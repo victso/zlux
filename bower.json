@@ -1,0 +1,16 @@
+{
+  "name": "zlux",
+  "version": "0.1.0",
+  "main": "",
+  "dependencies": {
+    "jquery": "~2.1.1",
+    "uikit": "~2.6",
+    "datatables": "~1.10"
+  },
+  "ignore": [
+    "node_modules",
+    "bower_components",
+    "vendor",
+    "index.html"
+  ]
+}

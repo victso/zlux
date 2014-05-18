@@ -1,0 +1,9 @@
+{
+	"boss": true,
+	"sub": true,
+	"browser": true,
+	"evil": true,
+	"globals": {
+        "jQuery": true
+	}
+}

@@ -1,0 +1,24 @@
+{
+	"folders":[
+		{
+			"follow_symlinks": true,
+			"path": "src",
+			"name":"Source"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "dist",
+			"name":"Dist"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "bower_components",
+			"name":"Dependencies"
+		},
+		{
+			"follow_symlinks": true,
+			"path": "/",
+			"name":"Project"
+		}
+	]
+}
