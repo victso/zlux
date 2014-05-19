@@ -1,7 +1,7 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
-    ZX.component('files', {
+    ZX.component('filesmanager', {
 
         defaults: {
             "toggle": ">li.uk-parent > a[href='#']",
@@ -36,7 +36,7 @@
                         "title": "", "data": "type", "searchable": false, "width": "14px", "class": "column-icon",
                         "render": function ( data, type ) {
                             if (type === 'display') {
-                                return '<i class="icon-' + (data === 'folder' ? 'folder-close' : 'file-alt') + '"></i>';
+                                return '<i class="uk-icon-' + (data === 'folder' ? 'folder' : 'file') + '"></i>';
                             } else {
                                 return data;
                             }
@@ -82,7 +82,7 @@
 
                     // append the object edit feature to the name
                     $('.zlux-x-name', $object.dom).append(
-                        '<i class="zlux-x-name-edit icon-edit-sign" title="' + ZX.lang._('RENAME') + '" />'
+                        '<i class="zlux-x-name-edit uk-icon-pencil-square" title="' + ZX.lang._('RENAME') + '" />'
                     );
                 },
                 "initComplete": function() {
@@ -172,8 +172,8 @@
             var content = $(
                 // btns
                 '<div class="zlux-x-tools">' +
-                    '<i class="zlux-x-details-btn icon-angle-down" />' +
-                    '<i class="zlux-x-remove icon-minus-sign" title="' + ZX.lang._('DELETE') + '" />' +
+                    '<i class="zlux-x-details-btn uk-icon-angle-down" />' +
+                    '<i class="zlux-x-remove uk-icon-minus-circle" title="' + ZX.lang._('DELETE') + '" />' +
                 '</div>' +
 
                 // name
@@ -217,11 +217,11 @@
 
     // init code
     $(document).on("uk-domready", function(e) {
-        $("[data-zx-files]").each(function() {
-            var files = $(this);
+        $("[data-zx-filesmanager]").each(function() {
+            var filesmanager = $(this);
 
-            if (!files.data("files")) {
-                var obj = ZX.files(files, $.UIkit.Utils.options(files.attr("data-uk-files")));
+            if (!filesmanager.data("filesmanager")) {
+                var obj = ZX.filesmanager(filesmanager, $.UIkit.Utils.options(filesmanager.attr("data-uk-filesmanager")));
             }
         });
     });
@@ -707,7 +707,7 @@
                 if ($(this).data('submited')) return; $(this).data('submited', true);
 
                 // set spinner
-                $('.column-icon i', $object.dom).addClass('icon-spinner icon-spin');
+                $('.column-icon i', $object.dom).addClass('uk-icon-spinner uk-icon-spin');
 
                 // change the object name
                 ZX.lang._changeObjectName($object, $('input', msg).val() + ext)
@@ -749,7 +749,7 @@
                 // on result
                 .always(function() {
                     // remove spinner
-                    $('.column-icon i', $object.dom).removeClass('icon-spinner icon-spin');
+                    $('.column-icon i', $object.dom).removeClass('uk-icon-spinner uk-icon-spin');
                 });
             })
 
@@ -995,7 +995,7 @@
                 // open the details
                 if (!TD.hasClass('zlux-ui-open')) {
                     TD.addClass('zlux-ui-open');
-                    toggle.removeClass('icon-angle-down').addClass('icon-angle-up');
+                    toggle.removeClass('uk-icon-angle-down').addClass('uk-icon-angle-up');
 
                     // scroll to the Object with animation
                     $this.zluxdialog.content.stop().animate({
@@ -1009,7 +1009,7 @@
 
                 // close them
                 } else {
-                    toggle.addClass('icon-angle-down').removeClass('icon-angle-up');
+                    toggle.addClass('uk-icon-angle-down').removeClass('uk-icon-angle-up');
                     TD.removeClass('zlux-ui-open');
                     details.slideUp('fast', function(){
                         $this.zluxdialog.scrollbar('refresh');
@@ -1018,7 +1018,7 @@
             });
 
             // trigger Object rename event on click
-            $this.zluxdialog.main.on('click', '.icon-edit-sign', function(){
+            $this.zluxdialog.main.on('click', '.uk-icon-pencil-square', function(){
                 var object_dom = $(this).closest('tr.zlux-object'),
                     $object;
 
@@ -1093,7 +1093,7 @@
                     if ($(this).data('submited')) return; $(this).data('submited', true);
 
                     // set spinner
-                    $('.column-icon i', $object.dom).addClass('icon-spinner icon-spin');
+                    $('.column-icon i', $object.dom).addClass('uk-icon-spinner uk-icon-spin');
 
                     // delete the file                      
                     var deleting = $this.deleteObject($object);
@@ -1132,7 +1132,7 @@
                     // on result
                     .always(function() {
                         // remove spinner
-                        $('.column-icon i', $object.dom).removeClass('icon-spinner icon-spin');
+                        $('.column-icon i', $object.dom).removeClass('uk-icon-spinner uk-icon-spin');
                     });
                 });
 

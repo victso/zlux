@@ -1,13 +1,14 @@
-.zlux {
-	@import "uikit/uikit.less";
-}
+//
+// ZLUX main
+//
+// ========================================================================
 
 
-/* Sortable - workaround for the dragged element, hide it outside zlux
-========================================================================== */
-.uk-sortable-list-dragged {
-	visibility: hidden;
-}
-.zlux .uk-sortable-list-dragged {
-	visibility: visible;
-}
+// Uikit
+// ========================================================================
+@import "uikit.less";
+
+
+// Add-ons
+// ========================================================================
+@import "filesmanager.less";

@@ -74,11 +74,8 @@ module.exports = function(grunt) {
 		// ========================================================================
 		watch: {
 		    src: {
-		        files: ["src/less/**/*.less"],
-		        tasks: ["dev"],
-		        options: {
-	             spawn: false,
-	           }
+		        files: ['src/less/**/*.less'],
+		        tasks: ['dev']
 		    }
 		}
 
@@ -96,7 +93,6 @@ module.exports = function(grunt) {
 
 	// register tasks
 	// ========================================================================
-
 	grunt.registerTask('dev', ['less:dev']);
 	grunt.registerTask('default', ['less:dist', 'usebanner']);
 	
