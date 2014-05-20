@@ -8,7 +8,6 @@
     }
 
     ZX.version = '1.0';
-    // zlux.zoo = {};
 
     ZX.fn = function(command, options) {
 

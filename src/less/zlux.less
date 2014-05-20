@@ -8,7 +8,77 @@
 // ========================================================================
 @import "uikit.less";
 
-
-// Add-ons
+// Components
 // ========================================================================
+@import "manager.less";
 @import "filesmanager.less";
+
+
+
+/* DataTables
+----------------------------------------------------------------------------------------------------*/
+// .zx-filesmanager {
+
+	// wrapper
+	&.dataTables_wrapper {
+		position: relative;
+		clear: both;
+		// min-height: 225px;
+		padding-bottom: 3px;
+
+		a:focus {
+			outline: none;
+		}
+	}
+
+	// pagination
+	div.dataTables_paginate {
+		margin: 0;
+	}
+
+	// table
+	.dataTable {
+
+		// IE8 fix
+		width: 100% !important;
+
+		// sorting
+		.sorting, // both
+		.sorting_asc,
+		.sorting_desc,
+		.sorting_asc_disabled,
+		.sorting_desc_disabled {
+			cursor: pointer;
+			*cursor: hand;
+			position: relative;
+
+			&:after {
+				font-family: FontAwesome;
+				font-style: normal;
+				font-weight: normal;
+				font-size: 14px;
+				float: right;
+			}
+		}
+
+		.sorting_asc:after,
+		.sorting_asc_disabled:after {
+			content: "\f0de"; // icon-sort-up
+		}
+		
+		.sorting_desc:after,
+		.sorting_desc_disabled:after {
+			content: "\f0dd"; // icon-sort-down
+		}
+
+		.sorting:after {
+			content: "\f0dc"; // icon-sort
+			color: #DCDCDC;
+		}
+
+		.sorting_asc_disabled:after,
+		.sorting_desc_disabled:after { 
+			color: #DCDCDC;
+		}
+	}
+// }

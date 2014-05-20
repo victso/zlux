@@ -70,6 +70,27 @@ module.exports = function(grunt) {
 			}
 		},
 
+		// COPY tasks
+		// ========================================================================
+		copy: { 
+
+			// copy uikit dist files
+			uikit: {
+				files: [
+					{
+						expand: true,
+						cwd: 'bower_components/uikit/dist',
+						src: [
+							'fonts/**',
+							'js/**'
+						],
+						dest: 'dist'
+					}
+				]
+			}
+
+		},
+
 		// WATCH tasks
 		// ========================================================================
 		watch: {
@@ -93,6 +114,7 @@ module.exports = function(grunt) {
 
 	// register tasks
 	// ========================================================================
+	grunt.registerTask('build', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
 	grunt.registerTask('default', ['less:dist', 'usebanner']);
 	

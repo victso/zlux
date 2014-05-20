@@ -1,24 +1,17 @@
 {
-	"folders":[
+	"folders":
+	[
 		{
 			"follow_symlinks": true,
-			"path": "src",
-			"name":"Source"
+			"path": "."
 		},
 		{
 			"follow_symlinks": true,
-			"path": "dist",
-			"name":"Dist"
+			"path": "/Users/miljan/temp/zlux_copy"
 		},
 		{
 			"follow_symlinks": true,
-			"path": "bower_components",
-			"name":"Dependencies"
-		},
-		{
-			"follow_symlinks": true,
-			"path": "/",
-			"name":"Project"
+			"path": "/Applications/MAMP/htdocs/uikit"
 		}
 	]
 }
