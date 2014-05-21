@@ -1,0 +1,210 @@
+// Name:            Manager
+// Description:     Defines styles for Manager
+//
+// Component:       `zx-manager`
+//
+// Sub-objects:     `zx-manager-resource`
+//					`zx-manager-resouce-tools`
+//					`zx-manager-resource-icon
+//
+// Modifiers:       ``
+//
+// States:          `zx-open`
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@import "uikit/variables.less";
+
+
+/* ========================================================================
+   Component: Manager
+ ========================================================================== */
+
+
+// TOOLBAR
+.zx-manager-nav {
+
+
+	// // subtoolbar
+	// [class^="zlux-dialog-subtoolbar-"] {
+	// 	border-top: 1px solid #EEE;
+	// 	margin-top: 4px;
+
+	// 	.zlux-x-input {
+	// 		width: 262px;
+	// 		margin: 4px 0 0;
+	// 	}
+	// }
+
+	// // TOOLBAR
+	// position: relative;
+	// text-align: center;
+	// border-bottom: 1px solid #EEE;
+	// // .border-radius(2px);
+	// padding: 4px 0;
+
+	// // btns
+	// a {
+	// 	// color: black;
+	// 	border: 2px solid #EEE;
+	// 	border-radius: 4px;
+	// 	font-size: 20px;
+	// 	cursor: pointer;
+	// 	padding: 4px 9px 3px;
+	// 	display: inline-block;
+	// 	position: relative;
+
+	// 	&:hover {
+	// 		border-color: #CFCFCF;
+	// 	}
+
+	// 	&.disabled {
+	// 		border-color: #EEEEEE;
+	// 		color: #C0C0C0;
+	// 		cursor: default;
+	// 	}
+
+	// 	&.zlux-ui-tool-enabled {
+	// 		border-color: #CFCFCF;
+	// 	}
+	// }
+
+	// // all toolbars
+	// [class^="zlux-dialog-toolbar-"] {
+	// 	display: none;
+
+	// 	ul.inline {
+	// 		margin-bottom: 0;
+	// 	}
+	// }
+
+	// // main toolbar
+	// [class^="zlux-dialog-toolbar-main"] {
+	// 	display: block;
+	// }
+
+	// // back to main menu btn
+	// .zlux-dialog-toolbar-backtomain {
+	// 	display: none;
+	// 	cursor: pointer;
+	// 	font-size: 17px;
+	// 	top: 5px;
+	// 	left: 4px;
+	// 	position: absolute;
+	// 	border-color: transparent;
+
+	// 	&:hover {
+	// 		border-color: #CFCFCF;
+	// 	}
+	// }
+}
+
+
+/* Sub-object: `zx-manager-resource`
+ ========================================================================== */
+
+ // red color icons
+.zx-manager-resource .zx-x-resource-icon.uk-icon-warning {
+	color: @global-danger-color;
+}
+
+// ok icon
+.zx-manager-resource .zx-x-resource-icon.uk-icon-check {
+	color: @global-success-color;
+}
+
+/*
+ * Actions btns
+ */
+
+// hidden on start
+.zx-manager-resource .zx-x-remove,
+.zx-manager-resource .zx-x-name-edit {
+	visibility: hidden;
+}
+
+// visible on state open
+.zx-manager-resource.zx-open .zx-x-remove,
+.zx-manager-resource.zx-open .zx-x-name-edit {
+	visibility: visible;
+}
+
+// name
+.zx-manager-resource .zx-x-name {
+	max-width: 175px;
+
+	// name edit
+	i.zx-x-name-edit {
+		display: inline-block;
+		float: none;
+		font-size: 15px;
+		position: relative;
+
+		&:before {
+			position: absolute;
+			top: -11px;
+			left: 2px;
+		}
+	}
+}
+
+.zx-manager-resource .zx-x-input {
+	margin: 7px 0;
+	width: 156px;
+}
+
+// details
+.zx-manager-resource .zx-x-details {
+	display: none;
+
+	.zx-x-details-content {
+		border-top: 1px dashed #DDD;
+		margin-top: 8px;
+		padding-top: 8px;
+		margin-bottom: 0;
+
+		ul.uk-list {
+			margin: 0;
+		}
+
+		&.zx-x-msg {
+			text-align: center;
+			font-weight: bold;
+			position: relative;
+			padding-left: 11px;
+			padding-right: 11px;
+
+			.zx-x-msg-remove {
+				font-size: 11px;
+				position: absolute;
+				right: -3px;
+				top: 0;
+			}
+		}
+	}
+}
+
+
+/* Sub-object: `zx-manager-resource-icon`
+ ========================================================================== */
+
+.zx-manager-resource-icon {
+	width: 21px;
+}
+
+
+/* Sub-object: `zx-manager-resource-tools`
+ ========================================================================== */
+
+.zx-manager-resource-tools > i {
+	float: right;
+	margin: 3px 0 0 4px;
+	cursor: pointer;
+	font-size: 14px;
+	display: inline-block;
+	text-align: center;
+	width: 1.25em;
+}

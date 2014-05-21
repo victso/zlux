@@ -1,7 +1,9 @@
 ### Grunt ###
 node_modules/
 bower_components/
+zlux_1.0/
 .grunt
+config.codekit
 
 
 # Bellow created by http://www.gitignore.io - Tags(OSX, Windows, SublimeText)

@@ -116,6 +116,6 @@ module.exports = function(grunt) {
 	// ========================================================================
 	grunt.registerTask('build', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
-	grunt.registerTask('default', ['less:dist', 'usebanner']);
+	// grunt.registerTask('default', ['less:dist', 'usebanner']);
 	
 };

@@ -147,6 +147,92 @@
     };
 
 
+    /** AJAX **/
+    ZX.ajax = {};
+    /**
+     * Ajax request
+     * @param {Object} settings The request settings
+     * @return {Promise} The ajax promise
+     */
+    ZX.ajax.request = function(settings)
+    {
+        // set defaults
+        var response = {success:false, errors:[], notices:[]},
+            queue = settings.queue ? settings.queue : null;
+
+        // delete custom params, just in case
+        delete settings.queue;
+
+        // set request defaults
+        settings = $.extend({
+            // dataType: 'json',
+            type: 'POST'
+        }, settings);
+
+        // return a promise
+        return $.Deferred(function( defer )
+        {
+            // use AjaxQ if queue param present, fallback to $.ajax()
+            var name = queue ? 'ajaxq' : 'ajax',
+                args = queue ? [queue, settings] : [settings];
+
+            // request  
+            $[name].apply(this, args)
+
+            // response recieved
+            .done(function(json, a, b)
+            {
+                // json response is assumed
+                if (ZX.utils.typeOf(json) !== 'object')
+                {
+                    try {
+                        // parse response detecting if there was some server side error
+                        json = $.parseJSON(json);
+
+                    // handle exception
+                    } catch(e) {
+                        response.errors.push(String(json));
+                        response.errors.push('An server-side error occurred. ' + String(e));
+                        defer.reject(response);
+                    }
+                }
+
+                else if (json.success)
+                    defer.resolve(json);
+                else
+                    defer.reject(json);
+            })
+            
+            // something went wrong
+            .fail(function(jqxhr, status, error)
+            {
+                // handle errors
+                switch (jqxhr.status) {
+                    case 403:
+                        response.errors.push('The session has expired.');
+                        break;
+                    case 404:
+                        response.errors.push('The requested URL is not accesible.');
+                        break;
+                    case 500:
+                        response.errors.push('A server-side error has occurred.');
+                        break;
+
+                    default:
+                        response.errors.push('An error occurred: ' + status + '\n Error: ' + error);
+                        break;
+                }
+
+                // set response status
+                response.status = jqxhr.status;
+
+                // reject
+                defer.reject(response);
+            });
+
+        }).promise();
+    };
+
 
     $.zlux = ZX;
     $.fn.zx = ZX.fn;
@@ -281,111 +367,8 @@
     );
 
 
-    /** AJAX **/
-    zlux.ajax = {};
-    /**
-     * Ajax request
-     * @param {Object} settings The request settings
-     * @return {Promise} The ajax promise
-     */
-    zlux.ajax.request = function(settings)
-    {
-        // set defaults
-        var response = {success:false, errors:[], notices:[]},
-            queue = settings.queue ? settings.queue : null;
-
-        // delete custom params, just in case
-        delete settings.queue;
-
-        // request defaults
-        settings = $.extend({
-            type: 'POST'
-        }, settings);
-
-        // return a promise
-        return $.Deferred(function( defer )
-        {
-            // use AjaxQ if queue param present, fallback to $.ajax()
-            var name = queue ? 'ajaxq' : 'ajax',
-                args = queue ? [queue, settings] : [settings];
-
-            // request  
-            $[name].apply(this, args)
-
-            // response recieved
-            .done(function(json)
-            {
-                try {
-                    // parse response detecting if there was some server side error
-                    json = $.parseJSON(json);
-
-                // handle exception
-                } catch(e) {
-                    response.errors.push(String(json));
-                    response.errors.push('An server-side error occurred. ' + String(e));
-                    defer.reject(response);
-                }
-
-                // json response is assumed
-                if (zlux.utils.typeOf(json) == 'object' && json.success)
-                    defer.resolve(json);
-                else
-                    defer.reject(json);
-            })
-            
-            // something went wrong
-            .fail(function(jqxhr, status, error)
-            {
-                // handle errors
-                switch (jqxhr.status) {
-                    case 403:
-                        response.errors.push('The session has expired.');
-                        break;
-                    case 404:
-                        response.errors.push('The requested URL is not accesible.');
-                        break;
-                    case 500:
-                        response.errors.push('A server-side error has occurred.');
-                        break;
-
-                    default:
-                        response.errors.push('An error occurred: ' + status + 'nError: ' + error);
-                        break;
-                }
-
-                // set response status
-                response.status = jqxhr.status;
-
-                // reject
-                defer.reject(response);
-            });
-
-        }).promise();
-    };
-
-
-    /** UIKIT **/
-    zlux.uikit = {};
-    zlux.uikit.notify = function(msg, options)
-    {
-        // display message
-        var notify = $.UIkit.notify(msg, options);
-
-        // wrapp for styling propose
-        $('.uk-notify').wrap('<div class="zlux" />');
-
-        return notify;
-    };
-    zlux.uikit.confirm = function(msg, options)
-    {
-        msg = msg +
-            '<div class="uk-text-center uk-margin-top">' +
-                '<a class="zl-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>' +
-                '<a class="zl-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>' +
-            '</div>';
-            
-        return zlux.uikit.notify(msg, options);
-    };
+   
+  
 
 
     /** UX **/

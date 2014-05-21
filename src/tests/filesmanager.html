@@ -6,33 +6,44 @@
 		<link rel="stylesheet" href="../../dist/zlux.min.css">
 		<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="../../bower_components/uikit/dist/js/uikit.min.js"></script>
+		<script src="../../bower_components/uikit/dist/js/addons/notify.min.js"></script>
 		<script src="../../bower_components/datatables/media/js/jquery.datatables.js"></script>
+		<script src="../../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
 		<script src="../js/core.js"></script>
 		<script src="../js/component.js"></script>
-		<script src="../js/filesmanager.js"></script>
+		<script src="../js/notify.js"></script>
+		<script src="../js/manager.js"></script>
+		<script src="../js/manager.files.js"></script>
 	</head>
 	<body class="tm-background zlux">
 
 		<div class="uk-container uk-container-center">
 			
 			<!-- main wrapper -->
-			<div data-zx-filesmanager class="zx-manager">
+			<div data-zx-manager data-zx-manager-type="filter" class="zx-manager">
 
 				<!-- menu -->
-				<nav class="uk-navbar zx-manager-nav">
-					<ul class="uk-navbar-nav">
-						<li class="uk-active"><a href="#">...</a></li>
-					   <li><a href="#">...</a></li>
-					   <li class="uk-parent"><a href="#">...</a></li>
-					</ul>
-			   	</nav>
+				<nav class="uk-navbar zx-manager-nav"></nav>
 
-			   	<!-- table -->
-			    <table class="uk-table zx-manager-list"></table>
+				<!-- table -->
+				<table class="uk-table zx-manager-resources"></table>
 
 			</div>
 
 		</div>
+
+		<script type="text/javascript">
+		
+		$.mockjax({
+			url: 'some/url',
+			// responseTime: 750,
+			contentType: 'text/html',
+			dataType: 'json',
+			// responseText: '{"hello": "World!"}'
+			responseText: {success:true, errors:[], notices:[]}
+		});
+			
+		</script>
 
 	</body>
 </html>

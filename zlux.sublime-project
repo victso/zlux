@@ -7,10 +7,6 @@
 		},
 		{
 			"follow_symlinks": true,
-			"path": "/Users/miljan/temp/zlux_copy"
-		},
-		{
-			"follow_symlinks": true,
 			"path": "/Applications/MAMP/htdocs/uikit"
 		}
 	]

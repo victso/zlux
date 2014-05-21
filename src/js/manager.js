@@ -1,39 +1,98 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
-    ZX.component('filesmanager', {
+    ZX.component('manager', {
 
-        defaults: {
-            "toggle": ">li.uk-parent > a[href='#']",
-            "lists": ">li.uk-parent > ul",
-            "multiple": false
+        type: '',
+
+        // init delegated to the plugins
+        init: function() {
+
+            // save the mananger type
+            this.type = this.element.attr('data-zx-manager-type');
+
+           
+           
+            // save nav node ref
+            this.nav = ZX.ManagerNav($('.zx-manager-nav', this.element));
+
+            this.nav.addChild();
         },
 
-        init: function() {
+        getResource: function(resource) {
+            // if already a resource object return directly, else retrieve from node
+            return resource instanceof jQuery ? resource.data('ManagerResource') : resource;
+        },
+
+        deleteResource: function($resource) {
             var $this = this;
-            
-            // // set navbar
-            // $this.element.append(
-            //     '<nav class="uk-navbar">' +
-            //         '<ul class="uk-navbar-nav">' +
-            //             '<li class="uk-active"><a href="#">...</a></li>' +
-            //            '<li><a href="#">...</a></li>' +
-            //            '<li class="uk-parent"><a href="#">...</a></li>' +
-            //         '</ul>' +
-            //     '</nav>');
+            $resource = this.getResource($resource);
 
-// console.log($.UIkit.Utils.template('{{~items}}\
-//                                           <li data-url="{{!$item.url}}">\
-//                                               <a href="{{!$item.url}}">\
-//                                                   {{{$item.title}}}\
-//                                                   {{#$item.text}}<div>{{{$item.text}}}</div>{{/$item.text}}\
-//                                               </a>\
-//                                           </li>\
-//                                           {{/items}}', {'items':[{'url':'mi url 1'}, {'url':'url2'}]}));
+            // only allowed to be submited once
+            // if ($(this).data('submited')) return; $(this).data('submited', true);
+
+            // set spinner
+            $('.column-icon i', $resource.dom).addClass('uk-icon-spinner uk-icon-spin');
+
+            // make the request and return a promise
+            ZX.ajax.request({
+                // "url": $.zlux.url.ajax('zlux', 'deleteResource'),
+                url: 'some/url',
+                "data": '',
+                dataType: 'json'
+            })
 
 
-            // init dataTable
-            $this.table = $('.zx-manager-list', $this.element).addClass('uk-table-striped').dataTable({
+            .done(function(json) {
+                console.log('succeded');
+                // console.log(json);
+
+                // hide the object
+                // $resource.dom.fadeOut('slow', function(){
+                //     // remove object from dom
+                //     $(this).remove();
+
+    
+
+                //     $.each(aaData, function(i, value){
+                //         if ($object.dom.data('id') === value.name && $object.dom.data('type') === value.type) {
+                //             // found, remove
+                //             aaData.splice(i, 1);
+
+                //             // stop iteration
+                //             return false;
+                //         }
+                //     });
+
+                //     // redraw the other instances
+                //     $this.redrawInstances();
+                // });
+                
+                // trigger event
+                $this.element.trigger('resourceDeleted', $resource);
+
+            }).fail(function(response){
+                console.log('failed l2');
+                console.log(response);
+
+                // show the message
+                // $this.pushMessageToObject($object, msg);
+            })
+
+            // on result
+            .always(function(json) {
+                // console.log(json);
+                // remove spinner
+                // $('.column-icon i', $object.dom).removeClass('uk-icon-spinner uk-icon-spin');
+            });
+        },
+
+
+        initTable: function() {
+            var $this = this;
+
+            // init dataTable and save reference to the node
+            this.resources = $('.zx-manager-resources', this.element).addClass('uk-table-striped').dataTable({
                 "dom": "F<'row-fluid'<'span12't>>",
                 "language": {
                     "emptyTable": ZX.lang._('EMPTY_FOLDER'),
@@ -75,23 +134,33 @@
                     "url": "data/folder_tree.json",
                 },
                 "rowCallback": function(row, data) {
-                    var $resource = data;
-                    
-                    // save resource dom
-                    $resource.dom = $(row);
+                    var $resource = ZX.ManagerResource(row);
+
+                    // set resource details
+                    data.details = [];
+                    if (data.type === 'folder') {
+                        data.details.push({name: ZX.lang._('NAME'), value: data.basename});
+
+                    } else { // file
+                        data.details.push({name: ZX.lang._('NAME'), value: data.basename});
+                        data.details.push({name: ZX.lang._('TYPE'), value: data.content_type});
+                        data.details.push({name: ZX.lang._('SIZE'), value: data.size.display});
+                    }
+
+                    $resource.pushData(data);
 
                     // set resource dom properties
-                    $resource.dom.attr('data-type', data.type).addClass('zx-manager-resource');
+                    $resource.element.attr('data-type', data.type).addClass('zx-manager-resource');
 
                     // reset and append the resource data
-                    $('.zx-manager-resource-name', $resource.dom).html('').append(
+                    $('.zx-manager-resource-name', $resource.element).html('').append(
                         // render the resource content
-                        $this.renderResource($resource)
+                       $resource.render()
                     );
 
                     // append the resource edit feature to the name
-                    $('.zlux-x-name', $resource.dom).append(
-                        '<i class="zlux-x-name-edit uk-icon-pencil-square" title="' + ZX.lang._('RENAME') + '" />'
+                    $('.zx-x-name', $resource.element).append(
+                        '<i class="zx-x-name-edit uk-icon-pencil-square" title="' + ZX.lang._('RENAME') + '" />'
                     );
                 },
                 "initComplete": function() {
@@ -146,10 +215,10 @@
             })
 
             // set Object details Open event
-            .on('click', '.zlux-x-details-btn', function(){
+            .on('click', '.zx-x-details-btn', function(){
                 var toggle = $(this),
                     $resource = toggle.closest('.zx-manager-resource'),
-                    details = $('.zlux-x-details', $resource);
+                    details = $('.zx-x-details', $resource);
 
                 // open the details
                 if (!$resource.hasClass('zx-open')) {
@@ -175,89 +244,79 @@
                     });
                 }
             });
-        },
-
-        /**
-         * Render the Resource content
-         */
-        renderResource: function($object) {
-            var $this = this,
-                aDetails;
-
-            // set the details
-            // if ($object.type === 'folder') {
-
-            //     aDetails = [
-            //         {name: ZX.lang._('NAME'), value: $object.basename}
-            //     ];
-
-            // } else { // file
-
-            //     aDetails = [
-            //         {name: ZX.lang._('NAME'), value: $object.basename},
-            //         {name: ZX.lang._('TYPE'), value: $object.content_type},
-            //         {name: ZX.lang._('SIZE'), value: $object.size.display}
-            //     ];
-            // }
-
-            // // prepare the details
-            // var sDetails = '';
-            // $.each(aDetails, function(i, detail){
-            //     sDetails += '<li><strong>' + detail.name + '</strong>: <span>' + detail.value + '</span></li>';
-            // });
-
-            // // set entry details
-            // var content = $(
-
-               
-            // );
-
-            // return content;
-            return '';
         }
     });
 
 
     ZX.component('ManagerResource', {
 
+        data: {},
+
         defaults: {
             template      : '<div class="zx-manager-resource-tools">\
-                                <i class="zlux-x-details-btn uk-icon-angle-down" />\
-                                <i class="zlux-x-remove uk-icon-minus-circle" title="{title.delete}" />\
+                                <i class="zx-x-details-btn uk-icon-angle-down" />\
+                                <i class="zx-x-remove uk-icon-minus-circle" data-uk-tooltip title="' + ZX.lang._('DELETE') + '" />\
                             </div>\
-                            <div class="zlux-x-name"><a href="#" class="zlux-x-name-link">{{name}}</a></div>\
-                            <div class="zlux-x-details">\
-                                <div class="zlux-x-messages" />\
-                                <div class="zlux-x-details-content">\
-                                    <ul class="uk-list">{{~products}}  {{ products[$i]==$item }}  {{/products}}</ul>\
+                            <div class="zx-x-name"><a href="#" class="zx-x-name-link">{{name}}</a></div>\
+                            <div class="zx-x-details">\
+                                <div class="zx-x-messages" />\
+                                <div class="zx-x-details-content">\
+                                    <ul class="uk-list">\
+                                        {{~details}}\
+                                        <li>\
+                                            <strong>{{$item.name}}</strong>: \
+                                            <span>{{$item.value}}</span>\
+                                        </li>\
+                                        {{/items}}\
+                                        </ul>\
                                 </div>\
                             </div>',
-
-            // example
-            renderer: function(data) {
-
-                var $this = this, opts = this.options;
-
-                this.dropdown.append(this.template({"items":data.results || [], "msgResultsHeader":opts.msgResultsHeader, "msgMoreResults": opts.msgMoreResults, "msgNoResults": opts.msgNoResults}));
-                this.show();
-            }
         },
 
         init: function() {
-            var $this = this;
 
-           
+        },
+
+        /* renders the resource content */
+        render: function(data) {
+            data = $.extend(true, {}, this.data, data);
+            return $.UIkit.Utils.template(this.defaults.template, data);
+        },
+
+        /* push new resource data into the current one */
+        pushData: function(data) {
+            this.data = $.extend(true, this.data, data);
         }
 
     });
 
+    
+    ZX.component('ManagerNav', {
+
+        defaults: {
+            template      : '<ul class="uk-navbar-nav">\
+                <li class="uk-active"><a href="#"><i class="uk-icon-filter"></i>Active</a></li>\
+                <li class=""><a href="#"><i class="uk-icon-filter"></i>other</a></li>\
+                </ul>'
+        },
+
+        init: function() {
+
+            this.element.append(this.options.template);
+        },
+
+        addChild: function() {
+            $('ul', this.element).append('<li class=""><a href="#"><i class="uk-icon-filter"></i>other</a></li>');
+        }
+    });
+
     // init code
     $(document).on("uk-domready", function(e) {
-        $("[data-zx-filesmanager]").each(function() {
-            var filesmanager = $(this);
+        $("[data-zx-manager]").each(function() {
+            var manager = $(this);
 
-            if (!filesmanager.data("filesmanager")) {
-                var obj = ZX.filesmanager(filesmanager, $.UIkit.Utils.options(filesmanager.attr("data-uk-filesmanager")));
+            if (!manager.data("manager")) {
+                var obj = ZX.manager(manager, $.UIkit.Utils.options(manager.attr("data-zx-manager")));
             }
         });
     });

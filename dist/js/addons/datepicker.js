@@ -1,3 +1,10 @@
+/* ===================================================
+ * ZLUX
+ * https://zoolanders.com
+ * ===================================================
+ * Copyright (C) JOOlanders SL
+ * http://www.gnu.org/licenses/gpl-2.0.html
+ * ========================================================== */
 /*! UIkit 2.6.0 | http://www.getuikit.com | (c) 2014 YOOtheme | MIT License */
 
 (function(addon) {

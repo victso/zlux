@@ -5,7 +5,9 @@
   "dependencies": {
     "jquery": "~2.1.1",
     "uikit": "~2.6",
-    "datatables": "~1.10"
+    "datatables": "~1.10",
+    "jquery-mockjax": "~1.5.3",
+    "jquery-mockjson": null
   },
   "ignore": [
     "node_modules",
