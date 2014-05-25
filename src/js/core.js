@@ -44,23 +44,23 @@
     ZX.url.zlfw = function (url) {
         return ZX.url.zlfw_url + (url || '');
     };
+    ZX.url.ajax_url = ZX.url.base_url + 'index.php?option=com_zoolanders&format=raw';
     ZX.url.ajax = function (controller, task, params) {
         // make sure params is defined
         params = params === undefined ? {} : params;
         // ser init vars
-        var app_id = params.app_id || ZX.zoo.app_id,
-            option = params.option || (ZX.com_zl ? 'com_zoolanders' : 'com_zoo');
+        // var app_id = params.app_id || ZX.zoo.app_id;
+        // var option = params.option || (ZX.com_zl ? 'com_zoolanders' : 'com_zoo');
 
         // avoid repeating main params
         delete params.option;
-        delete params.app_id;
+        // delete params.app_id;
 
         // prepare and return the url
-        return ZX.url.base_url + 'index.php?option=' + option +
+        return ZX.url.ajax_url +
             '&controller=' + controller +
             '&task=' + task +
-            (app_id ? '&app_id=' + app_id : '') +
-            '&format=raw' + 
+            // (app_id ? '&app_id=' + app_id : '') +
             ($.isEmptyObject(params) ? '' : '&' + $.param(params));
     };
 
@@ -121,14 +121,14 @@
         return options;
     };
     /**
-     * Clean a path from double slash and others
-     * @param {String} path The path to be cleaned
+     * Clean an URI from double slash and others
+     * @param String uri The uri to be cleaned
      */
-    ZX.utils.cleanPath = function(path) {
-        if (!path) return;
+    ZX.utils.cleanURI = function(uri) {
+        if (!uri) return '';
         
-        // return path and
-        return path
+        // return uri and
+        return uri
 
         // replace \ with /
         .replace(/\\/g, '/')
@@ -151,8 +151,8 @@
     ZX.ajax = {};
     /**
      * Ajax request
-     * @param {Object} settings The request settings
-     * @return {Promise} The ajax promise
+     * @param Object settings The request settings
+     * @return Promise The ajax promise
      */
     ZX.ajax.request = function(settings)
     {
@@ -165,7 +165,7 @@
 
         // set request defaults
         settings = $.extend({
-            // dataType: 'json',
+            dataType: 'json',
             type: 'POST'
         }, settings);
 
@@ -176,34 +176,34 @@
             var name = queue ? 'ajaxq' : 'ajax',
                 args = queue ? [queue, settings] : [settings];
 
-            // request  
+            // perform the request  
             $[name].apply(this, args)
 
-            // response recieved
-            .done(function(json, a, b)
+            // if response recieved
+            .done(function(result, a, b)
             {
                 // json response is assumed
-                if (ZX.utils.typeOf(json) !== 'object')
+                if (ZX.utils.typeOf(result) !== 'object')
                 {
                     try {
                         // parse response detecting if there was some server side error
-                        json = $.parseJSON(json);
+                        json = $.parseJSON(result);
 
                     // handle exception
                     } catch(e) {
-                        response.errors.push(String(json));
+                        response.errors.push(String(result));
                         response.errors.push('An server-side error occurred. ' + String(e));
                         defer.reject(response);
                     }
                 }
 
-                else if (json.success)
-                    defer.resolve(json);
+                else if (result.success)
+                    defer.resolve(result);
                 else
-                    defer.reject(json);
+                    defer.reject(result);
             })
             
-            // something went wrong
+            // if something went wrong
             .fail(function(jqxhr, status, error)
             {
                 // handle errors
@@ -231,6 +231,46 @@
             });
 
         }).promise();
+    };
+    /**
+     * Ajax request and notify the answer
+     * @param Object request The ajax request
+     * @param Object notify The notify settings
+     * @return Promise The ajax promise
+     */
+    ZX.ajax.requestAndNotify = function(request, notify)
+    {
+        // set defaults
+        notify = notify === undefined ? {} : notify;
+
+        // request
+        return ZX.ajax.request(request)
+        .done(function(response){
+
+            if(notify.group) ZX.notify.closeAll(notify.group);
+
+            // display message
+            if(response.message) ZX.notify(response.message, $.extend({
+                status: 'success'
+            }, notify));
+            
+        }).fail(function(response){
+
+            if(notify.group) $.UIkit.notify.closeAll(notify.group);
+
+            // display errors
+            if(response.errors && response.errors.length) $.each(response.errors, function(){
+                ZX.notify(this, $.extend({
+                    status: 'danger'
+                }, notify));
+            });
+            // display notices
+            if(response.notices && response.notices.length) $.each(response.notices, function(){
+                ZX.notify(this, $.extend({
+                    status: 'warning'
+                }, notify));
+            });
+        });
     };
 
 
@@ -365,54 +405,6 @@
         (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0) || //IE >=11
         false
     );
-
-
-   
-  
-
-
-    /** UX **/
-    zlux.ux = {};
-    /**
-     * Ajax request and notify the answer
-     * @param {Object} request The ajax request
-     * @param {Object} notify The notify settings
-     * @return {Promise} The ajax promise
-     */
-    zlux.ux.requestAndNotify = function(request, notify)
-    {
-        // set defaults
-        notify = notify === undefined ? {} : notify;
-
-        // request
-        return zlux.ajax.request(request)
-        .done(function(response){
-
-            if(notify.group) $.UIkit.notify.closeAll(notify.group);
-
-            // display message
-            if(response.message) zlux.uikit.notify(response.message, $.extend({
-                status: 'success'
-            }, notify));
-            
-        }).fail(function(response){
-
-            if(notify.group) $.UIkit.notify.closeAll(notify.group);
-
-            // display errors
-            if(response.errors.length) $.each(response.errors, function(){
-                zlux.uikit.notify(this, $.extend({
-                    status: 'danger'
-                }, notify));
-            });
-            // display notices
-            if(response.notices.length) $.each(response.notices, function(){
-                zlux.uikit.notify(this, $.extend({
-                    status: 'warning'
-                }, notify));
-            });
-        });
-    };
 
 
     // set zlux

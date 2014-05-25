@@ -1,21 +1,51 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
+    var instance_id = 0,
+        cache = {};
+
     ZX.plugin("manager", "filesManager", {
+
+        options: {
+            root: '', // relative path to the root folder
+            extensions: '', // array or comma separated values of allowed extensions
+            storage: 'local',
+            storage_params: {},
+            max_file_size: '',
+            resize: {}
+        },
 
         init: function(manager) {
             var $this = this;
 
-            // make sure is file manager
-            if (!manager.type && manager.type !== 'files') return;
+            // if manager is not of of files type, abort
+            if (!manager.type || manager.type !== 'files') return;
 
-            // init table
-            manager.initTable();
-           
+            // extend manager options
+            $.extend(manager.options, $this.options);
+            
+            // set instance id
+            manager.id = instance_id++;
 
+            // save manager reference
+            $this.manager = manager;
 
-            // resource selected event
-            manager.resources.on('click', '.zx-manager-resource .zx-x-name a', function () {
+            // clean settings
+            $this.options.max_file_size = parseSize($this.options.max_file_size);
+            $this.options.extensions = $this.options.extensions.replace(/\|/g, ',');
+            $this.options.root = ZX.utils.cleanURI($this.options.root);
+
+            // check storage param
+            if ($this.options.storage === '' || $this.options.storage === undefined || $this.options.storage === null) {
+                // ZX._ErrorLog(0, ZX.lang._('STORAGE_PARAM_MISSING'));
+                $this.options.storage = 'local';
+            }
+
+            // set initial path
+            $this.currentPath = $this.options.root;
+
+            // EVENT resource selected
+            manager.on('click', '.zx-manager-resource .zx-x-name a', function () {
                 var $resource = manager.getResource($(this).closest('.zx-manager-resource'));
 
                 if ($resource.element.attr('data-zx-status') !== 'true') {
@@ -35,49 +65,178 @@
                     }
 
                     // trigger event
-                    manager.resources.trigger('manager-resource-selected', $resource);
+                    manager.element.trigger('manager-resource-selected', $resource);
                 }
 
                 // prevent default
                 return false;
             });
 
+            // extend with new functions
+            manager._ajax = $this._ajax;
+            manager.redrawInstances = $this.redrawInstances;
 
-            // Trigger Object Removed event
-            manager.resources.on('click', '.zx-manager-resource .zx-x-remove', function(){
-                var $resource = manager.getResource($(this).closest('.zx-manager-resource')),
-                    msg = ZX.lang._($resource.type === 'folder' ? 'DELETE_THIS_FOLDER' : 'DELETE_THIS_FILE');
+            // override the ajax function
+            manager.DTsettings.ajax = function (data, callback, settings) {
+                manager._ajax(data, callback, settings);
+            };
 
-                ZX.notify.confirm(msg).done(function(){
-                    manager.deleteResource($resource);
-                });
+            // manager.DTsettings.ajax = $this._ajax;
 
-                return;
+            
 
-                // if allready message displayed, abort
-                // if ($('.zlux-x-details-message-actions')[0]) return;
+            // all set, init manager
+            manager.initManager();
+        },
 
-               
+        _ajax: function (data, callback, settings) {
+            var $this = this,
+                root;
+
+            console.log(this);
+
+            // push values to the data request
+            data.extensions = $this.options.extensions;
+
+            // if S3 storage
+            if($this.options.storage === 's3') {
+                data.storage = s3;
+                data.accesskey = $this.options.storage_params.accesskey;
+                data.key = $this.options.storage_params.secretkey;
+                data.bucket = $this.options.storage_params.bucket;
+            }
 
 
-               
 
+            /* the Cache Data is stored in the main plugin so it can be shared by all instances */
 
-                // // if open, the remove action will delete the file, with confirmation
-                // if (TD.hasClass('zlux-ui-open')) {
-                //     $this.trigger("BeforeDeleteFile", $object);
-                // }
-                
-                // prevent default
-                return false;
+            // set the root
+            root = ZX.utils.cleanURI($this.currentPath + '/' + $this.goToPath);
+
+            // reset vars
+            $this.goToPath = '';
+
+            // send root with post data
+            data.root = root;
+
+            // set ajax object
+            settings.jqXHR = ZX.ajax.requestAndNotify({
+                url: ZX.url.ajax('zlux', 'getFilesManagerData'),
+                data: data,
+                beforeSend: function(){
+                    // check if the data is cached
+                    var cached = false;
+
+                    // if not reloading
+                    if (!$this.reloading || $this.redrawing){
+
+                        // check if already cached
+                        var json = cache[root]; /// CHECK THIS
+                        if (json) {
+
+                            // if first time, save real root path, as it can be changed for security reasons by the server
+                            if (!$this.cacheInited) $this.startRoot = json.root;
+
+                            // save root
+                            $this.currentPath = root;
+
+                            // set cache status
+                            $this.cacheInited = true;
+
+                            // emulate the xhr events
+                            $($this.manager.resources).trigger('xhr', [settings, json]);
+                            callback( json );
+
+                            // avoid ajax call
+                            cached = true;
+                        }
+
+                        // if redrawing
+                        if ($this.redrawing) {
+                            // reset the param
+                            $this.redrawing = false;
+
+                            // save root
+                            $this.currentPath = root;
+
+                            // avoid the ajax call
+                            return false;
+                        }
+                    }
+
+                    // if cached abort ajax
+                    if (cached) return false;
+
+                    // else, the ajax proceeds, show the spinner
+                    // $this.zluxdialog.spinner('show');
+                }
+            })
+
+            .fail(function (response) {
+                // console.log(response);
+
+            })
+
+            .done(function ( json ) {
+
+                // if first time, save real root path, as it can be changed for security reasons by the server
+                if (!$this.cacheInited) $this.startRoot = json.root;
+
+                // save new path
+                $this.currentPath = json.root;
+
+                // empty cache if reloading, so the content is retrieved again
+                if ($this.reloading) cache = {};
+
+                // cache the data
+                cache[json.root] = json;
+
+                // redraw the other instances
+                $this.redrawInstances();
+
+                // set reloading to false
+                $this.reloading = false;
+
+                // set cache status
+                $this.cacheInited = true;
+
+                // trigger events
+                $($this.resources).trigger('xhr', [settings, json]);
+                callback( json );
+            })
+
+            .always(function() {
+                // console.log($.mockjax.mockedAjaxCalls());
             });
-
-
-
         },
 
         /**
-         * Delete the object from the server
+         * Redraw all other instances
+         */
+        redrawInstances: function() {
+            var $this = this;
+
+            // redraw instances
+            $('[data-zx-manager-type="files"]').each(function(index, instance){
+
+                console.log($this.id);
+                
+                // skip current instance
+                if (parseInt(index) === $this.id) return true;
+
+
+                // if table inited
+                if (instance.oTable) {
+
+                    // redraw
+                    instance.bRedrawing = true;
+                    instance.oTable.fnReloadAjax();
+                }
+            });
+        },
+
+        /**
+         * Delete the object from the server // TO CHECK
          */
         deleteObject: function($object) {
             var $this = this,
@@ -105,7 +264,7 @@
             $this.manager.deleteObject().done(function(json) {
 
                 // remove the object from cache
-                var aaData = $.zlux.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData;
+                var aaData = cache[$this.sCurrentPath].data;
             })
 
 
@@ -189,7 +348,7 @@
 
             $this.pushMessageToObject($object, msg);
         },
-        
+
         /**
          * Requests the Object name change
          */
@@ -269,5 +428,36 @@
             return cp ? cp + '/' + path : path;
         }
     });
+
+
+    /* Helper functions
+       ---------------------------------------------- */
+
+    /**
+        Parses the specified size string into a byte value. For example 10kb becomes 10240
+
+        @param  String/Number size String to parse or number to just pass through
+        @return Number Size in bytes
+    */
+    function parseSize(size){
+        if (typeof(size) !== 'string' || size === '') return size;
+
+        var muls = {
+                t: 1099511627776,
+                g: 1073741824,
+                m: 1048576,
+                k: 1024
+            },
+            mul;
+
+        size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
+        mul = size[2];
+        size = +size[1];
+        
+        if (muls.hasOwnProperty(mul)) {
+            size *= muls[mul];
+        }
+        return size;
+    };
 
 })(jQuery, jQuery.zlux, window, document);
