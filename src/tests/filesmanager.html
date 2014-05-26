@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en-gb" dir="ltr">
 	<head>
-		<meta charset="utf-8">
+		<meta charset="utf-8"></meta>
+		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
 		<title>Zlux Files</title>
 		<link rel="stylesheet" href="../../dist/zlux.min.css">
 		<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
@@ -11,6 +12,7 @@
 		<script src="../../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
 		<script src="../../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
 		<script src="../js/core.js"></script>
+		<script src="../js/ajax.js"></script>
 		<script src="../js/component.js"></script>
 		<script src="../js/notify.js"></script>
 		<script src="../js/manager.js"></script>
@@ -23,18 +25,7 @@
 			<div class="uk-grid">
 
 				<!-- main wrapper -->
-				<div data-zx-manager data-zx-manager-type="files" class="zx-manager uk-width-1-2">
-
-					<!-- menu -->
-					<nav class="uk-navbar zx-manager-nav"></nav>
-
-					<!-- table -->
-					<table class="uk-table uk-table-striped zx-manager-resources"></table>
-
-				</div>
-
-				<!-- main wrapper -->
-				<div data-zx-manager data-zx-manager-type="files" class="zx-manager uk-width-1-2">
+				<div data-zx-manager-files class="zx-manager uk-width-1-1">
 
 					<!-- menu -->
 					<nav class="uk-navbar zx-manager-nav"></nav>
@@ -50,30 +41,22 @@
 
 		<script type="text/javascript">
 
-			// mock the 
-			$.mockjax({
-				url: 'index.php?option=com_zoolanders&format=raw&controller=zlux&task=getFilesManagerData',
-				contentType: 'text/json',
-				type: 'POST',
-				// response: function(settings){
-				// 	var response = {
-				// 		"draw": settings.data.draw,
-				// 		"root": settings.data.root,
-				// 		"recordsTotal": 1,
-				// 		"recordsFiltered": 1,
-				// 		"data": [{
-				// 			"type": "folder",
-				// 			"name": "nostrud",
-				// 			"basename": "nostrud",
-				// 			"size": {
-				// 				"value": 3499,
-				// 				"display": "34.99 KB"
-				// 			}
-				// 		}]
-				// 	};
-				// 	return response;
-				// }
-				proxy: 'data/filesManager.json'
+			// mock DT request
+			$.mockjax(function(settings) {
+				var service = settings.url.match(/index\.php\?option\=com_zoolanders\&format\=raw\&controller\=zlux\&task\=getFilesManagerData/);
+				if ( service ) {
+					// emulate 1 level folder tree
+					if (settings.data.root === '') {
+						return {
+							proxy: 'data/filesManager.json'
+						};
+					} else {
+						return {
+							proxy: 'data/filesManager.subfolder.json'
+						};
+					}
+				}
+				return;
 			});
 
 			// mock the 
@@ -85,8 +68,6 @@
 				// 	"success|0-1": true
 				// })
 			});
-
-
 			
 		</script>
 

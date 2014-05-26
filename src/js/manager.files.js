@@ -3,10 +3,10 @@
 
     var instance_id = 0,
         cache = {};
+    
+    ZX.component('filesManager', $.extend(true, {}, ZX.components['manager'], {
 
-    ZX.plugin("manager", "filesManager", {
-
-        options: {
+        defaults: {
             root: '', // relative path to the root folder
             extensions: '', // array or comma separated values of allowed extensions
             storage: 'local',
@@ -15,169 +15,183 @@
             resize: {}
         },
 
-        init: function(manager) {
+        init: function() {
             var $this = this;
 
-            // if manager is not of of files type, abort
-            if (!manager.type || manager.type !== 'files') return;
-
-            // extend manager options
-            $.extend(manager.options, $this.options);
+            // init main manager
+            ZX.components['manager'].init.apply(this);
             
             // set instance id
-            manager.id = instance_id++;
-
-            // save manager reference
-            $this.manager = manager;
+            this.id = instance_id++;
 
             // clean settings
-            $this.options.max_file_size = parseSize($this.options.max_file_size);
-            $this.options.extensions = $this.options.extensions.replace(/\|/g, ',');
-            $this.options.root = ZX.utils.cleanURI($this.options.root);
+            this.options.max_file_size = parseSize(this.options.max_file_size);
+            this.options.extensions = this.options.extensions.replace(/\|/g, ',');
+            this.options.root = ZX.utils.cleanURI(this.options.root);
 
             // check storage param
-            if ($this.options.storage === '' || $this.options.storage === undefined || $this.options.storage === null) {
+            if (this.options.storage === '' || this.options.storage === undefined || this.options.storage === null) {
                 // ZX._ErrorLog(0, ZX.lang._('STORAGE_PARAM_MISSING'));
-                $this.options.storage = 'local';
+                this.options.storage = 'local';
             }
 
             // set initial path
-            $this.currentPath = $this.options.root;
+            this.currentPath = this.options.root;
 
             // EVENT resource selected
-            manager.on('click', '.zx-manager-resource .zx-x-name a', function () {
-                var $resource = manager.getResource($(this).closest('.zx-manager-resource'));
-
-                if ($resource.element.attr('data-zx-status') !== 'true') {
-                    $resource.element.attr('data-zx-status', 'true');
+            this.on('resourceSelected', function (e, resource)
+            {
+                if (resource.element.attr('data-zx-status') !== 'true') {
+                    resource.element.attr('data-zx-status', 'true');
 
                     // remove selected status from siblings
-                    $resource.element.siblings().removeAttr('data-zx-status');
+                    resource.element.siblings().removeAttr('data-zx-status');
 
                     // if folder
-                    if ($resource.element.data('type') === 'folder') {
+                    if (resource.element.data('type') === 'folder') {
 
-                        // update go to path
-                        $this.goToPath = $resource.element.data('id');
-
-                        // reload with new path
-                        // manager.reloadAjax();
+                        // go to the resources path
+                        $this.goToPath(resource.element.data('id'));
                     }
 
                     // trigger event
-                    manager.element.trigger('manager-resource-selected', $resource);
+                    // $this.trigger('manager-resource-selected', $resource);
                 }
 
                 // prevent default
                 return false;
             });
 
-            // extend with new functions
-            manager._ajax = $this._ajax;
-            manager.redrawInstances = $this.redrawInstances;
+            // EVENT resource deleted
+            this.on('resourceDeleted', function (e, resource)
+            {
+                // remove the object from cache
+                var data = cache[$this.currentPath].data;
+                $.each(data, function(i, value){
+                    if (resource.data.name === value.name && resource.data.type === value.type) {
+                        // found, remove
+                        data.splice(i, 1);
+
+                        // stop iteration
+                        return false;
+                    }
+                });
+
+                // redraw instances
+                $this.redrawInstances();
+            });
 
             // override the ajax function
-            manager.DTsettings.ajax = function (data, callback, settings) {
-                manager._ajax(data, callback, settings);
+            this.DTsettings.ajax = function (data, callback, settings) {
+                $this.ajax(data, callback, settings);
             };
 
-            // manager.DTsettings.ajax = $this._ajax;
-
-            
-
-            // all set, init manager
-            manager.initManager();
+            // all set, init resources
+            this.initResources();
         },
 
-        _ajax: function (data, callback, settings) {
+        goToPath: function (path) {
+            this._goToPath = path;
+            this.resources.DataTable().ajax.reload();
+            // reset var after ajax request
+            this._goToPath = '';
+        },
+
+        ajax: function (data, callback, settings) {
             var $this = this,
-                root;
 
-            console.log(this);
+            // set the new root
+            root = ZX.utils.cleanURI($this.currentPath + '/' + $this._goToPath);
 
-            // push values to the data request
+            // if available use cache data instead
+
+            if (cache[root]) {
+                callback( cache[root] );
+                return;
+            }
+
+            // prepare request data to be send
             data.extensions = $this.options.extensions;
+            data.root = root;
 
             // if S3 storage
-            if($this.options.storage === 's3') {
+            if ($this.options.storage === 's3') {
                 data.storage = s3;
                 data.accesskey = $this.options.storage_params.accesskey;
                 data.key = $this.options.storage_params.secretkey;
                 data.bucket = $this.options.storage_params.bucket;
             }
 
-
-
-            /* the Cache Data is stored in the main plugin so it can be shared by all instances */
-
-            // set the root
-            root = ZX.utils.cleanURI($this.currentPath + '/' + $this.goToPath);
-
-            // reset vars
-            $this.goToPath = '';
-
-            // send root with post data
-            data.root = root;
-
-            // set ajax object
-            settings.jqXHR = ZX.ajax.requestAndNotify({
+            // request
+            ZX.ajax.requestAndNotify({
                 url: ZX.url.ajax('zlux', 'getFilesManagerData'),
                 data: data,
-                beforeSend: function(){
-                    // check if the data is cached
-                    var cached = false;
+                queue: 'filesmanager',
+                // beforeSend: function(){
+                //     // check if the data is cached
+                //     var cached = false;
 
-                    // if not reloading
-                    if (!$this.reloading || $this.redrawing){
+                //     setTimeout(function(){
+                //         console.log(cache['']);
+                //     }, 100);
 
-                        // check if already cached
-                        var json = cache[root]; /// CHECK THIS
-                        if (json) {
+                    
 
-                            // if first time, save real root path, as it can be changed for security reasons by the server
-                            if (!$this.cacheInited) $this.startRoot = json.root;
+                //     // if not reloading
+                //     if (!$this.reloading || $this.redrawing){
 
-                            // save root
-                            $this.currentPath = root;
+                //         // check if already cached
+                //         var json = cache[root];
+                       
+                //         if (json) {
+                //             console.log('it is cached');
+                //             // if first time, save real root path, as it can be changed for security reasons by the server
+                //             if (!$this.cacheInited) $this.startRoot = json.root;
 
-                            // set cache status
-                            $this.cacheInited = true;
+                //             // save current path
+                //             $this.currentPath = root;
 
-                            // emulate the xhr events
-                            $($this.manager.resources).trigger('xhr', [settings, json]);
-                            callback( json );
+                //             // set cache status
+                //             $this.cacheInited = true;
 
-                            // avoid ajax call
-                            cached = true;
-                        }
+                //             // emulate the xhr events
+                //             // $($this.resources).trigger('xhr', [settings, json]);
+                //             callback( json );
 
-                        // if redrawing
-                        if ($this.redrawing) {
-                            // reset the param
-                            $this.redrawing = false;
+                //             // avoid ajax call
+                //             cached = true;
+                //         }
 
-                            // save root
-                            $this.currentPath = root;
+                //         // if redrawing
+                //         if ($this.redrawing) {
+                //             // reset the param
+                //             $this.redrawing = false;
 
-                            // avoid the ajax call
-                            return false;
-                        }
-                    }
+                //             // save root
+                //             $this.currentPath = root;
 
-                    // if cached abort ajax
-                    if (cached) return false;
+                //             // avoid the ajax call
+                //             return false;
+                //         }
+                //     }
 
-                    // else, the ajax proceeds, show the spinner
-                    // $this.zluxdialog.spinner('show');
-                }
+                //     console.log(cached);
+
+                //     // if cached abort ajax
+                //     if (cached) return false;
+
+                //     // else, the ajax proceeds, show the spinner
+                //     // $this.zluxdialog.spinner('show');
+                // }
             })
 
-            .fail(function (response) {
-                // console.log(response);
+            .done(function (json) {
 
-            })
+                // reset cache if reloading, in order to retrieve the content again
+                // if ($this.reloading) cache = {};
 
-            .done(function ( json ) {
+                // cache the retrieved data
+                cache[json.root] = json;
 
                 // if first time, save real root path, as it can be changed for security reasons by the server
                 if (!$this.cacheInited) $this.startRoot = json.root;
@@ -185,14 +199,9 @@
                 // save new path
                 $this.currentPath = json.root;
 
-                // empty cache if reloading, so the content is retrieved again
-                if ($this.reloading) cache = {};
-
-                // cache the data
-                cache[json.root] = json;
-
-                // redraw the other instances
-                $this.redrawInstances();
+               
+               // redraw the other instances
+                // if ($this.cacheInited) $this.redrawInstances();
 
                 // set reloading to false
                 $this.reloading = false;
@@ -200,13 +209,8 @@
                 // set cache status
                 $this.cacheInited = true;
 
-                // trigger events
-                $($this.resources).trigger('xhr', [settings, json]);
-                callback( json );
-            })
-
-            .always(function() {
-                // console.log($.mockjax.mockedAjaxCalls());
+                // redraw
+                callback(json);
             });
         },
 
@@ -217,22 +221,25 @@
             var $this = this;
 
             // redraw instances
-            $('[data-zx-manager-type="files"]').each(function(index, instance){
-
-                console.log($this.id);
+            $('[data-zx-manager-files]').each(function(index, instance){
+                var manager = $(instance).data('filesManager');
                 
                 // skip current instance
-                if (parseInt(index) === $this.id) return true;
+                if (manager.id === $this.id) return true;
 
-
-                // if table inited
-                if (instance.oTable) {
-
+                // if resources and cache inited
+                if (manager.resources && manager.cacheInited) {
                     // redraw
-                    instance.bRedrawing = true;
-                    instance.oTable.fnReloadAjax();
+                    // manager.redrawing = true;
+                    manager.resources.DataTable().ajax.reload();
                 }
             });
+        },
+
+        preResourceDelete: function(resource, request) {
+            var $this = this;
+
+            // adapt request
         },
 
         /**
@@ -261,12 +268,11 @@
             aoData.push({ "name": "path", "value": path });
 
             //
-            $this.manager.deleteObject().done(function(json) {
+            $this.deleteObject().done(function(json) {
 
                 // remove the object from cache
                 var aaData = cache[$this.sCurrentPath].data;
-            })
-
+            });
 
             aoData.push({ "name": "key", "value": $this.options.storage_params.secretkey });
         },
@@ -427,7 +433,7 @@
             var cp = this.sCurrentPath;
             return cp ? cp + '/' + path : path;
         }
-    });
+    }));
 
 
     /* Helper functions
@@ -458,6 +464,19 @@
             size *= muls[mul];
         }
         return size;
-    };
+    }
+
+
+    // init code
+    $(document).on("uk-domready", function(e) {
+
+        $("[data-zx-manager-files]").each(function() {
+            var manager = $(this);
+
+            if (!manager.data("filesManager")) {
+                var obj = ZX.filesManager(manager, $.UIkit.Utils.options(manager.attr("data-zx-manager-files")));
+            }
+        });
+    });
 
 })(jQuery, jQuery.zlux, window, document);

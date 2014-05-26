@@ -6,6 +6,7 @@
 // Sub-objects:     `zx-manager-resource`
 //					`zx-manager-resouce-tools`
 //					`zx-manager-resource-icon
+//					`zx-manager-nav
 //
 // Modifiers:       ``
 //
@@ -24,83 +25,83 @@
  ========================================================================== */
 
 
-// TOOLBAR
-.zx-manager-nav {
+/* Sub-object: `zx-manager-nav`
+ ========================================================================== */
+.zx-manager-nav .uk-navbar-nav a > i {
+	color: black;
+	font-size: 20px;
 
-
-	// // subtoolbar
-	// [class^="zlux-dialog-subtoolbar-"] {
-	// 	border-top: 1px solid #EEE;
-	// 	margin-top: 4px;
-
-	// 	.zlux-x-input {
-	// 		width: 262px;
-	// 		margin: 4px 0 0;
-	// 	}
-	// }
-
-	// // TOOLBAR
+	border: 2px solid #EEE;
+	border-radius: 4px;
+	
+	padding: 4px 9px 3px;
+	// display: inline-block;
 	// position: relative;
-	// text-align: center;
-	// border-bottom: 1px solid #EEE;
-	// // .border-radius(2px);
-	// padding: 4px 0;
 
-	// // btns
-	// a {
-	// 	// color: black;
-	// 	border: 2px solid #EEE;
-	// 	border-radius: 4px;
-	// 	font-size: 20px;
-	// 	cursor: pointer;
-	// 	padding: 4px 9px 3px;
-	// 	display: inline-block;
-	// 	position: relative;
+	&:hover {
+		border-color: #CFCFCF;
+	}
 
-	// 	&:hover {
-	// 		border-color: #CFCFCF;
-	// 	}
+	&.disabled {
+		border-color: #EEEEEE;
+		color: #C0C0C0;
+		cursor: default;
+	}
 
-	// 	&.disabled {
-	// 		border-color: #EEEEEE;
-	// 		color: #C0C0C0;
-	// 		cursor: default;
-	// 	}
-
-	// 	&.zlux-ui-tool-enabled {
-	// 		border-color: #CFCFCF;
-	// 	}
-	// }
-
-	// // all toolbars
-	// [class^="zlux-dialog-toolbar-"] {
-	// 	display: none;
-
-	// 	ul.inline {
-	// 		margin-bottom: 0;
-	// 	}
-	// }
-
-	// // main toolbar
-	// [class^="zlux-dialog-toolbar-main"] {
-	// 	display: block;
-	// }
-
-	// // back to main menu btn
-	// .zlux-dialog-toolbar-backtomain {
-	// 	display: none;
-	// 	cursor: pointer;
-	// 	font-size: 17px;
-	// 	top: 5px;
-	// 	left: 4px;
-	// 	position: absolute;
-	// 	border-color: transparent;
-
-	// 	&:hover {
-	// 		border-color: #CFCFCF;
-	// 	}
+	// &.zlux-ui-tool-enabled {
+	// 	border-color: #CFCFCF;
 	// }
 }
+
+
+// // subtoolbar
+// [class^="zlux-dialog-subtoolbar-"] {
+// 	border-top: 1px solid #EEE;
+// 	margin-top: 4px;
+
+// 	.zlux-x-input {
+// 		width: 262px;
+// 		margin: 4px 0 0;
+// 	}
+// }
+
+// // TOOLBAR
+// position: relative;
+// text-align: center;
+// border-bottom: 1px solid #EEE;
+// // .border-radius(2px);
+// padding: 4px 0;
+
+
+
+// // all toolbars
+// [class^="zlux-dialog-toolbar-"] {
+// 	display: none;
+
+// 	ul.inline {
+// 		margin-bottom: 0;
+// 	}
+// }
+
+// // main toolbar
+// [class^="zlux-dialog-toolbar-main"] {
+// 	display: block;
+// }
+
+// // back to main menu btn
+// .zlux-dialog-toolbar-backtomain {
+// 	display: none;
+// 	cursor: pointer;
+// 	font-size: 17px;
+// 	top: 5px;
+// 	left: 4px;
+// 	position: absolute;
+// 	border-color: transparent;
+
+// 	&:hover {
+// 		border-color: #CFCFCF;
+// 	}
+// }
 
 
 /* Sub-object: `zx-manager-resource`

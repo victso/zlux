@@ -1,27 +1,21 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
-    ZX.component('manager', {
+    ZX.components['manager'] = {
 
         id: 0,
-        type: '',
 
         init: function() {
             var $this = this;
-
-            // save the mananger type
-            this.type = this.element.attr('data-zx-manager-type');
-
-            // make sure type is set
-            if (!this.type) return;
            
             // save nav node ref
             this.nav = ZX.ManagerNav($('.zx-manager-nav', this.element));
 
-            this.nav.addChild();
+            this.nav.addChild({icon: 'filter'});
+            this.nav.addChild({icon: 'user'});
 
             // delete resource event
-            this.element.on('click', '.zx-manager-resource .zx-x-remove', function(e){
+            this.on('click', '.zx-manager-resource .zx-x-remove', function(e){
                 e.preventDefault();
                 var resource = $this.getResource($(this).closest('.zx-manager-resource'));
 
@@ -29,6 +23,13 @@
                 ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE')).done(function(){
                     $this.deleteResource(resource);
                 });
+            });
+
+
+            // EVENT trigger resourceSelected
+            this.on('click', '.zx-manager-resource .zx-x-name a', function (e) {
+                $this.trigger('resourceSelected', $this.getResource($(this).closest('.zx-manager-resource')));
+                e.preventDefault();
             });
         },
 
@@ -38,6 +39,7 @@
                 emptyTable: ZX.lang._('EMPTY_FOLDER'),
                 infoEmpty: ''
             },
+            stripeClasses: [], // uikit doesn't need stipe class on each row
             paging: false,
             columns: [
                 { 
@@ -132,6 +134,7 @@
             preDrawCallback: function() {
                 // show processing
                 // $this.zluxdialog.spinner('show');
+            
             },
             drawCallback: function(settings) {
                 // pagination hide/show
@@ -141,7 +144,8 @@
                 // if (oPaging.totalPages <= 1) pagination.hide(); else pagination.show();
 
                 // trigger event
-                this.trigger("DrawCallback");
+                // this.trigger("DrawCallback");
+
 
                 // // update dialog scrollbar
                 // $this.zluxdialog.scrollbar('refresh');
@@ -151,15 +155,12 @@
             }
         },
 
-        initManager: function() {
-            // init table
-            this.initResources();
-        },
-
         getResource: function(resource) {
             // if already a resource object return directly, else retrieve from node
             return resource instanceof jQuery ? resource.data('ManagerResource') : resource;
         },
+
+        preResourceDelete: function(resource, request) {},
 
         deleteResource: function(resource) {
             var $this = this;
@@ -178,9 +179,8 @@
             // $('.column-icon i', resource.dom).spin('on');
 
 
-            // pre action event, allow changing request data
-            this.element.trigger('preResourceDelete', request);
-
+            // pre action, allow changing request data
+            this.preResourceDelete(resource, request);
 
             // make the request and return a promise
             ZX.ajax.request(request).done(function(json) {
@@ -189,27 +189,12 @@
                 resource.element.fadeOut('slow', function(){
                     $(this).remove();
 
-                    // remove the object from cache
-                    // var aaData = $.zlux.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData;
-                    // $.each(aaData, function(i, value){
-                    //     if ($object.dom.data('id') === value.name && $object.dom.data('type') === value.type) {
-                    //         // found, remove
-                    //         aaData.splice(i, 1);
-
-                    //         // stop iteration
-                    //         return false;
-                    //     }
-                    // });
-
-                    // redraw the other instances
-                    // $this.redrawInstances();
+                    // trigger event
+                    $this.trigger('resourceDeleted', resource);
                 });
-                
-                // trigger event
-                $this.element.trigger('resourceDeleted', resource);
 
             }).fail(function(response){
-                console.log('failed L2');
+     
                 // console.log(response);
 
                 // show the message
@@ -261,7 +246,7 @@
                 }
             });
         }
-    });
+    };
 
 
     ZX.component('ManagerResource', {
@@ -284,20 +269,19 @@
                                             <strong>{{$item.name}}</strong>: \
                                             <span>{{$item.value}}</span>\
                                         </li>\
-                                        {{/items}}\
+                                        {{/details}}\
                                         </ul>\
                                 </div>\
                             </div>\
                             {{/end}}',
         },
 
-        init: function() {
-        },
+        init: function() {},
 
         /* renders the resource content */
         render: function() {
             
-            return $.UIkit.Utils.template(this.defaults.template, this.data);
+            return $.UIkit.Utils.template(this.options.template, this.data);
         },
 
         /* push new resource data into the current one */
@@ -311,31 +295,20 @@
     ZX.component('ManagerNav', {
 
         defaults: {
-            template      : '<ul class="uk-navbar-nav">\
-                <li class="uk-active"><a href="#"><i class="uk-icon-filter"></i>Active</a></li>\
-                <li class=""><a href="#"><i class="uk-icon-filter"></i>other</a></li>\
-                </ul>'
+            template    : '<ul class="uk-navbar-nav uk-navbar-center">\
+                            </ul>',
+            btn_tmpl    : '<li><a href="">\
+                            <i class="uk-icon-{{icon}}"></i>\
+                           </a></li>' 
         },
 
         init: function() {
             this.element.append(this.options.template);
         },
 
-        addChild: function() {
-            $('ul', this.element).append('<li class=""><a href="#"><i class="uk-icon-filter"></i>other</a></li>');
+        addChild: function(data) {
+            this.find('ul.uk-navbar-nav').append($.UIkit.Utils.template(this.options.btn_tmpl, data));
         }
-    });
-
-    // init code
-    $(document).on("uk-domready", function(e) {
-
-        $("[data-zx-manager]").each(function() {
-            var manager = $(this);
-
-            if (!manager.data("manager")) {
-                var obj = ZX.manager(manager, $.UIkit.Utils.options(manager.attr("data-zx-manager")));
-            }
-        });
     });
 
 })(jQuery, jQuery.zlux, window, document);
