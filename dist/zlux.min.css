@@ -7210,20 +7210,22 @@
  ========================================================================== */
 /* Sub-object: `zx-manager-nav`
  ========================================================================== */
-.zx-manager-nav .uk-navbar-nav a > i {
-  color: black;
-  font-size: 20px;
+.zx-manager-nav .uk-navbar-nav a {
   border: 2px solid #EEE;
   border-radius: 4px;
   padding: 4px 9px 3px;
 }
-.zx-manager-nav .uk-navbar-nav a > i:hover {
+.zx-manager-nav .uk-navbar-nav a:hover {
   border-color: #CFCFCF;
 }
-.zx-manager-nav .uk-navbar-nav a > i.disabled {
+.zx-manager-nav .uk-navbar-nav a.disabled {
   border-color: #EEEEEE;
   color: #C0C0C0;
   cursor: default;
+}
+.zx-manager-nav .uk-navbar-nav a > i {
+  color: black;
+  font-size: 20px;
 }
 /* Sub-object: `zx-manager-resource`
  ========================================================================== */
