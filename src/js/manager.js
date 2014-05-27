@@ -20,7 +20,7 @@
                 var resource = $this.getResource($(this).closest('.zx-manager-resource'));
 
                 // prompt confirmation
-                ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE')).done(function(){
+                ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE'), {timeout: false}).done(function(){
                     $this.deleteResource(resource);
                 });
             });

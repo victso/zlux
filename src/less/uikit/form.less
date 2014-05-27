@@ -12,12 +12,9 @@
 @form-background:                               @global-background;
 @form-color:                                    @global-color;
 
-@form-focus-border:                             @global-primary-background;
-@form-focus-background:                         @global-background;
 @form-focus-color:                              @global-color;
 
 @form-disabled-border:                          @global-border;
-@form-disabled-background:                      #fafafa;
 @form-disabled-color:                           @global-muted-color;
 
 @form-placeholder-color:                        @global-muted-color;
@@ -25,13 +22,23 @@
 @form-gutter:                                   @global-margin;
 
 @form-legend-border:                            @global-border;
-@form-legend-font-size:                         round(@global-font-size * 1.28); // 18px
-@form-legend-line-height:                       round(@form-legend-font-size * 1.66); // 30px
+@form-legend-font-size:                         round(@global-font-size * 1.28); // 18px / 20px
+@form-legend-line-height:                       round(@form-legend-font-size * 1.68); // 30px / 34px
 
 @form-small-height:                             @global-height-small;
 @form-large-height:                             @global-height-large;
-@form-small-font-size:                          round(@global-font-size * 0.85); // 12px
-@form-large-font-size:                          round(@global-font-size * 1.14); // 16px
+@form-small-font-size:                          round(@global-font-size * 0.85); // 12px / 14px
+@form-large-font-size:                          round(@global-font-size * 1.14); // 16px / 18px
+
+@form-blank-border:                             @global-border;
+
+@form-icon-width:                               @global-height;
+@form-icon-font-size:                           @global-font-size;
+@form-icon-color:                               @global-muted-color;
+
+//
+// New
+//
 
 @form-danger-border:                            @global-danger-background;
 @form-danger-background:                        @global-background;
@@ -41,16 +48,10 @@
 @form-success-background:                       @global-background;
 @form-success-color:                            @global-color;
 
-@form-blank-border:                             @global-border;
-
 @form-large-width:                              400px;
 
 @form-horizontal-label-margin-top:              7px;
 @form-horizontal-controls-text-padding-top:     7px;
-
-@form-icon-width:                               @global-height;
-@form-icon-font-size:                           @global-font-size;
-@form-icon-color:                               @global-muted-color;
 
 
 // Component
@@ -88,7 +89,16 @@
 // ========================================================================
 
 .hook-form-blank() {}
+
 .hook-form-blank-focus() {}
+
+
+// Sub-object: `uk-form-label`
+// ========================================================================
+
+.hook-form-stacked-label() {}
+
+.hook-form-horizontal-label() {}
 
 
 // Miscellaneous
@@ -100,5 +110,5 @@
         color: @global-muted-color;
         font-style: italic;
     }
-    
+
 }

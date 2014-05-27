@@ -7,26 +7,26 @@
 // Variables
 // ========================================================================
 
-@notify-position:                               50px;
 @notify-z-index:                                (@global-z-index + 40);
 
 @notify-message-margin-bottom:                  15px;
-@notify-message-background:                     rgba(240,240,240,0.9);
-@notify-message-color:                          #444;
-@notify-message-font-size:                      16px;
+@notify-message-background:                     @global-primary-soft-background;
+@notify-message-color:                          @global-primary-color;
+@notify-message-border:             			fade(@global-primary-color, 30%);
+@notify-message-font-size:                      round(@global-font-size * 1.14); // 16px / 18px
 @notify-message-line-height:                    round(@notify-message-font-size * 1.37); // 22px
 
-@notify-message-primary-background:             fade(#e1f2fb, 90%);
-@notify-message-primary-color:                  #37a5e4;
+@notify-message-success-background:             @global-success-soft-background;
+@notify-message-success-color:                  @global-success-color;
+@notify-message-success-border:             	fade(@global-success-color, 30%);
 
-@notify-message-success-background:             fade(#ecf7e9, 90%);
-@notify-message-success-color:                  #80c96d;
+@notify-message-warning-background:             @global-warning-soft-background;
+@notify-message-warning-color:                  @global-warning-color;
+@notify-message-warning-border:             	fade(@global-danger-color, 30%);
 
-@notify-message-warning-background:             fade(#fff0e0, 90%);
-@notify-message-warning-color:                  #ff9a2e;
-
-@notify-message-danger-background:              fade(#fde7e7, 90%);
-@notify-message-danger-color:                   #f0615b;
+@notify-message-danger-background:              @global-danger-soft-background;
+@notify-message-danger-color:                   @global-danger-color;
+@notify-message-danger-border:           	  	fade(@global-danger-color, 30%);
 
 
 // Component
@@ -35,17 +35,16 @@
 .hook-notify() {}
 
 .hook-notify-message() {
-	border-radius: 4px;
+	border: 1px solid @notify-message-border;
+	border-radius: @global-border-radius;
 	font-weight: 300;
 }
 
-.hook-notify-message-primary() {}
+.hook-notify-message-success() { border-color: @notify-message-success-border; }
 
-.hook-notify-message-success() {}
+.hook-notify-message-warning() { border-color: @notify-message-warning-border; }
 
-.hook-notify-message-warning() {}
-
-.hook-notify-message-danger() {}
+.hook-notify-message-danger() { border-color: @notify-message-danger-border; }
 
 
 // Miscellaneous

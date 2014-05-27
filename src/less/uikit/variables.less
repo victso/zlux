@@ -4,10 +4,12 @@
 // ========================================================================
 
 
-
-
 // Global variables
 // ========================================================================
+
+//
+// New
+//
 
 @global-primary-color:                            #37a5e4;
 @global-success-color:                            #80c96d;
@@ -45,18 +47,22 @@
 @global-primary-background:                     #37a5e4;
 @global-primary-hover-background:               #2495d6;
 @global-primary-active-background:              #1889c6;
+@global-primary-soft-background:                #e1f2fb;
 
 @global-success-background:                     #80c96d;
 @global-success-hover-background:               #6dbc58;
 @global-success-active-background:              #61b54c;
+@global-success-soft-background:                #ecf7e9;
+
+@global-warning-background:                     #ff9a2e;
+@global-warning-soft-background:                #fff0e0;
 
 @global-danger-background:                      #f0615b;
 @global-danger-hover-background:                #e54f49;
 @global-danger-active-background:               #e4463a;
+@global-danger-soft-background:                 #fde7e7;
 
-@global-warning-background:                     #ff9a2e;
-
-@global-hover-background:                       #ffd;
+@global-hover-background:                       rgba(0, 0, 0, 0.05);
 
 @global-navbar-background:						#fff;
 @global-navbar-color:							#999;
@@ -85,20 +91,3 @@
 //
 
 @global-z-index:                                1000;
-
-//
-// Breakpoints
-//
-
-@breakpoint-mini-max:                           (@breakpoint-small - 1);
-
-@breakpoint-small:                              480px;
-@breakpoint-small-max:                          (@breakpoint-medium - 1);
-
-@breakpoint-medium:                             768px;
-@breakpoint-medium-max:                         (@breakpoint-large - 1);
-
-@breakpoint-large:                              960px;
-@breakpoint-large-max:                          (@breakpoint-xlarge - 1);
-
-@breakpoint-xlarge:                             1220px;

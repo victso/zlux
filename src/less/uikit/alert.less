@@ -9,41 +9,48 @@
 
 @alert-margin-vertical:                         @global-margin;
 
-@alert-background:                              #e1f2fb;
-@alert-color:                                   #37a5e4;
+@alert-color:                                   @global-primary-color;
+@alert-background:                              @global-primary-soft-background;
+@alert-border:                                  fade(@alert-color, 30%);
 
-@alert-success-background:                      #ecf7e9;
-@alert-success-color:                           #80c96d;
+@alert-success-color:                           @global-success-color;
+@alert-success-background:                      @global-success-soft-background;
+@alert-success-border:                          fade(@alert-success-color, 30%);
 
-@alert-warning-background:                      #fff0e0;
-@alert-warning-color:                           #ff9a2e;
+@alert-warning-color:                           @global-warning-color;
+@alert-warning-background:                      @global-warning-soft-background;
+@alert-warning-border:                          fade(@alert-warning-color, 30%);
 
-@alert-danger-background:                       #fde7e7;
-@alert-danger-color:                            #f0615b;
+@alert-danger-color:                            @global-danger-color;
+@alert-danger-background:                       @global-danger-soft-background;
+@alert-danger-border:                           fade(@alert-danger-color, 30%);
 
 
 // Component
 // ========================================================================
 
-.hook-alert() { border-radius: @global-border-radius; }
+.hook-alert() {
+    border: 1px solid @alert-border;
+    border-radius: @global-border-radius;
+}
 
 
 // Modifier: `uk-alert-success`
 // ========================================================================
 
-.hook-alert-success() {}
+.hook-alert-success() { border-color: @alert-success-border; }
 
 
 // Modifier: `uk-alert-warning`
 // ========================================================================
 
-.hook-alert-warning() {}
+.hook-alert-warning() { border-color: @alert-warning-border; }
 
 
 // Modifier: `uk-alert-danger`
 // ========================================================================
 
-.hook-alert-danger() {}
+.hook-alert-danger() { border-color: @alert-danger-border; }
 
 
 // Miscellaneous

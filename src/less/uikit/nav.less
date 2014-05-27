@@ -22,31 +22,30 @@
 
 @nav-parent-icon-width:                         @global-line-height;
 
-@nav-side-color:                                @global-muted-color;
-@nav-side-hover-background:                     @global-hover-background;
+@nav-side-color:                                @global-color;
 @nav-side-hover-color:                          @global-color;
-@nav-side-active-background:                    @global-default-background;
-@nav-side-active-color:                         @global-color;
+@nav-side-active-background:                    @global-primary-background;
+@nav-side-active-color:                         @global-contrast-color;
 @nav-side-header-color:                         @global-color;
 @nav-side-divider-border:                       @global-border;
 @nav-side-nested-color:                         @global-link-color;
 @nav-side-nested-hover-color:                   @global-link-hover-color;
 
 @nav-dropdown-color:                            @global-color;
-@nav-dropdown-hover-background:                 transparent;
-@nav-dropdown-hover-color:                      @global-link-color;
+@nav-dropdown-hover-background:                 @global-primary-background;
+@nav-dropdown-hover-color:                      @global-contrast-color;
 @nav-dropdown-header-color:                     @global-muted-color;
 @nav-dropdown-divider-border:                   @global-border;
 @nav-dropdown-nested-color:                     @global-link-color;
 @nav-dropdown-nested-hover-color:               @global-link-hover-color;
 
-@nav-navbar-color:                              @global-navbar-color;
-@nav-navbar-hover-background:                   transparent;
-@nav-navbar-hover-color:                        @global-navbar-hover-color;
+@nav-navbar-color:                              @global-color;
+@nav-navbar-hover-background:                   @global-primary-background;
+@nav-navbar-hover-color:                        @global-contrast-color;
 @nav-navbar-header-color:                       @global-muted-color;
 @nav-navbar-divider-border:                     @global-border;
-@nav-navbar-nested-color:                       @global-navbar-color;
-@nav-navbar-nested-hover-color:                 @global-navbar-hover-color;
+@nav-navbar-nested-color:                       @global-link-color;
+@nav-navbar-nested-hover-color:                 @global-link-hover-color;
 
 @nav-offcanvas-color:                           @offcanvas-panel-link-color;
 @nav-offcanvas-hover-background:                lighten(@offcanvas-bar-background, 5%);
@@ -54,8 +53,7 @@
 @nav-offcanvas-active-background:               darken(@offcanvas-bar-background, 10%);
 @nav-offcanvas-active-color:                    @offcanvas-panel-link-hover-color;
 @nav-offcanvas-header-color:                    @offcanvas-panel-color;
-@nav-offcanvas-divider-border:                  #333;
-@nav-offcanvas-divider-border-width:            2px;
+@nav-offcanvas-divider-border:                  darken(@offcanvas-bar-background, 10%);
 @nav-offcanvas-nested-color:                    @offcanvas-panel-link-color;
 @nav-offcanvas-nested-hover-color:              @offcanvas-panel-link-hover-color;
 
@@ -166,6 +164,7 @@
 // ========================================================================
 
 .hook-nav-offcanvas-link() {}
+
 .hook-nav-offcanvas-link-hover() {}
 
 //
@@ -173,6 +172,9 @@
 //
 
 .hook-nav-offcanvas() {}
+
+// Hover
+.hook-nav-offcanvas-hover() {}
 
 // Active
 .hook-nav-offcanvas-active() {}
@@ -193,15 +195,4 @@
 // Miscellaneous
 // ========================================================================
 
-.hook-nav-misc() {
-
-    /*
-     * Needed because of nav-actions to keep style on hover
-     */
-
-    .uk-nav-side > li:hover > a {
-        background: @nav-side-hover-background;
-        color: @nav-side-hover-color;
-    }
-
-}
+.hook-nav-misc() {}
