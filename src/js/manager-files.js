@@ -236,6 +236,19 @@
             });
         },
 
+        /**
+         * Reload the data from source and redraw
+         */
+        reload: function() {
+            var $this = this;
+
+            // set vars
+            $this.reloading = true;
+
+            // reload
+            $this.resources.DataTable().ajax.reload();
+        },
+
         preResourceDelete: function(resource, request) {
             var $this = this;
 

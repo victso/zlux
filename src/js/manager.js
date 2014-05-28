@@ -9,7 +9,7 @@
             var $this = this;
            
             // save nav node ref
-            this.nav = ZX.ManagerNav($('.zx-manager-nav', this.element));
+            this.nav = ZX.managerNav($('.zx-manager-nav', this.element));
 
             this.nav.addChild({icon: 'filter'});
             this.nav.addChild({icon: 'user'});
@@ -85,7 +85,7 @@
                     rsc_data.details.push({name: ZX.lang._('SIZE'), value: data.size.display});
                 }
 
-                var $resource = ZX.ManagerResource(row, rsc_data);
+                var $resource = ZX.managerResource(row, rsc_data);
                 $resource.pushData(rsc_data);
 
                 // set resource dom properties
@@ -249,7 +249,7 @@
     };
 
 
-    ZX.component('ManagerResource', {
+    ZX.component('managerResource', {
 
         data: {},
 
@@ -292,14 +292,25 @@
     });
 
     
-    ZX.component('ManagerNav', {
+    ZX.component('managerNav', {
 
         defaults: {
-            template    : '<ul class="uk-navbar-nav uk-navbar-center">\
-                            </ul>',
-            btn_tmpl    : '<li><a href="">\
-                            <i class="uk-icon-{{icon}}"></i>\
-                           </a></li>' 
+            template:       '<ul class="uk-navbar-nav">\
+                                <li class="uk-parent" data-uk-dropdown>\
+                                    <a href=""><i class="uk-icon-bars"></i></a>\
+                                    <div class="uk-dropdown uk-dropdown-navbar">\
+                                        <ul class="uk-nav uk-nav-navbar">\
+                                            <li><a href="">Another item</a></li>\
+                                        </ul>\
+                                    </div>\
+                                </li>\
+                            </ul>\
+                            <div class="uk-navbar-content">\
+                                <form class="uk-form uk-margin-remove uk-display-inline-block">\
+                                   <input type="text" placeholder="Search">\
+                                </form>\
+                            </div>',
+            option_tmpl    : '<li><a href=""><i class="uk-icon-{{icon}}"></i> Some text </a></li>'
         },
 
         init: function() {
@@ -307,7 +318,7 @@
         },
 
         addChild: function(data) {
-            this.find('ul.uk-navbar-nav').append($.UIkit.Utils.template(this.options.btn_tmpl, data));
+            this.find('.uk-dropdown > ul').append($.UIkit.Utils.template(this.options.option_tmpl, data));
         }
     });
 
