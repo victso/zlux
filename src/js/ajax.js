@@ -52,7 +52,11 @@
                     }
                 }
 
-                else if (result.success)
+                // status must be set
+                else if (result.success === undefined) {
+                    result.errors = ['Response format error: status not specified'];
+                    defer.reject(result);
+                } else if (result.success)
                     defer.resolve(result);
                 else
                     defer.reject(result);
