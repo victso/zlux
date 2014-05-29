@@ -90,6 +90,119 @@
             this.initResources();
         },
 
+        DTsettings: {
+            paging: false,
+            columns: [
+                { 
+                    title: '', data: 'type', searchable: false, class: 'zx-manager-resource-icon uk-width-1-1',
+                    render: function (data, type) {
+                        if (type === 'display') {
+                            return '<i class="uk-icon-' + (data === 'folder' ? 'folder' : 'file-o') + '"></i>';
+                        } else {
+                            return data;
+                        }
+                    }
+                },
+                { 
+                    title: ZX.lang._('NAME'), data: 'name', class: 'zx-manager-resource-name',
+                    render: function (data, type) {
+                        return type === 'display' ? '' : data;
+                    },
+                    createdCell: function (cell, cellData, rowData) {
+                        // store path in data
+                        $(cell).parent('tr').attr('data-id', ZX.utils.cleanURI(rowData.name));
+                    }
+                }
+            ],
+            columnDefs: {
+                visible: false, targets: [ 2 ]
+            },
+            sorting: [ [0,'desc'], [1,'asc'] ], // init sort
+            serverSide: true,
+            rowCallback: function(row, data) {
+                var rsc_data = data;
+                    rsc_data.details = [];
+
+                // set resource details
+                if (data.type === 'folder') {
+                    rsc_data.details.push({name: ZX.lang._('NAME'), value: data.basename});
+
+                } else { // file
+                    rsc_data.details.push({name: ZX.lang._('NAME'), value: data.basename});
+                    rsc_data.details.push({name: ZX.lang._('TYPE'), value: data.content_type});
+                    rsc_data.details.push({name: ZX.lang._('SIZE'), value: data.size.display});
+                }
+
+                var $resource = ZX.managerResource(row, rsc_data);
+                $resource.pushData(rsc_data);
+
+                // set resource dom properties
+                $resource.element.attr('data-type', data.type).addClass('zx-manager-resource');
+
+                // reset and append the resource data
+                $('.zx-manager-resource-name', $resource.element).html('').append(
+                    // render the resource content
+                   $resource.render()
+                );
+
+                // append the resource edit feature to the name
+                $('.zx-x-name', $resource.element).append(
+                    '<i class="zx-x-name-edit uk-icon-pencil-square" title="' + ZX.lang._('RENAME') + '" />'
+                );
+            },
+            initComplete: function() {
+                // var input_filter = $('.zlux-x-filter-input_wrapper', wrapper)
+                
+                // .append(
+                //     // set search icon
+                //     $('<i class="icon-search" />'),
+                //     // and the cancel button
+                //     $('<i class="icon-remove zlux-ui-dropdown-unselect" />').hide().on('click', function(){
+                //         $('input', input_filter).val('');
+                //         $(this).hide();
+                //         // reset the filter
+                //         $this.oTable.fnFilter('');
+                //     })
+                // );
+
+                // // set search events
+                // $('input', input_filter).on('keyup', function(){
+                //     if ($(this).val() === '') {
+                //         $('.zlux-ui-dropdown-unselect', input_filter).hide();
+                //     } else {
+                //         $('.zlux-ui-dropdown-unselect', input_filter).show();
+                //     }
+                // });
+
+                // trigger table init event 50ms after as a workaround if the first ajax call is canceled
+                // setTimeout(function() {
+                //     this.trigger("InitComplete");
+                // }, 50);
+            },
+            preDrawCallback: function() {
+                // show processing
+                // $this.zluxdialog.spinner('show');
+            
+            },
+            drawCallback: function(settings) {
+                // pagination hide/show
+                // var oPaging = $this.table.fnPagingInfo(),
+                //     pagination = $('.dataTables_paginate', $(settings.tableWrapper)).closest('.row-fluid');
+                
+                // if (oPaging.totalPages <= 1) pagination.hide(); else pagination.show();
+
+                // trigger event
+                // this.trigger("DrawCallback");
+
+
+                // // update dialog scrollbar
+                // $this.zluxdialog.scrollbar('refresh');
+
+                // // hide spinner
+                // $this.zluxdialog.spinner('hide');
+            }
+        },
+
         goToPath: function (path) {
             this._goToPath = path;
             this.resources.DataTable().ajax.reload();
