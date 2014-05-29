@@ -8,12 +8,6 @@ module.exports = function(grunt) {
 
 		// set metadata
 		meta: {
-			path: {
-				src: 'src',
-				dist: {
-					root: 'dist'
-				}
-			},
 			banner: '/* ===================================================\n' +
 					' * <%= pkg.name %>\n' +
 					' * <%= pkg.homepage %>\n' +
@@ -31,28 +25,28 @@ module.exports = function(grunt) {
 				options: {
 					cleancss: true
 				},
-				files: { "dist/zlux.min.css": ["src/less/zlux.less"] }
+				files: { 'dist/css/zlux.min.css': ['src/less/zlux.less'] }
 			},
 			dev: {
 				options: {
 					cleancss: false
 				},
-				files: { "dist/zlux.min.css": ["src/less/zlux.less"] }
+				files: { 'dist/css/zlux.min.css': ['src/less/zlux.less'] }
 			}
 		},
 
 		// JS tasks
 		// ========================================================================
 		uglify: {
-			com: {
-				files: { '<%= meta.path.dist %>/zlux.min.js': ['<%= meta.path.dist %>/media/js/admin.js'] }
+			dist: {
+				files: { 'dist/js/zlux.min.js': ['dist/js/zlux.js'] }
 			}
 		},
 
 		// BANNER tasks
 		// ========================================================================
 		usebanner: {
-			com: {
+			dist: {
 				options: {
 					position: 'top',
 					banner: '<%= meta.banner %>'
@@ -63,7 +57,8 @@ module.exports = function(grunt) {
 						cwd: 'dist', 
 						src: [
 							'**/*.css',
-							'**/*.js'
+							'**/*.js',
+							'!**/uikit/*.js'
 						]
 					}
 				]
@@ -75,20 +70,50 @@ module.exports = function(grunt) {
 		copy: { 
 
 			// copy uikit dist files
-			uikit: {
+			uikit_fonts: {
 				files: [
 					{
 						expand: true,
-						cwd: 'bower_components/uikit/dist',
+						cwd: 'bower_components/uikit/dist/fonts',
 						src: [
-							'fonts/**',
-							'js/**'
+							'*'
 						],
-						dest: 'dist'
+						dest: 'dist/fonts'
+					}
+				]
+			},
+			uikit_js: {
+				files: [
+					{
+						expand: true,
+						cwd: 'bower_components/uikit/dist/js',
+						src: [
+							'**/*.min.js'
+						],
+						dest: 'dist/js/uikit'
 					}
 				]
 			}
 
+		},
+
+		// CONCAT tasks
+		// ========================================================================
+		concat: {
+		    dist: {
+		        options: {
+		            separator: "\n\n"
+		        },
+		        src: [
+		            "src/js/core.js",
+		            "src/js/component.js",
+		            "src/js/ajax.js",
+		            "src/js/notify.js",
+		            "src/js/manager.js",
+		            "src/js/manager-items.js",
+		        ],
+		        dest: "dist/js/zlux.js"
+		    }
 		},
 
 		// WATCH tasks
@@ -98,8 +123,28 @@ module.exports = function(grunt) {
 		        files: ['src/less/**/*.less'],
 		        tasks: ['dev']
 		    }
-		}
+		},
 
+		// CLEAN tasks
+		// ========================================================================
+		clean: {
+
+			dist: ['dist/*'],
+
+			dist_sources: {
+				files: [
+					{
+						expand: true, 
+						cwd: 'dist', 
+						src: [
+							'**/*.less',
+							'**/*.js',
+							'!**/*.min.js'
+						]
+					}
+				]
+			}
+		}
 	});
 
 	// Load grunt tasks from NPM packages
@@ -109,6 +154,7 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks("grunt-contrib-jshint");
 	grunt.loadNpmTasks("grunt-contrib-uglify");
 	grunt.loadNpmTasks("grunt-contrib-watch");
+	grunt.loadNpmTasks("grunt-contrib-clean");
 	grunt.loadNpmTasks("grunt-banner");
 
 
@@ -116,6 +162,6 @@ module.exports = function(grunt) {
 	// ========================================================================
 	grunt.registerTask('build', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
-	// grunt.registerTask('default', ['less:dist', 'usebanner']);
+	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts']);
 	
 };
