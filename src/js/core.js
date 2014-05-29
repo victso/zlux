@@ -7,7 +7,7 @@
         return ZX;
     }
 
-    ZX.version = '1.0';
+    ZX.version = '2.0';
 
     ZX.fn = function(command, options) {
 
@@ -26,42 +26,56 @@
     };
 
 
-    /** URL **/
+    /** URI **/
     ZX.url = {};
-    ZX.url.root_url = ''; // populated by zlux helper
-    ZX.url.root = function (url) {
-        // make sure the url has no the root_path on it
-        var patt = new RegExp('^' + ZX.url.root_url);
-        url = ZX.utils.typeOf(url) === 'string' ? url.replace(patt, '') : '';
-        // rturn the root + the cleaned url
-        return ZX.url.root_url + url;
+    ZX.url.urls = {};
+    /**
+     * Push urls to the list
+     * @param Object urls List of urls in JSON format
+     */
+    ZX.url.push = function (urls) {
+        $.extend(ZX.url.urls, urls);
     };
-    ZX.url.base_url = ''; // populated by zlux helper
-    ZX.url.base = function (url) {
-        return ZX.url.base_url + (url || '');
-    };
-    ZX.url.zlfw_url = 'plugins/system/zlframework/zlframework/';
-    ZX.url.zlfw = function (url) {
-        return ZX.url.zlfw_url + (url || '');
-    };
-    ZX.url.ajax_url = ZX.url.base_url + 'index.php?option=com_zoolanders&format=raw';
-    ZX.url.ajax = function (controller, task, params) {
-        // make sure params is defined
+    /**
+     * Retrieves the specified url
+     * @param String url || url:path The url to be retrieved
+     * @param Object params List of params tu attach to the url
+     * @return String The full url
+     */
+    ZX.url.get = function (url, params) {
+        url = url.split(':');
         params = params === undefined ? {} : params;
-        // ser init vars
-        // var app_id = params.app_id || ZX.zoo.app_id;
-        // var option = params.option || (ZX.com_zl ? 'com_zoolanders' : 'com_zoo');
 
-        // avoid repeating main params
-        delete params.option;
-        // delete params.app_id;
-
-        // prepare and return the url
-        return ZX.url.ajax_url +
-            '&controller=' + controller +
-            '&task=' + task +
-            // (app_id ? '&app_id=' + app_id : '') +
+        return ZX.url.clean(url.length === 2 ? ZX.url._get(url[0]) + '/' + url[1] : url[0]) +
             ($.isEmptyObject(params) ? '' : '&' + $.param(params));
+    };
+    ZX.url._get = function (url) {
+        return ZX.url.urls[url] || url;
+    };
+    /**
+     * Clean an URL from double slash and others
+     * @param String url The url to be cleaned
+     */
+    ZX.url.clean = function(url) {
+        if (!url) return '';
+        
+        // return url and
+        return url
+
+        // replace \ with /
+        .replace(/\\/g, '/')
+
+        // replace // with /
+        .replace(/\/\//g, '/')
+
+        // remove undefined
+        .replace(/undefined/g, '')
+
+        // remove / from end
+        .replace(/\/$/g, '')
+
+        // recover the http:// if set
+        .replace(/:\//g, ':\/\/');
     };
 
 
@@ -69,16 +83,16 @@
     ZX.lang = {};
     ZX.lang.strings = {};
     /**
-     * Add the language strings to the array
-     * @param {Object} strings Translated string in JSON format.
+     * Push language strings to the list
+     * @param Object strings Translated string in JSON format.
      */
-    ZX.lang.set = function (strings) {
+    ZX.lang.push = function (strings) {
         $.extend(ZX.lang.strings, strings);
     };
     /**
      * Retrieves the specified language string
-     * @param {String} string String to look for.
-     * @return {String} Translated string or the input string if it wasn't found.
+     * @param String string String to look for.
+     * @return String Translated string or the input string if it wasn't found.
      */
     ZX.lang.get = function (string) {
         return ZX.lang.strings[string] || string;
@@ -87,8 +101,8 @@
     ZX.lang._ = ZX.lang.get;
     /**
      * Pseudo sprintf implementation - simple way to replace tokens with specified values.
-     * @param {String} str String with tokens
-     * @return {String} String with replaced tokens
+     * @param String str String with tokens
+     * @return String String with replaced tokens
      */
     ZX.lang.sprintf = function (str) {
         var args = [].slice.call(arguments, 1);
@@ -120,79 +134,17 @@
 
         return options;
     };
-    /**
-     * Clean an URI from double slash and others
-     * @param String uri The uri to be cleaned
-     */
-    ZX.utils.cleanURI = function(uri) {
-        if (!uri) return '';
-        
-        // return uri and
-        return uri
-
-        // replace \ with /
-        .replace(/\\/g, '/')
-
-        // replace // with /
-        .replace(/\/\//g, '/')
-
-        // remove undefined
-        .replace(/undefined/g, '')
-
-        // remove / from end
-        .replace(/\/$/g, '')
-
-        // recover the http:// if set
-        .replace(/:\//g, ':\/\/');
-    };
-
-
-    $.zlux = ZX;
-    $.fn.zx = ZX.fn;
-
-    return ZX;
 
 
     /** ASSETS **/
-    zlux.assets = {};
-    zlux.assets._ress = {}; // requested assets
-    // store known assets for fast loading
-    zlux.assets.known = {
-        "dates":{
-            "css":"plugins/system/zlframework/zlframework/zlux/DatesManager/style.css",
-            "js":"plugins/system/zlframework/zlframework/zlux/DatesManager/plugin.js"
-        },
-        "dialog":{
-            "css":"plugins/system/zlframework/zlframework/zlux/DialogManager/style.css",
-            "js":"plugins/system/zlframework/zlframework/zlux/DialogManager/plugin.js"
-        },
-        "fields":{
-            "css":"plugins/system/zlframework/zlframework/zlux/FieldsManager/style.css",
-            "js":"plugins/system/zlframework/zlframework/zlux/FieldsManager/plugin.js"
-        },
-        "files":{
-            "css":"plugins/system/zlframework/zlframework/zlux/FilesManager/style.css",
-            "js":"plugins/system/zlframework/zlframework/zlux/FilesManager/plugin.js"
-        },
-        "items":{
-            "css":"plugins/system/zlframework/zlframework/zlux/ItemsManager/style.css",
-            "js":"plugins/system/zlframework/zlframework/zlux/ItemsManager/plugin.js"
-        }
-    };
-
+    ZX.assets = {};
+    ZX.assets._ress = {}; // requested assets
     /**
      * Load requested assets and execute callback
      * @ress String or Array
      */
-    zlux.assets.load = function(ress, callback, failcallback) {
+    ZX.assets.load = function(ress, callback, failcallback) {
         var req  = [];
-
-        // if is string check for related known ressources
-        if (zlux.utils.typeOf(ress) == 'string' && $.zlux.assets.known[ress] !== undefined){
-            ress = $.map(zlux.assets.known[ress], function(value, index) {
-                return [value];
-            });
-        }
         
         // clean vars
         ress = $.isArray(ress) ? ress:[ress];
@@ -202,14 +154,14 @@
 
             if(!ress[i]) continue;
 
-            if (!zlux.assets._ress[ress[i]]) {
+            if (!ZX.assets._ress[ress[i]]) {
                 if (ress[i].match(/\.js$/)) {
-                    zlux.assets._ress[ress[i]] = zlux.assets.getScript(zlux.url.root(ress[i]));
+                    ZX.assets._ress[ress[i]] = ZX.assets.getScript(ZX.url.get('root:'+ress[i]));
                 } else {
-                    zlux.assets._ress[ress[i]] = zlux.assets.getCss(zlux.url.root(ress[i]));
+                    ZX.assets._ress[ress[i]] = ZX.assets.getCss(ZX.url.get('root:'+ress[i]));
                 }
             }
-            req.push(zlux.assets._ress[ress[i]]);
+            req.push(ZX.assets._ress[ress[i]]);
         }
 
         return $.when.apply($, req).done(callback).fail(function(){
@@ -220,7 +172,7 @@
             }
         });
     };
-    zlux.assets.getScript = function(url, callback) {
+    ZX.assets.getScript = function(url, callback) {
         var d = $.Deferred(), script = document.createElement('script');
 
         script.async = true;
@@ -248,7 +200,7 @@
 
         return d.promise();
     };
-    zlux.assets.getCss = function(url, callback){
+    ZX.assets.getCss = function(url, callback){
         var d         = $.Deferred(),
             link      = document.createElement('link');
             link.type = 'text/css';
@@ -268,195 +220,8 @@
     };
 
 
-   
-    /** SUPPORT **/
-    zlux.support = {};
-    zlux.support.touch = (
-        ('ontouchstart' in window && navigator.userAgent.toLowerCase().match(/mobile|tablet/)) ||
-        (window.DocumentTouch && document instanceof window.DocumentTouch)  ||
-        (window.navigator['msPointerEnabled'] && window.navigator['msMaxTouchPoints'] > 0) || //IE 10
-        (window.navigator['pointerEnabled'] && window.navigator['maxTouchPoints'] > 0) || //IE >=11
-        false
-    );
+    // declare zlux
+    $.zlux = ZX;
+    $.fn.zx = ZX.fn;
 
-
-    // set zlux
-    $.zlux = zlux;
-    $.fn.zlux = zlux.fn;
-})(jQuery, window, document);
-
-
-/* ===================================================
- * ZLUX Main
- * https://zoolanders.com/extensions/zl-framework
- * ===================================================
- * Copyright (C) JOOlanders SL 
- * http://www.gnu.org/licenses/gpl-2.0.html GNU/GPLv2 only
- * ========================================================== */
-;(function ($, window, document, undefined) {
-    "use strict";
-    return;
-
-
-    var Plugin = function(){};
-    $.extend(Plugin.prototype, {
-        name: 'Main',
-        options: {},
-        // var for internal events, must be reseted when expanding?
-        events: {},
-        /**
-         * Dispatches the specified event name and it's arguments to all listeners.
-         *
-         * @method trigger
-         * @param {String} name Event name to fire.
-         * @param {Object..} Multiple arguments to pass along to the listener functions.
-         */
-        trigger : function(name) {
-            var list = this.events[name.toLowerCase()], i, args;
-
-            // Replace name with sender in args
-            args = Array.prototype.slice.call(arguments);
-            args[0] = this;
-
-            // if event was binded
-            if (list) {
-
-                // Dispatch event to all listeners
-                for (i = 0; i < list.length; i++) {
-                    // Fire event, break chain if false is returned
-                    if (list[i].func.apply(list[i].scope, args) === false) {
-                        return false;
-                    }
-                }
-            }
-
-            // always trigger target for external binds with zlux. namespace
-            if (this.element) this.element.trigger('zlux.' + name, args);
-
-            return true;
-        },
-        /**
-         * Adds an event listener by name.
-         *
-         * @method bind
-         * @param {String} name Event name to listen for.
-         * @param {function} func Function to call ones the event gets fired.
-         * @param {Object} scope Optional scope to execute the specified function in.
-         */
-        bind: function(names, func, scope){
-            var $this = this;
-
-            names.split(' ').each(function(name){
-                var list;
-
-                name = name.toLowerCase();
-                list = $this.events[name] || [];
-                list.push({func : func, scope : scope || $this});
-                $this.events[name] = list;
-            });
-
-            // chaining
-            return this;
-        },
-        /**
-         * Removes the specified event listener.
-         *
-         * @method unbind
-         * @param {String} name Name of event to remove.
-         * @param {function} func Function to remove from listener.
-         */
-        unbind : function(name) {
-            name = name.toLowerCase();
-
-            var list = this.events[name], i, func = arguments[1];
-
-            if (list) {
-                if (func !== undefined) {
-                    for (i = list.length - 1; i >= 0; i--) {
-                        if (list[i].func === func) {
-                            list.splice(i, 1);
-                                break;
-                        }
-                    }
-                } else {
-                    list = [];
-                }
-
-                // delete event list if it has become empty
-                if (!list.length) {
-                    delete this.events[name];
-                }
-            }
-        },
-        /**
-         * Removes all event listeners.
-         *
-         * @method unbindAll
-         */
-        unbindAll : function() {
-            var $this = this;
-            
-            $.each($this.events, function(list, name) {
-                $this.unbind(name);
-            });
-        },
-        /**
-         * Check whether uploader has any listeners to the specified event.
-         *
-         * @method hasEventListener
-         * @param {String} name Event name to check for.
-         */
-        hasEventListener : function(name) {
-            return !!this.events[name.toLowerCase()];
-        },
-        /**
-         * Log an error message
-         *  @param {int} iLevel log error messages, or display them to the user
-         *  @param {string} sMesg error message
-         */
-        _ErrorLog: function(iLevel, sMesg ) {
-            var $this = this,
-                sAlert = ($this.ID === undefined) ?
-                $this.name + ": " + sMesg :
-                $this.name + " warning (id = '" + $this.ID + "'): " + sMesg;
-
-            if ( iLevel === 0 )
-            {
-                alert( sAlert );
-                return;
-            }
-            else if ( window.console && console.log )
-            {
-                console.log( sAlert );
-            }
-        },
-        /**
-         * Shortcut for translate function
-         *
-         * @param {String} str String to look for.
-         * @return {String} Translated string or the input string if it wasn't found.
-         */
-        _: function(str) {
-            return $.zlux.lang.get(str);
-        },
-        /**
-         * Pseudo sprintf implementation - simple way to replace tokens with specified values.
-         *
-         * @param {String} str String with tokens
-         * @return {String} String with replaced tokens
-         */
-        sprintf: function(str) {
-            var args = [].slice.call(arguments, 1), reStr = '';
-
-            str.split(/%[sdf]/).forEach(function(part) {
-                reStr += part;
-                if (args.length) {
-                    reStr += args.shift();
-                }
-            });
-            return reStr;
-        }
-    });
-    // Don't touch
-    $.zlux[Plugin.prototype.name] = Plugin;
 })(jQuery, window, document);
