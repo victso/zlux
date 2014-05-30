@@ -93,8 +93,20 @@ module.exports = function(grunt) {
 						dest: 'dist/js/uikit'
 					}
 				]
-			}
+			},
 
+			svg: {
+				files: [
+					{
+						expand: true,
+						cwd: 'src/svg',
+						src: [
+							'*'
+						],
+						dest: 'dist/svg'
+					}
+				]
+			}
 		},
 
 		// CONCAT tasks
@@ -161,6 +173,6 @@ module.exports = function(grunt) {
 	// ========================================================================
 	grunt.registerTask('build', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
-	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts']);
+	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts', 'copy:svg']);
 	
 };
