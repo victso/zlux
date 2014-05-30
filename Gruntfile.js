@@ -25,7 +25,10 @@ module.exports = function(grunt) {
 				options: {
 					cleancss: true
 				},
-				files: { 'dist/css/zlux.min.css': ['src/less/zlux.less'] }
+				files: [
+					{ 'dist/css/zlux-theme.min.css': ['src/less/zlux-theme.less'] },
+					{ 'dist/css/zlux.min.css': ['src/less/zlux.less'] }
+				]
 			},
 			dev: {
 				options: {

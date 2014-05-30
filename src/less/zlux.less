@@ -9,22 +9,32 @@
 
 @import "uikit/variables.less";
 
-/* Wrap - uikit styles must be wrapped with zlux class
+
+/* Visibility - missing Mini breakpoint
 ========================================================================== */
 
 .zlux {
-	@import "uikit/uikit.less";
-	@import "uikit/uikit-addons.less";
-}
 
-/* Sortable - workaround for the dragged element, hide it outside zlux
-========================================================================== */
+	/* Desktop and bigger */
+	@media (min-width: @breakpoint-large) {
+	    .zx-visible-mini { display: none !important; }
+	}
 
-.uk-sortable-list-dragged {
-	visibility: hidden;
-}
-.zlux .uk-sortable-list-dragged {
-	visibility: visible;
+	/* Only tablets portrait */
+	@media (min-width: @breakpoint-medium) and (max-width: @breakpoint-medium-max) {
+	    .zx-visible-mini { display: none !important; }
+	}
+
+	/* Phone landscape */
+	@media (min-width: @breakpoint-mini-max) and (max-width: @breakpoint-small-max) {
+	    .zx-visible-mini { display: none !important; }
+	}
+
+	/* Phones portrait and smaller */
+	@media (max-width: @breakpoint-mini-max) {
+	    .zx-hidden-mini { display: none !important; }
+	}
+
 }
 
 
@@ -40,6 +50,7 @@
 
 /* DataTables
 ----------------------------------------------------------------------------------------------------*/
+.zlux {
 // .zx-filesmanager {
 
 	// wrapper
@@ -105,3 +116,4 @@
 		}
 	}
 // }
+}
