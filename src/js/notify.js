@@ -35,9 +35,14 @@
             });
 
         }).promise();
+    },
+
+    closeAll = function(group, instantly){
+        $.UIkit.notify.closeAll(group, instantly);
     };
 
     ZX.notify          = notify;
     ZX.notify.confirm  = confirm;
+    ZX.notify.closeAll = closeAll;
 
 })(jQuery, jQuery.zlux, window, document);
