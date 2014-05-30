@@ -137,9 +137,7 @@ module.exports = function(grunt) {
 						expand: true, 
 						cwd: 'dist', 
 						src: [
-							'**/*.less',
-							'**/*.js',
-							'!**/*.min.js'
+							'**/*.less'
 						]
 					}
 				]
