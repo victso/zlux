@@ -4,11 +4,12 @@
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
 		<title>zlux Items Manager</title>
+		<link rel="stylesheet" href="../../dist/css/zlux-theme.min.css">
 		<link rel="stylesheet" href="../../dist/css/zlux.min.css">
 		<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="../../bower_components/uikit/dist/js/uikit.min.js"></script>
+		<script src="../../bower_components/uikit/dist/js/addons/datepicker.min.js"></script>
 		<script src="../../bower_components/uikit/dist/js/addons/notify.min.js"></script>
-		<script src="../../bower_components/datatables/media/js/jquery.datatables.js"></script>
 		<script src="../../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
 		<script src="../../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
 		<script src="../js/core.js"></script>
@@ -17,25 +18,46 @@
 		<script src="../js/notify.js"></script>
 		<script src="../js/manager.js"></script>
 		<script src="../js/manager-items.js"></script>
-	</head>
-	<body class="tm-background zlux">
+		<script type="text/javascript">
+			jQuery.zlux.url.push({"zlux":"\/dist", "root":""});		
+		</script>
+		<style type="text/css">
 
+			html { font-size: 14px; }
+
+			body { font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+			body.uk-container { padding-bottom: 250px; }
+
+/*			.test .uk-dropdown {
+				display: block;
+				position: relative;
+				z-index: 0;
+				-moz-box-sizing: border-box;
+				box-sizing: border-box;
+			}*/
+
+		</style>
+	</head>
+	<body class="tm-background zlux test">
 		<div class="uk-container uk-container-center">
 
-			<div class="uk-grid">
+		<form class="uk-form">
+			<input type="" data-uk-datepicker="{format:'DD.MM'}">
+		</form>
 
-				<!-- main wrapper -->
-				<div data-zx-manager-items class="zx-manager uk-width-1-1">
+		<form class="uk-form">
+			<input type="" data-uk-datepicker="{format:'DD.MM.YYYY'}">
+		</form>
 
-					<!-- menu -->
-					<nav class="uk-navbar zx-manager-nav"></nav>
+			<form class="uk-form">
+				<input type="text" data-zx-itempicker="{init_display:'My selected Item'">
+			</form>
 
-					<!-- table -->
-					<table class="uk-table uk-table-striped zx-manager-resources"></table>
+			<form class="uk-form">
+				<input type="text" data-zx-itempicker="{init_display:'My selected Item'">
+			</form>
 
-				</div>
-
-			</div>
 
 		</div>
 
@@ -43,7 +65,7 @@
 
 			// mock DT request
 			$.mockjax(function(settings) {
-				var service = settings.url.match(/index\.php\?option\=com_zoolanders\&format\=raw\&controller\=zlux\&task\=getItemsManagerData/);
+				var service = settings.url.match(/&controller\=zlux\&task\=getItemsManagerData/);
 				if ( service ) {
 					return {
 						proxy: 'data/manager-items.json'

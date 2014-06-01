@@ -6,7 +6,8 @@
 // Sub-objects:     `zx-manager-resource`
 //					`zx-manager-resouce-tools`
 //					`zx-manager-resource-icon
-//					`zx-manager-nav
+//					`zx-manager-nav`
+//					`zx-manager-pagination
 //
 // Modifiers:       ``
 //
@@ -17,10 +18,124 @@
 // Variables
 // ========================================================================
 
+@manager-nav-height:                         20px;
+@manager-nav-color:                          #444;
+@manager-nav-hover-color:                    #444;
+@manager-previous-icon:                      "\f053";
+@manager-next-icon:                          "\f054";
 
 /* ========================================================================
    Component: Manager
  ========================================================================== */
+
+/*
+ * Pagination
+ */
+
+.zx-manager-pagination a {
+	color: @manager-nav-color;
+	text-decoration: none;
+	.hook-manager-pagination-item;
+}
+
+.zx-manager-pagination a:hover { color: @manager-nav-hover-color; }
+
+.zx-manager-pagination-prev { float: left; }
+.zx-manager-pagination-next { float: right; }
+
+.zx-manager-pagination-prev a:after,
+.zx-manager-pagination-next a:after {
+	width: @manager-nav-height;
+	font-family: FontAwesome;
+}
+
+.zx-manager-pagination-prev a:after { content: @manager-previous-icon; }
+.zx-manager-pagination-next a:after { content: @manager-next-icon; }
+
+
+// Variation: Dropdown
+// ========================================================================
+
+.uk-dropdown.zx-manager {
+	width: 225px;
+}
+
+.uk-dropdown .zx-manager-nav {
+	text-align: center;
+}
+
+
+/*
+ * DataTable
+ */
+ 
+	// // wrapper
+	// &.dataTables_wrapper {
+	// 	position: relative;
+	// 	clear: both;
+	// 	// min-height: 225px;
+	// 	padding-bottom: 3px;
+
+	// 	a:focus {
+	// 		outline: none;
+	// 	}
+	// }
+
+	// // pagination
+	// div.dataTables_paginate {
+	// 	margin: 0;
+	// }
+
+.zx-manager table.dataTable {
+
+	// basic style
+	width: 100% !important;
+	margin-bottom: 0;
+
+	// remove border from last row
+	.zx-manager-resource:last-child td {
+		border: 0;
+	}
+
+	// sorting
+	.sorting, // both
+	.sorting_asc,
+	.sorting_desc,
+	.sorting_asc_disabled,
+	.sorting_desc_disabled {
+		cursor: pointer;
+		*cursor: hand;
+		position: relative;
+
+		&:after {
+			font-family: FontAwesome;
+			font-style: normal;
+			font-weight: normal;
+			font-size: 14px;
+			float: right;
+		}
+	}
+
+	.sorting_asc:after,
+	.sorting_asc_disabled:after {
+		content: "\f0de"; // icon-sort-up
+	}
+	
+	.sorting_desc:after,
+	.sorting_desc_disabled:after {
+		content: "\f0dd"; // icon-sort-down
+	}
+
+	.sorting:after {
+		content: "\f0dc"; // icon-sort
+		color: #DCDCDC;
+	}
+
+	.sorting_asc_disabled:after,
+	.sorting_desc_disabled:after { 
+		color: #DCDCDC;
+	}
+}
 
 
 /* Sub-object: `zx-manager-nav`
@@ -126,6 +241,7 @@
 	color: @global-success-color;
 }
 
+
 /*
  * Actions btns
  */
@@ -198,18 +314,20 @@
 }
 
 
-/* Sub-object: `zx-manager-resource-icon`
- ========================================================================== */
+/*
+ * Icon
+ */
 
-.zx-manager-resource-icon {
+.zx-manager-resource .zx-x-icon {
 	width: 21px;
 }
 
 
-/* Sub-object: `zx-manager-resource-tools`
- ========================================================================== */
+/*
+ * Tools
+ */
 
-.zx-manager-resource-tools > i {
+.zx-manager-resource .zx-x-tools > i {
 	float: right;
 	margin: 3px 0 0 4px;
 	cursor: pointer;
@@ -218,3 +336,12 @@
 	text-align: center;
 	width: 1.25em;
 }
+
+
+// Hooks
+// ========================================================================
+
+.hook-manager-misc;
+
+.hook-manager-pagination-item() {}
+.hook-manager-misc() {}

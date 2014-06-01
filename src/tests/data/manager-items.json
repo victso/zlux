@@ -1,7 +1,7 @@
 {
 	"success": true,
-    "recordsTotal": "2",
-    "recordsFiltered": "2",
+    "recordsTotal": "20",
+    "recordsFiltered": "5",
     "columns": "_itemname, application, type, access, author, id",
     "apps": [{
         "name": "Blog",
@@ -78,6 +78,60 @@
         },
         "access": "Registered",
         "created": "2010-03-11 16:36:21",
+        "author": {
+            "name": "",
+            "id": "42"
+        }
+    }, {
+        "id": "36",
+        "name": "John Q. Public",
+        "_itemname": "John Q. Public",
+        "application": {
+            "name": "Blog",
+            "id": "1"
+        },
+        "type": {
+            "name": "Author",
+            "id": "author"
+        },
+        "access": "Public",
+        "created": "2010-03-11 16:33:16",
+        "author": {
+            "name": "",
+            "id": "42"
+        }
+    }, {
+        "id": "36",
+        "name": "John Q. Public",
+        "_itemname": "John Q. Public",
+        "application": {
+            "name": "Blog",
+            "id": "1"
+        },
+        "type": {
+            "name": "Author",
+            "id": "author"
+        },
+        "access": "Public",
+        "created": "2010-03-11 16:33:16",
+        "author": {
+            "name": "",
+            "id": "42"
+        }
+    }, {
+        "id": "36",
+        "name": "John Q. Public",
+        "_itemname": "John Q. Public",
+        "application": {
+            "name": "Blog",
+            "id": "1"
+        },
+        "type": {
+            "name": "Author",
+            "id": "author"
+        },
+        "access": "Public",
+        "created": "2010-03-11 16:33:16",
         "author": {
             "name": "",
             "id": "42"

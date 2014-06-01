@@ -28,7 +28,11 @@
 
     /** URI **/
     ZX.url = {};
-    ZX.url.urls = {};
+    ZX.url.urls = {
+        ajax: '',
+        root: '',
+        zlux: ''
+    };
     /**
      * Push urls to the list
      * @param Object urls List of urls in JSON format
@@ -50,7 +54,7 @@
             ($.isEmptyObject(params) ? '' : '&' + $.param(params));
     };
     ZX.url._get = function (url) {
-        return ZX.url.urls[url] || url;
+        return ZX.url.urls[url] !== undefined ? ZX.url.urls[url] : url;
     };
     /**
      * Clean an URL from double slash and others
@@ -223,5 +227,11 @@
     // declare zlux
     $.zlux = ZX;
     $.fn.zx = ZX.fn;
+
+
+    // style workaround, wrap with zlux floating elements
+    $(document).on("uk-domready", function(e) {
+        $('body > .uk-datepicker, body > .uk-timepicker, body > .uk-tooltip').wrap('<div class="zlux" />');
+    });
 
 })(jQuery, window, document);
