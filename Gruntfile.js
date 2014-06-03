@@ -42,12 +42,9 @@ module.exports = function(grunt) {
 		// ========================================================================
 		uglify: {
 			dist: {
-				files: { 'dist/js/zlux.min.js': ['dist/js/zlux.js'] }
-			},
-
-			assets: {
 				files: [
-					{ 'dist/js/dataTables.min.js': ['dist/js/dataTables.min.js'] }
+					{ 'dist/js/zlux.min.js': ['dist/js/zlux.js'] },
+					{ 'dist/js/addons/datatables.min.js': ['dist/js/addons/datatables.js'] }
 				]
 			}
 		},
@@ -71,14 +68,6 @@ module.exports = function(grunt) {
 						]
 					}
 				]
-			},
-
-			dataTables: {
-				options: {
-					position: 'top',
-					banner: '/*! DataTables 1.10\n* ©2008-2014 SpryMedia Ltd - datatables.net/license\n*/'
-				},
-				src: ['dist/js/dataTables.min.js']
 			}
 		},
 
@@ -99,6 +88,7 @@ module.exports = function(grunt) {
 					}
 				]
 			},
+
 			uikit_js: {
 				files: [
 					{
@@ -125,9 +115,16 @@ module.exports = function(grunt) {
 				]
 			},
 
-			js_assets: {
+			addons: {
 				files: [
-					{ 'dist/js/dataTables.min.js': ['bower_components/datatables/media/js/jquery.datatables.js'] }
+					{
+						expand: true,
+						cwd: 'src/js/addons',
+						src: [
+							'*.js'
+						],
+						dest: 'dist/js/addons'
+					}
 				]
 			}
 		},
@@ -196,6 +193,6 @@ module.exports = function(grunt) {
 	// ========================================================================
 	grunt.registerTask('build', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
-	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts', 'copy:svg', 'copy:js_assets', 'uglify:assets', 'usebanner:dataTables']);
+	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'copy:addons', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts', 'copy:svg']);
 	
 };

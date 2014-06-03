@@ -3,8 +3,7 @@
 
     var instance_id = 0, active = false, cache = {}, dropdown,
     
-    // extend the main manager
-    itemsManager = $.extend(true, {}, ZX.components['manager'], {
+    itemsManagerSettings = {
 
         defaults: {
             apps: '', // Array or comma separated values
@@ -18,7 +17,7 @@
             var $this = this;
 
             // init main manager
-            ZX.components['manager'].init.apply(this);
+            ZX.components.manager.init.apply(this);
             
             // set instance id
             this.id = instance_id++;
@@ -26,34 +25,19 @@
             // set the filter param
             $this.filter = {};
 
-            // // EVENT resource selected
-            // this.on('resourceSelected', function (e, resource)
-            // {
-                
-            // });
-
-            // // EVENT resource deleted
-            // this.on('resourceDeleted', function (e, resource)
-            // {
-               
-            // });
-
             // override the ajax function
             this.DTsettings.ajax = function (data, callback, settings) {
                 $this.ajax(data, callback, settings);
             };
 
-            // all set, init resources
-            this.initResources();
+            // set language vars
+            $.extend($this.DTsettings.language, {
+                emptyTable: ZX.lang._('IM_NO_ITEMS_FOUND'),
+                info: ZX.lang._('IM_PAGINATION_INFO')
+            });
         },
 
         DTsettings: {
-            language: {
-                emptyTable: ZX.lang._('IM_NO_ITEMS_FOUND'),
-                info: ZX.lang._('IM_PAGINATION_INFO')
-            },
-            serverSide: true,
-            pagingType: 'uikit_simple',
             pageLength: 5,
             columns:
             [
@@ -172,15 +156,23 @@
             // specify zlux version
             data.zlux2 = true;
 
-            
+            // save draw value
+            var draw = data.draw;
+
             // hash the request data
+            data.draw = 0;
             var hash = String($.param(data)).hashCode();
 
             // if request cached, use instead and abort ajax
-            if (cache[hash]) {
+            if (false && cache[hash]) {
+                cache[hash].draw = draw;
+
                 callback( cache[hash] );
                 return;
             }
+
+            // recover draw value
+            data.draw = draw;
 
             // request
             ZX.ajax.requestAndNotify({
@@ -214,180 +206,62 @@
 
             // adapt request
         }
-    });
+    };
 
 
-    /* Itempicker
-       ---------------------------------------------- */
-
-    // extends itemsManager
-    ZX.component('itempicker', $.extend(true, {}, itemsManager, {
-
-        defaults: {
-            offsettop: 5,
-            template: function(data, opts) {
-
-                var content = '';
-
-                content += '<div class="zx-manager-nav">';
-                    content += '<div class="uk-search">';
-                        content += '<input class="uk-search-field" type="search" placeholder="search...">';
-                        content += '<button class="uk-search-close" type="reset"></button>';
-                    content += '</div>';
-                content += '</div>';
-                content += '<table class="uk-table zx-manager-resources"></table>';
-
-                return content;
-            }
-        },
+    ZX.component('itempicker', $.extend(true, {}, itemsManagerSettings, ZX.components.managerDropdown, {
 
         init: function() {
             var $this = this;
 
-            // init main manager
-            ZX.components.manager.init.apply(this);
-            
-            // set instance id
-            this.id = instance_id++;
-
-            // set the filter param
-            $this.filter = {};
-
-            // override the ajax function
-            this.DTsettings.ajax = function (data, callback, settings) {
-                $this.ajax(data, callback, settings);
-            };
-
-            this.current  = this.element.val();
+            // init functions
+            itemsManagerSettings.init.apply(this);
+            ZX.components.managerDropdown.init.apply(this);
 
             this.on("click", function(){
                if(active!==$this) $this.pick(this.value);
-            }).on("change", function(){
-
-               // if($this.element.val() && !moment($this.element.val(), $this.options.format).isValid()) {
-               //    $this.element.val(moment().format($this.options.format));
-               // }
-
             });
 
             // init dropdown
-            if (!dropdown) {
+            dropdown = this.initDropdown(dropdown).addClass('zx-itempicker');
+        },
 
-                dropdown = $('<div class="uk-dropdown zx-itempicker zx-manager"></div>');
-                
-                // dropdown.on("click", ".uk-datepicker-next, .uk-datepicker-previous, [data-date]", function(e){
-                //     e.stopPropagation();
-                //     e.preventDefault();
-
-                //     var ele = $(this);
-
-                //     if (ele.hasClass('uk-datepicker-date-disabled')) return false;
-
-                //     if(ele.is('[data-date]')) {
-                //         active.element.val(moment(ele.data("date")).format(active.options.format)).trigger("change");
-                //         dropdown.hide();
-                //         active = false;
-                //     } else {
-                //        active.add("months", 1 * (ele.hasClass("uk-datepicker-next") ? 1:-1));
-                //     }
-                // });
-
-                dropdown.appendTo("body");
-
-                // wrap it for style fix
-                dropdown.wrap('<div class="zlux" />');
-
-                // init searh feature
-                dropdown.on('change', '.uk-search-field', function(e, input){
-                    var value = $(input).val();
-
-                    // filter and redraw
-                    $this.resources.DataTable().search(value);
-                    $this.resources.DataTable().draw();
-
-                    // close button
-                    if (value === '') {
-                        $('.uk-search-close', dropdown).hide();
-                    } else {
-                        $('.uk-search-close', dropdown).show();
+        DTsettings: {
+            ordering: false,
+            columns:
+            [
+                {
+                    title: '', data: '_itemname', class: 'zx-x-main-column uk-width-1-1',
+                    render: function (data, type) {
+                        return type === 'display' ? '' : data;
                     }
-                });
+                }
+            ],
+            rowCallback: function(row, data) {
+                var rsc_data = data;
+                    rsc_data.details = [];
 
-                // reset search action
-                dropdown.on('click', '.uk-search-close', function(e){
-                    // reset table
-                    $this.resources.DataTable().search('');
-                    $this.resources.DataTable().draw();
+                // set resource details
+                rsc_data.details.push( data.application.name + ' / ' + data.type.name + ' / ' + data.id );
+            
+                var resource = ZX.managerResource(row, rsc_data);
+                resource.pushData(rsc_data);
 
-                    // reset form
-                    $('.uk-search-field', dropdown).val('');
-                    $(this).hide();
-                });
+                // set resource dom properties
+                resource.element.addClass('zx-manager-resource');
+
+                // append the resource data
+                $('.zx-x-main-column', resource.element).append(
+                    resource.render()
+                );
             }
-       },
+        },
 
-       pick: function(inititem) {
-           var offset = this.element.offset(),
-               css    = {"top": offset.top + this.element.outerHeight() + this.options.offsettop, "left": offset.left, "right":""};
-
-           this.current  = inititem ? inititem:null;
-           this.inititem = this.current;
-
-           this.update();
-
-           if ($.UIkit.langdirection == 'right') {
-               css.right = window.innerWidth - (css.left + this.element.outerWidth());
-               css.left  = "";
-           }
-
-           dropdown.css(css).show();
+        pick: function(inititem) {
+           ZX.components.managerDropdown.pick.apply(this, [inititem]);
 
            active = this;
-       },
-
-       update: function() {
-           var data = {},
-               tpl  = this.options.template(data, this.options);
-
-           dropdown.html(tpl);
-
-           // init resources
-           this.initResources($('.zx-manager-resources', dropdown));
-       },
-
-
-       DTsettings: {
-           columns:
-           [
-               {
-                   title: '', data: '_itemname', class: 'zx-x-main-column uk-width-1-1',
-                   render: function (data, type) {
-                       return type === 'display' ? '' : data;
-                   }
-               }
-           ],
-           rowCallback: function(row, data) {
-               var rsc_data = data;
-                   rsc_data.details = [];
-
-               // set resource details
-               rsc_data.details.push( data.application.name + ' / ' + data.type.name + ' / ' + data.id );
-           
-               var resource = ZX.managerResource(row, rsc_data);
-               resource.pushData(rsc_data);
-
-               // set resource dom properties
-               resource.element.addClass('zx-manager-resource');
-
-
-               // append the resource data
-               $('.zx-x-main-column', resource.element).append(
-                   resource.render()
-               );
-           },
-           ordering: false
-        }
-
+        },
     }));
 
     // init code
@@ -409,39 +283,5 @@
             active = false;
         }
     });
-
-
-    /* Helper functions
-       ---------------------------------------------- */
-
-    /**
-    * @see http://stackoverflow.com/q/7616461/940217
-    * @return {number}
-    */
-    String.prototype.hashCode = function(){
-       if (Array.prototype.reduce){
-           return this.split("").reduce(function(a,b){a=((a<<5)-a)+b.charCodeAt(0);return a&a},0);              
-       } 
-       var hash = 0;
-       if (this.length === 0) return hash;
-       for (var i = 0; i < this.length; i++) {
-           var character  = this.charCodeAt(i);
-           hash  = ((hash<<5)-hash)+character;
-           hash = hash & hash; // Convert to 32bit integer
-       }
-       return hash;
-    }
-
-    // // init code
-    // $(document).on("uk-domready", function(e) {
-
-    //     $("[data-zx-manager-items], input[data-zx-itempicker]").each(function() {
-    //         var manager = $(this);
-
-    //         if (!manager.data("itemsManager")) {
-    //             var obj = ZX.itemsManager(manager, $.UIkit.Utils.options(manager.attr("data-zx-manager-items")));
-    //         }
-    //     });
-    // });
 
 })(jQuery, jQuery.zlux, window, document);

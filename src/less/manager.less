@@ -21,6 +21,8 @@
 @manager-nav-height:                         20px;
 @manager-nav-color:                          #444;
 @manager-nav-hover-color:                    #444;
+@manager-first-icon:                  	     "\f100";
+@manager-last-icon:                  	     "\f101";
 @manager-previous-icon:                      "\f053";
 @manager-next-icon:                          "\f054";
 
@@ -32,25 +34,49 @@
  * Pagination
  */
 
+.zx-manager-pagination {
+	padding: 0;
+	list-style: none;
+	text-align: center;
+	margin: 20px 0 0 0;
+}
+
 .zx-manager-pagination a {
-	color: @manager-nav-color;
 	text-decoration: none;
 	.hook-manager-pagination-item;
 }
 
+.zx-manager-pagination > li {
+	color: @manager-nav-color;
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 5px;
+}
+
 .zx-manager-pagination a:hover { color: @manager-nav-hover-color; }
+.zx-manager-pagination li.uk-disabled { visibility: hidden; }
+.zx-manager-pagination li.uk-active { cursor: default; }
 
 .zx-manager-pagination-prev { float: left; }
 .zx-manager-pagination-next { float: right; }
 
+.zx-manager-pagination-first a,
+.zx-manager-pagination-prev a,
+.zx-manager-pagination-next a,
+.zx-manager-pagination-last a { color: @manager-nav-color; }
+
+.zx-manager-pagination-first a:after,
 .zx-manager-pagination-prev a:after,
-.zx-manager-pagination-next a:after {
+.zx-manager-pagination-next a:after,
+.zx-manager-pagination-last a:after {
 	width: @manager-nav-height;
 	font-family: FontAwesome;
 }
 
+.zx-manager-pagination-first a:after { content: @manager-first-icon; }
 .zx-manager-pagination-prev a:after { content: @manager-previous-icon; }
 .zx-manager-pagination-next a:after { content: @manager-next-icon; }
+.zx-manager-pagination-last a:after { content: @manager-last-icon; }
 
 
 // Variation: Dropdown

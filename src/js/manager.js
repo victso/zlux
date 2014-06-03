@@ -1,7 +1,9 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
-    ZX.components['manager'] = {
+    var dropdown;
+
+    ZX.components.manager = {
 
         id: 0,
 
@@ -33,157 +35,6 @@
             });
         },
 
-        DTsettings: {
-            dom: 'tp',
-            language: {
-                emptyTable: ZX.lang._('EMPTY_FOLDER'),
-                infoEmpty: ''
-            },
-            stripeClasses: [] // uikit doesn't need stipe class on each row
-        },
-
-        DT_uikit_pagination: {
-            fnInit: function( oSettings, nPaging, fnCallbackDraw ) {
-                var oLang = oSettings.oLanguage.oPaginate;
-                var fnClickHandler = function ( e ) {
-                    e.preventDefault();
-                    if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-                        fnCallbackDraw( oSettings );
-                    }
-                };
-
-                $(nPaging).addClass('pagination').append(
-                    '<ul class="uk-pagination">'+
-                        '<li class="zx-x-first uk-disabled"><a href="#"><i class="uk-icon-angle-double-left"></i></a></li>'+
-                        '<li class="zx-x-prev uk-disabled"><a href="#"><i class="uk-icon-angle-left"></i></a></li>'+
-                        '<li class="zx-x-next uk-disabled"><a href="#"><i class="uk-icon-angle-right"></i></a></li>'+
-                        '<li class="zx-x-last uk-disabled"><a href="#"><i class="uk-icon-angle-double-right"></i></a></li>'+
-                    '</ul>'
-                );
-                var els = $('a', nPaging);
-                $(els[0]).bind( 'click.DT', { action: 'first' }, fnClickHandler );
-                $(els[1]).bind( 'click.DT', { action: 'previous' }, fnClickHandler );
-                $(els[2]).bind( 'click.DT', { action: 'next' }, fnClickHandler );
-                $(els[3]).bind( 'click.DT', { action: 'last' }, fnClickHandler );
-            },
-
-            fnUpdate: function ( oSettings, fnCallbackDraw ) {
-                var iListLength = 4;
-                var paging = oSettings.oInstance.DataTable().page.info();
-                var an = oSettings.aanFeatures.p;
-                var i, ien, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
-
-                if ( paging.pages < iListLength) {
-                    iStart = 1;
-                    iEnd = paging.pages;
-                }
-                else if ( paging.page <= iHalf ) {
-                    iStart = 1;
-                    iEnd = iListLength;
-                } else if ( paging.page >= (paging.pages-iHalf) ) {
-                    iStart = paging.pages - iListLength + 1;
-                    iEnd = paging.pages;
-                } else {
-                    iStart = paging.page - iHalf + 1;
-                    iEnd = iStart + iListLength - 1;
-                }
-
-                for ( i=0, ien=an.length ; i<ien ; i++ ) {
-                    // Remove the middle elements
-                    $('li:gt(1)', an[i]).filter(':not(:last)').not('.zx-x-next').remove();
-
-                    // Add the new list items and their event handlers
-                    for ( j=iStart ; j<=iEnd ; j++ ) {
-                        var active = (j==paging.page+1);
-                        sClass = active ? 'class="uk-active"' : '';
-                        $('<li '+sClass+'>'+(active ? '<span>' : '<a href="#">')+j+(active ? '</span>' : '</a>')+'</li>')
-
-                            .insertBefore( $('li.zx-x-next, li.zx-x-last', an[i])[0] )
-                            .bind('click', function (e) {
-                                e.preventDefault();
-                                oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * paging.length;
-                                fnCallbackDraw( oSettings );
-                            });
-                    }
-
-                    // Add / remove disabled classes from the static elements
-                    if ( paging.page === 0 ) {
-                        $('li.zx-x-first, li.zx-x-prev', an[i]).addClass('uk-disabled');
-                    } else {
-                        $('li.zx-x-first, li.zx-x-prev', an[i]).removeClass('uk-disabled');
-                    }
-
-                    if ( paging.page === paging.pages-1 || paging.pages === 0 ) {
-                        $('li.zx-x-next, li.zx-x-last', an[i]).addClass('uk-disabled');
-                    } else {
-                        $('li.zx-x-next, li.zx-x-last', an[i]).removeClass('uk-disabled');
-                    }
-                }
-            }
-        },
-
-        DT_uikit_pagination_simple: {
-            fnInit: function( oSettings, nPaging, fnCallbackDraw ) {
-                var oLang = oSettings.oLanguage.oPaginate;
-                var fnClickHandler = function ( e ) {
-                    e.preventDefault();
-                    console.log(oSettings.oApi._fnPageChange(oSettings, e.data.action));
-                    if ( oSettings.oApi._fnPageChange(oSettings, e.data.action) ) {
-                        fnCallbackDraw( oSettings );
-                    }
-                };
-
-                $(nPaging).addClass('pagination').append(
-                    '<ul class="uk-list zx-manager-pagination">'+
-                        '<li class="zx-manager-pagination-prev uk-disabled"><a href=""></a></li>'+
-                        '<li class="zx-manager-pagination-next uk-disabled"><a href=""></a></li>'+
-                    '</ul>'
-                );
-                var els = $('a', nPaging);
-                $(els[0]).bind( 'click.DT', { action: 'previous' }, fnClickHandler );
-                $(els[1]).bind( 'click.DT', { action: 'next' }, fnClickHandler );
-            },
-
-            fnUpdate: function ( oSettings, fnCallbackDraw ) {
-                var iListLength = 4;
-                var paging = oSettings.oInstance.DataTable().page.info();
-                var an = oSettings.aanFeatures.p;
-                var i, ien, j, sClass, iStart, iEnd, iHalf=Math.floor(iListLength/2);
-
-                if ( paging.pages < iListLength) {
-                    iStart = 1;
-                    iEnd = paging.pages;
-                }
-                else if ( paging.page <= iHalf ) {
-                    iStart = 1;
-                    iEnd = iListLength;
-                } else if ( paging.page >= (paging.pages-iHalf) ) {
-                    iStart = paging.pages - iListLength + 1;
-                    iEnd = paging.pages;
-                } else {
-                    iStart = paging.page - iHalf + 1;
-                    iEnd = iStart + iListLength - 1;
-                }
-
-                for ( i=0, ien=an.length ; i<ien ; i++ ) {
-                    // Remove the middle elements
-                    // $('li:gt(1)', an[i]).filter(':not(:last)').not('.zx-x-next').remove();
-
-                    // Add / remove disabled classes from the static elements
-                    if ( paging.page === 0 ) {
-                        $('li.zx-x-prev', an[i]).addClass('uk-disabled');
-                    } else {
-                        $('li.zx-x-prev', an[i]).removeClass('uk-disabled');
-                    }
-
-                    if ( paging.page === paging.pages-1 || paging.pages === 0 ) {
-                        $('li.zx-x-next', an[i]).addClass('uk-disabled');
-                    } else {
-                        $('li.zx-x-next', an[i]).removeClass('uk-disabled');
-                    }
-                }
-            }
-        },
 
         getResource: function(resource) {
             // if already a resource object return directly, else retrieve from node
@@ -239,21 +90,22 @@
             });
         },
 
-        initResources: function(resources_dom) {
+        initResources: function(dom) {
             var $this = this;
 
+            dom = dom === undefined ? $this.find('.zx-manager-resources') : dom;
+
             // load DataTables
-            ZX.assets.load(ZX.url.get('zlux:js/dataTables.min.js')).done(function(){
+            ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
 
-                // set uikit pagination option
-                $.fn.dataTableExt.pager.uikit = $this.DT_uikit_pagination;
-                $.fn.dataTableExt.pager.uikit_simple = $this.DT_uikit_pagination_simple;
+                // init DT
+                ZX.datatables();
 
-                // init DataTables
-                $this.resources = resources_dom.dataTable($this.DTsettings)
+                // init DataTables instance
+                $this.resources = dom.dataTable($.extend(true, {}, ZX.datatables.settings, $this.DTsettings)).DataTable();
 
                 // set Object details Open event
-                .on('click', '.zx-x-details-btn', function(){
+                $this.resources.on('click', '.zx-x-details-btn', function(){
                     var toggle = $(this),
                         resource = toggle.closest('.zx-manager-resource'),
                         details = $('.zx-x-details', resource);
@@ -283,7 +135,12 @@
                     }
                 });
             });
+        },
+
+        DTsettings: {
+            serverSide: true
         }
+               
     };
 
 
@@ -314,7 +171,7 @@
                                         </ul>\
                                 </div>\
                             </div>\
-                            {{/end}}',
+                            {{/end}}'
         },
 
         init: function() {},
@@ -359,6 +216,129 @@
 
         addChild: function(data) {
             this.find('.uk-dropdown > ul').append($.UIkit.Utils.template(this.options.option_tmpl, data));
+        }
+    });
+
+
+    /* Dropdown
+    ---------------------------------------------- */
+
+    // extends itemsManager
+    ZX.components.managerDropdown = $.extend(true, {}, ZX.components.manager, {
+
+        defaults: {
+            offsettop: 5,
+            template: function(data, opts) {
+
+                var content = '';
+
+                content += '<div class="zx-manager-nav">';
+                    content += '<div class="uk-search">';
+                        content += '<input class="uk-search-field" type="search" placeholder="search...">';
+                        content += '<button class="uk-search-close" type="reset"></button>';
+                    content += '</div>';
+                content += '</div>';
+                content += '<table class="uk-table zx-manager-resources"></table>';
+
+                return content;
+            }
+        },
+
+        init: function() {
+            var $this = this;
+
+            this.current = this.element.val();
+        },
+
+        initDropdown: function(dropdown) {
+            var $this = this;
+
+            if (!dropdown) {
+
+                dropdown = $('<div class="uk-dropdown zx-manager"></div>');
+                
+                // init searh feature
+                var thread = null;
+                dropdown.on('keyup', '.uk-search-field', function(e){
+                    var value = $(this).val();
+
+                    // close button
+                    if (value === '') {
+                        $('.uk-search-close', dropdown).hide();
+                    } else {
+                        $('.uk-search-close', dropdown).show();
+                    }
+
+                    // clear any previous query execution
+                    clearTimeout(thread);
+
+                    // if input empty, reset search
+                    if (value === '') {
+                        $this.resources.search('').draw();
+                    }
+                    
+                    // perform search on enter key press
+                    var code = (e.keyCode ? e.keyCode : e.which);
+                    if (code == 13) {
+                        $this.resources.search(value).draw();
+                        return;
+                    }
+
+                    // queue the search
+                    thread = setTimeout(function() {
+                        $this.resources.search(value).draw();
+                    }, 500); 
+                });
+
+                // reset search action
+                dropdown.on('click', '.uk-search-close', function(e){
+                    // reset form
+                    $('.uk-search-field', dropdown).val('');
+                    $(this).hide();
+
+                    // and search
+                    $this.resources.search('').draw();
+                });
+
+                dropdown.appendTo("body");
+
+                // wrap it for style fix
+                dropdown.wrap('<div class="zlux" />');
+            }
+
+            // save reference
+            this.dropdown = dropdown;
+            return dropdown;
+        },
+
+        pick: function(inititem) {
+            var offset = this.element.offset(),
+               css    = {"top": offset.top + this.element.outerHeight() + this.options.offsettop, "left": offset.left, "right":""};
+
+            this.current  = inititem ? inititem : null;
+            this.inititem = this.current;
+
+            this.update();
+
+            if ($.UIkit.langdirection == 'right') {
+               css.right = window.innerWidth - (css.left + this.element.outerWidth());
+               css.left  = "";
+            }
+
+            this.dropdown.css(css).show();
+
+            // focus on dropdown search
+            $('.uk-search-field', dropdown).focus();
+        },
+
+        update: function() {
+            var data = {},
+               tpl  = this.options.template(data, this.options);
+
+            this.dropdown.html(tpl);
+
+            // init resources
+            this.initResources($('.zx-manager-resources', this.dropdown));
         }
     });
 

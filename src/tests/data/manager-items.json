@@ -1,7 +1,7 @@
 {
 	"success": true,
     "recordsTotal": "20",
-    "recordsFiltered": "5",
+    "recordsFiltered": "20",
     "columns": "_itemname, application, type, access, author, id",
     "apps": [{
         "name": "Blog",
