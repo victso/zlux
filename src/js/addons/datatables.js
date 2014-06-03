@@ -98,6 +98,9 @@
                     $('li.zx-manager-pagination-next, li.zx-manager-pagination-last', an[i]).removeClass('uk-disabled');
                 }
             }
+
+            // hide active page if only one
+            if(paging.pages === 1) $('.zx-manager-pagination .uk-active').hide();
         }
     },
 

@@ -284,4 +284,15 @@
         }
     });
 
+    // init code
+    $(document).on("uk-domready", function(e) {
+        $("[data-zx-itempicker]").each(function() {
+            var ele = $(this);
+
+            if (!ele.data("itempicker")) {
+                var obj = ZX.itempicker(ele, $.UIkit.Utils.options(ele.attr("data-zx-itempicker")));
+            }
+        });
+    });
+
 })(jQuery, jQuery.zlux, window, document);

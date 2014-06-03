@@ -16,29 +16,12 @@
             // this.nav.addChild({icon: 'filter'});
             // this.nav.addChild({icon: 'user'});
 
-            // delete resource event
-            this.on('click', '.zx-manager-resource .zx-x-remove', function(e){
-                e.preventDefault();
-                var resource = $this.getResource($(this).closest('.zx-manager-resource'));
-
-                // prompt confirmation
-                ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE'), {timeout: false}).done(function(){
-                    $this.deleteResource(resource);
-                });
-            });
-
-
-            // EVENT trigger resourceSelected
-            this.on('click', '.zx-manager-resource .zx-x-name a', function (e) {
-                $this.trigger('resourceSelected', $this.getResource($(this).closest('.zx-manager-resource')));
-                e.preventDefault();
-            });
         },
 
 
         getResource: function(resource) {
             // if already a resource object return directly, else retrieve from node
-            return resource instanceof jQuery ? resource.data('ManagerResource') : resource;
+            return resource instanceof jQuery ? resource.data('managerResource') : resource;
         },
 
         preResourceDelete: function(resource, request) {},
@@ -96,7 +79,7 @@
             dom = dom === undefined ? $this.find('.zx-manager-resources') : dom;
 
             // load DataTables
-            ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
+            return ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
 
                 // init DT
                 ZX.datatables();
@@ -104,7 +87,7 @@
                 // init DataTables instance
                 $this.resources = dom.dataTable($.extend(true, {}, ZX.datatables.settings, $this.DTsettings)).DataTable();
 
-                // set Object details Open event
+                // details
                 $this.resources.on('click', '.zx-x-details-btn', function(){
                     var toggle = $(this),
                         resource = toggle.closest('.zx-manager-resource'),
@@ -134,13 +117,29 @@
                         });
                     }
                 });
+
+                // EVENT trigger resourceSelected
+                $this.resources.on('click', '.zx-manager-resource .zx-x-name a', function (e) {
+                    e.preventDefault();
+                    $this.trigger('resourceSelected', $this.getResource($(this).closest('.zx-manager-resource')));
+                });
+
+                // delete resource event
+                $this.resources.on('click', '.zx-manager-resource .zx-x-remove', function(e){
+                    e.preventDefault();
+                    var resource = $this.getResource($(this).closest('.zx-manager-resource'));
+
+                    // prompt confirmation
+                    ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE'), {timeout: false}).done(function(){
+                        $this.deleteResource(resource);
+                    });
+                });
             });
         },
 
         DTsettings: {
             serverSide: true
         }
-               
     };
 
 
@@ -227,6 +226,7 @@
     ZX.components.managerDropdown = $.extend(true, {}, ZX.components.manager, {
 
         defaults: {
+            init_display: '',
             offsettop: 5,
             template: function(data, opts) {
 
@@ -247,7 +247,19 @@
         init: function() {
             var $this = this;
 
+            // save current value
             this.current = this.element.val();
+
+            // create a hidden input that will store the real value
+            this.hidden = this.element.clone().attr('type', 'hidden').removeAttr('data-zx-itempicker').insertAfter(this.element);
+
+            // set initial display
+            this.element.val(this.options.init_display).removeAttr('name');
+
+            // weitch focus from main input
+            this.on('focus', function() {
+                $('.uk-search-field', dropdown).focus();
+            });
         },
 
         initDropdown: function(dropdown) {
@@ -300,7 +312,7 @@
                     $this.resources.search('').draw();
                 });
 
-                dropdown.appendTo("body");
+                dropdown.appendTo('body');
 
                 // wrap it for style fix
                 dropdown.wrap('<div class="zlux" />');
@@ -332,13 +344,20 @@
         },
 
         update: function() {
-            var data = {},
-               tpl  = this.options.template(data, this.options);
+            var $this = this,
+                data = {},
+                tpl  = this.options.template(data, this.options);
 
             this.dropdown.html(tpl);
 
             // init resources
-            this.initResources($('.zx-manager-resources', this.dropdown));
+            this.initResources($('.zx-manager-resources', this.dropdown)).done(function(){
+
+                $this.on('resourceSelected', function(e, resource) {
+                    $this.element.val(resource.data.name);
+                    $this.hidden.val(resource.data.id);
+                });
+            });
         }
     });
 
