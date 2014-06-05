@@ -2,7 +2,6 @@
     "use strict";
 
     var notify = function(msg, options){
-
         // display message
         var notify = $.UIkit.notify(msg, options);
 
@@ -12,8 +11,7 @@
         return notify;
     },
 
-    confirm = function(msg, options)
-    {
+    confirm = function(msg, options){
         $.extend({}, options, {
             'timeout': false // confirmation must wait user interaction
         });
@@ -39,10 +37,15 @@
 
     closeAll = function(group, instantly){
         $.UIkit.notify.closeAll(group, instantly);
+    },
+
+    require = function() {
+        return $.zlux.assets.load(ZX.url.get('zlux:js/uikit/addons/notify.min.js'));
     };
 
     ZX.notify          = notify;
     ZX.notify.confirm  = confirm;
     ZX.notify.closeAll = closeAll;
+    ZX.notify.require  = require;
 
 })(jQuery, jQuery.zlux, window, document);
