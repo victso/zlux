@@ -108,8 +108,6 @@
         return ZX.ajax.request(request)
         .done(function(response){
 
-            if(notify.group) ZX.notify.closeAll(notify.group);
-
             // display message
             if(response.message) ZX.notify(response.message, $.extend({
                 status: 'success'
@@ -117,14 +115,17 @@
             
         }).fail(function(response){
 
-            if(notify.group) $.UIkit.notify.closeAll(notify.group);
-
             // display errors
             if(response.errors && response.errors.length) $.each(response.errors, function(){
                 ZX.notify(this, $.extend({
                     status: 'danger'
                 }, notify));
             });
+           
+        }).always(function(response){
+
+            if(notify.group) ZX.notify.closeAll(notify.group);
+
             // display notices
             if(response.notices && response.notices.length) $.each(response.notices, function(){
                 ZX.notify(this, $.extend({
