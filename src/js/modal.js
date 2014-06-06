@@ -7,9 +7,6 @@
 
         var modal = $.UIkit.modal.dialog(content, options);
 
-        // wrapp for styling
-        $(modal.element).wrap($('<div class="zlux" />'));
-
         // extend modal with
         $.extend(modal, {
 
@@ -27,6 +24,9 @@
             }
         });
 
+        // add zlux class for the holding content styling
+        modal.element.addClass('zlux');
+
         return modal;
     },
 
@@ -36,9 +36,6 @@
             '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
             '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
         ]).join(""), $.extend({bgclose:false, keyboard:false}, options));
-
-        // wrapp for styling
-        $(modal.element).wrap($('<div class="zlux" />'));
 
         modal.show();
 
@@ -53,9 +50,6 @@
            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
            '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
         ]).join(""), $.extend({bgclose:false, keyboard:false}, options));
-
-        // wrapp for styling
-        $(modal.element).wrap($('<div class="zlux" />'));
 
         modal.element.find(".js-modal-confirm").on("click", function(){
            onconfirm();

@@ -246,10 +246,4 @@
     $.zlux = ZX;
     $.fn.zx = ZX.fn;
 
-
-    // style workaround, wrap with zlux floating elements
-    $(document).on("uk-domready", function(e) {
-        $('body > .uk-datepicker, body > .uk-timepicker, body > .uk-tooltip').wrap('<div class="zlux" />');
-    });
-
 })(jQuery, window, document);

@@ -1,55 +1,144 @@
 // UIkit
 // ========================================================================
 
-@import "../../../bower_components/uikit/src/less/uikit.less";
 // @import "../../../src/less/uikit.less"; // uncomment when using Customizer
-
 
 // Theme
 // ========================================================================
 
-// LESS related
+// // LESS related
 @import "variables.less";
 
-// Defaults
-@import "base.less";
+// wrapp with zlux to avoid interfiering with other styles
+.zlux {
+	// Defaults
+	@import "../../../bower_components/uikit/src/less/normalize.less";
+	@import "../../../bower_components/uikit/src/less/base.less";
 
-// Layout
-@import "grid.less";
-@import "panel.less";
-@import "article.less";
-@import "comment.less";
+	@import "base.less";
 
-// Navs
-@import "nav.less";
-@import "navbar.less";
-@import "subnav.less";
-@import "breadcrumb.less";
-@import "pagination.less";
-@import "tab.less";
+	// Layout
+	@import "../../../bower_components/uikit/src/less/grid.less";
+	@import "../../../bower_components/uikit/src/less/panel.less";
+	@import "../../../bower_components/uikit/src/less/article.less";
+	@import "../../../bower_components/uikit/src/less/comment.less";
 
-// Elements
-@import "list.less";
-@import "description-list.less";
-@import "table.less";
-@import "form.less";
+	@import "grid.less";
+	@import "panel.less";
+	@import "article.less";
+	@import "comment.less";
 
-// Common
-@import "button.less";
-@import "icon.less";
-@import "close.less";
-@import "badge.less";
-@import "alert.less";
-@import "thumbnail.less";
-@import "overlay.less";
-@import "progress.less";
+	// Navs
+	@import "../../../bower_components/uikit/src/less/nav.less";
+	@import "../../../bower_components/uikit/src/less/navbar.less";
+	@import "../../../bower_components/uikit/src/less/subnav.less";
+	@import "../../../bower_components/uikit/src/less/breadcrumb.less";
+	@import "../../../bower_components/uikit/src/less/pagination.less";
+	@import "../../../bower_components/uikit/src/less/tab.less";
 
-// JavaScript
-@import "dropdown.less";
-@import "modal.less";
-@import "offcanvas.less";
-@import "tooltip.less";
+	@import "nav.less";
+	@import "navbar.less";
+	@import "subnav.less";
+	@import "breadcrumb.less";
+	@import "pagination.less";
+	@import "tab.less";
 
-// Need to be loaded last
-@import "text.less";
-@import "utility.less";
+	// Elements
+	@import "../../../bower_components/uikit/src/less/list.less";
+	@import "../../../bower_components/uikit/src/less/description-list.less";
+	@import "../../../bower_components/uikit/src/less/table.less";
+	@import "../../../bower_components/uikit/src/less/form.less";
+
+	@import "list.less";
+	@import "description-list.less";
+	@import "table.less";
+	@import "form.less";
+
+	// Common
+	@import "../../../bower_components/uikit/src/less/button.less";
+	@import "../../../bower_components/uikit/src/less/icon.less";
+	@import "../../../bower_components/uikit/src/less/close.less";
+	@import "../../../bower_components/uikit/src/less/badge.less";
+	@import "../../../bower_components/uikit/src/less/alert.less";
+	@import "../../../bower_components/uikit/src/less/thumbnail.less";
+	@import "../../../bower_components/uikit/src/less/overlay.less";
+	@import "../../../bower_components/uikit/src/less/progress.less";
+	@import "../../../bower_components/uikit/src/less/animation.less";
+
+	@import "button.less";
+	@import "icon.less";
+	@import "close.less";
+	@import "badge.less";
+	@import "alert.less";
+	@import "thumbnail.less";
+	@import "overlay.less";
+	@import "progress.less";
+
+	// JavaScript
+	@import "../../../bower_components/uikit/src/less/offcanvas.less";
+	@import "../../../bower_components/uikit/src/less/switcher.less";
+
+	@import "offcanvas.less";
+}
+
+	// for those the main dom can't be wrapped
+	@import "../../../bower_components/uikit/src/less/dropdown.less";
+	@import "../../../bower_components/uikit/src/less/modal.less";
+	@import "../../../bower_components/uikit/src/less/tooltip.less";
+
+	@import "dropdown.less";
+	@import "modal.less";
+	@import "tooltip.less";
+
+.zlux {
+	// Need to be loaded last
+	@import "../../../bower_components/uikit/src/less/text.less";
+	@import "../../../bower_components/uikit/src/less/utility.less";
+	@import "../../../bower_components/uikit/src/less/print.less";
+	
+	@import "text.less";
+	@import "utility.less";
+}
+
+
+// Addons
+// ========================================================================
+
+.zlux {
+	// Navs
+	@import "../../../bower_components/uikit/src/less/addons/dotnav.less";
+	@import "../../../bower_components/uikit/src/less/addons/slidenav.less";
+
+	@import "addons/dotnav.less";
+	@import "addons/slidenav.less";
+
+	// Common
+	@import "../../../bower_components/uikit/src/less/addons/form-file.less";
+	@import "../../../bower_components/uikit/src/less/addons/form-password.less";
+	@import "../../../bower_components/uikit/src/less/addons/placeholder.less";
+
+	@import "addons/form-password.less";
+	@import "addons/placeholder.less";
+
+	// JavaScript
+	@import "../../../bower_components/uikit/src/less/addons/autocomplete.less";
+	@import "../../../bower_components/uikit/src/less/addons/markdownarea.less";
+	@import "../../../bower_components/uikit/src/less/addons/search.less";
+	@import "../../../bower_components/uikit/src/less/addons/sticky.less";
+	@import "../../../bower_components/uikit/src/less/addons/upload.less";
+
+	@import "addons/autocomplete.less";
+	@import "addons/htmleditor.less";
+	@import "addons/nestable.less";
+	@import "addons/search.less";
+	@import "addons/sticky.less";
+}
+
+	// for those the main dom can't be wrapped
+	@import "../../../bower_components/uikit/src/less/addons/datepicker.less";
+	@import "../../../bower_components/uikit/src/less/addons/notify.less";
+	@import "../../../bower_components/uikit/src/less/addons/sortable.less";
+
+	@import "addons/datepicker.less";
+	@import "addons/notify.less";
+	@import "addons/sortable.less";

@@ -313,9 +313,6 @@
                 });
 
                 dropdown.appendTo('body');
-
-                // wrap it for style fix
-                dropdown.wrap('<div class="zlux" />');
             }
 
             // save reference

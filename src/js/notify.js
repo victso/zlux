@@ -5,8 +5,8 @@
         // display message
         var notify = $.UIkit.notify(msg, options);
 
-        // wrapp for styling
-        $('.uk-notify').wrap('<div class="zlux" />');
+        // add zlux class for the holding content styling
+        notify.element.parent().addClass('zlux');
 
         return notify;
     },
