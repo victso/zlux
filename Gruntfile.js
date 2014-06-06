@@ -141,6 +141,7 @@ module.exports = function(grunt) {
 		            "src/js/component.js",
 		            "src/js/ajax.js",
 		            "src/js/notify.js",
+		            "src/js/modal.js",
 		            "src/js/spin.js",
 		            "src/js/manager.js",
 		            "src/js/manager-items.js",
