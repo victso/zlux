@@ -80,7 +80,7 @@
                         break;
 
                     default:
-                        response.errors.push('An error occurred: ' + status + '\n Error: ' + error);
+                        response.errors.push('An ' + status + ' occurred<br />' + error + '<br /><br />Returned' + jqxhr.responseText);
                         break;
                 }
 
