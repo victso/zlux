@@ -79,13 +79,22 @@
             dom = dom === undefined ? $this.find('.zx-manager-resources') : dom;
 
             // load DataTables
-            return ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
+            ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
 
                 // init DT
                 ZX.datatables();
 
                 // init DataTables instance
                 $this.resources = dom.dataTable($.extend(true, {}, ZX.datatables.settings, $this.DTsettings)).DataTable();
+
+                // hide DT wrapper, must be unhiden by the extending component
+                $this.DT_wrapper = dom.closest('.dataTables_wrapper').addClass('uk-hidden');
+
+                // when DT inited
+                $this.resources.on('init', function() {
+                    // trigger resources init event
+                    $this.trigger('resourcesInit');
+                });
 
                 // details
                 $this.resources.on('click', '.zx-x-details-btn', function(){
@@ -238,6 +247,7 @@
                         content += '<button class="uk-search-close" type="reset"></button>';
                     content += '</div>';
                 content += '</div>';
+                content += '<div class="zx-manager-spinner uk-text-center"><i class="uk-icon-zx-spinner uk-icon-spin"></i></div>';
                 content += '<table class="uk-table zx-manager-resources"></table>';
 
                 return content;
@@ -258,7 +268,15 @@
 
             // weitch focus from main input
             this.on('focus', function() {
-                $('.uk-search-field', dropdown).focus();
+                $('.uk-search-field', this.dropdown).focus();
+            });
+
+            this.on('resourcesInit', function() {
+                // unhide DT table
+                $this.DT_wrapper.closest('.dataTables_wrapper').removeClass('uk-hidden');
+
+                // remove spinner
+                $('.zx-manager-spinner', this.dropdown).remove();
             });
         },
 
@@ -267,7 +285,7 @@
 
             if (!dropdown) {
 
-                dropdown = $('<div class="uk-dropdown zx-manager"></div>');
+                dropdown = $('<div class="uk-dropdown zx-manager zlux"></div>');
                 
                 // init searh feature
                 var thread = null;
@@ -347,14 +365,14 @@
 
             this.dropdown.html(tpl);
 
-            // init resources
-            this.initResources($('.zx-manager-resources', this.dropdown)).done(function(){
-
-                $this.on('resourceSelected', function(e, resource) {
-                    $this.element.val(resource.data.name);
-                    $this.hidden.val(resource.data.id);
-                });
+            // set event listeners
+            $this.on('resourceSelected', function(e, resource) {
+                $this.element.val(resource.data.name);
+                $this.hidden.val(resource.data.id);
             });
+
+            // init resources
+            this.initResources($('.zx-manager-resources', this.dropdown));
         }
     });
 
