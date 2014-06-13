@@ -99,41 +99,45 @@
      * @param Object notify The notify settings
      * @return Promise The ajax promise
      */
-    ZX.ajax.requestAndNotify = function(request, notify)
-    {
-        // set defaults
-        notify = notify === undefined ? {} : notify;
+     ZX.ajax.requestAndNotify = function(request, notify)
+     {
+         // set defaults
+         notify = notify === undefined ? {} : notify;
 
-        // request
-        return ZX.ajax.request(request)
-        .done(function(response){
+         // request
+         return ZX.ajax.request(request)
+         .done(function(response){
 
-            // display message
-            if(response.message) ZX.notify(response.message, $.extend({
-                status: 'success'
-            }, notify));
+             // close others, then notify
+             if(notify.group) ZX.notify.closeAll(notify.group);
+
+             // display message
+             if(response.message) ZX.notify(response.message, $.extend({
+                 status: 'success'
+             }, notify));
+             
+         }).fail(function(response){
+
+             // close others, then notify
+             if(notify.group) ZX.notify.closeAll(notify.group);
+
+             // display errors
+             if(response.errors && response.errors.length) $.each(response.errors, function(){
+                 ZX.notify(this, $.extend({
+                     status: 'danger'
+                 }, notify));
+             });
             
-        }).fail(function(response){
+         }).always(function(response){
 
-            // display errors
-            if(response.errors && response.errors.length) $.each(response.errors, function(){
-                ZX.notify(this, $.extend({
-                    status: 'danger'
-                }, notify));
-            });
-           
-        }).always(function(response){
-
-            if(notify.group) ZX.notify.closeAll(notify.group);
-
-            // display notices
-            if(response.notices && response.notices.length) $.each(response.notices, function(){
-                ZX.notify(this, $.extend({
-                    status: 'warning'
-                }, notify));
-            });
-        });
-    };
+             // display notices
+             if(response.notices && response.notices.length) $.each(response.notices, function(){
+                 ZX.notify(this, $.extend({
+                     status: 'warning'
+                 }, notify));
+             });
+         });
+     };
 
 
     // Original code from AjaxQ jQuery Plugin
