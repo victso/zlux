@@ -242,6 +242,16 @@
     };
 
 
+    // ZX init functions
+    var _ready = $.Deferred();
+    ZX.ready = function() {
+        return _ready.promise();
+    };
+    ZX.init = function() {
+        _ready.resolve();
+    };
+
+
     // declare zlux
     $.zlux = ZX;
     $.fn.zx = ZX.fn;

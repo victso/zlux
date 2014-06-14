@@ -39,13 +39,18 @@
         $.UIkit.notify.closeAll(group, instantly);
     },
 
-    require = function() {
+    loadAssets = function() {
         return $.zlux.assets.load(ZX.url.get('zlux:js/uikit/addons/notify.min.js'));
     };
 
-    ZX.notify          = notify;
-    ZX.notify.confirm  = confirm;
-    ZX.notify.closeAll = closeAll;
-    ZX.notify.require  = require;
+    ZX.notify             = notify;
+    ZX.notify.confirm     = confirm;
+    ZX.notify.closeAll    = closeAll;
+    ZX.notify.loadAssets  = loadAssets;
+
+
+    $.when(ZX.ready()).done(function(){
+        ZX.notify.loadAssets();
+    });
 
 })(jQuery, jQuery.zlux, window, document);
