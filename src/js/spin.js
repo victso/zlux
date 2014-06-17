@@ -8,36 +8,54 @@
             affix:  'append' // append, prepend or replace
         },
 
-        init: function() {},
+        init: function() {
+            // run default
+            this.on();
+        },
 
-        on: function(args) {
+        on: function() {
             var $this = this;
 
             $this.icon_class = false;
 
-            // check for icon, use it if found
-            if($('i', $this.element)[0]) {
-                $this.icon_class = $('i', $this.element).attr('class');
-                $('i', $this.element).attr('class', 'uk-icon-zx-spinner uk-icon-spin');
+            // find and existing icon
+            $this.icon = $this.element.is('i') ? $this.element : $('i', $this.element).first();
 
-            // create the icon if not
-            } else if($this.options.affix == 'replace') {
-                $this.element.html($('<i class="uk-icon-zx-spinner uk-icon-spin"></i>').addClass($this.options['class']));
+            // use it if found
+            if($this.icon.length) {
+                // save original class
+                $this.icon_class = $this.icon.attr('class');
+                // set new class
+                $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin');
+
+            // else, create one
             } else {
-                $this.element[$this.options.affix]($('<i class="uk-icon-zx-spinner uk-icon-spin"></i>').addClass($this.options['class']));
+                $this.icon = $('<i class="uk-icon-zx-spinner uk-icon-spin"></i>');
+
+                // place the icon
+                if($this.options.affix == 'replace') {
+                    $this.element.html($this.icon);
+                } else {
+                    $this.element[$this.options.affix]($this.icon);
+                }
             }
+
+            // add custom class
+            $this.icon.addClass($this.options['class']);
         },
 
-        off: function(args) {
+        off: function() {
             var $this = this;
 
             // remove the spin classes but not the icon
-            $('i', $this.element).removeClass('uk-icon-zx-spinner uk-icon-spin');
+            $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin');
 
             // recover class, if any
-            if($this.icon_class) $('i', $this.element).attr('class', $this.icon_class);
-        }
+            if($this.icon_class) $this.icon.attr('class', $this.icon_class);
 
+            // remove spin instance from element
+            $this.element.removeData('spin');
+        }
     });
 
 })(jQuery, jQuery.zlux, window, document);
