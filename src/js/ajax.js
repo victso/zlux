@@ -37,29 +37,37 @@
             // if response recieved
             request.done(function(result, a, b)
             {
-                // json response is assumed
-                if (ZX.utils.typeOf(result) !== 'object')
+                // if dataType is json
+                if (settings.dataType === 'json')
                 {
-                    try {
-                        // parse response detecting if there was some server side error
-                        json = $.parseJSON(result);
+                    // check if object returned
+                    if(ZX.utils.typeOf(result) !== 'object')
+                    {
+                        try {
+                            // parse response detecting if there was some server side error
+                            json = $.parseJSON(result);
 
-                    // handle exception
-                    } catch(e) {
-                        response.errors.push(String(result));
-                        response.errors.push('An server-side error occurred. ' + String(e));
-                        defer.reject(response);
+                        // handle exception
+                        } catch(e) {
+                            response.errors.push(String(result));
+                            response.errors.push('An server-side error occurred. ' + String(e));
+                            defer.reject(response);
+                        }
                     }
-                }
 
-                // status must be set
-                else if (result.success === undefined) {
-                    result.errors = ['Response format error: status not specified'];
-                    defer.reject(result);
-                } else if (result.success)
+                    // check if status set
+                    else if (result.success === undefined) {
+                        result.errors = ['Response format error: status not specified'];
+                        defer.reject(result);
+                    } else if (result.success)
+                        defer.resolve(result);
+                    else
+                        defer.reject(result);
+
+                // else just send the result over
+                } else {
                     defer.resolve(result);
-                else
-                    defer.reject(result);
+                }
             })
             
             // if something went wrong
