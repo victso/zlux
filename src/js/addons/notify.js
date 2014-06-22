@@ -12,8 +12,9 @@
     },
 
     confirm = function(msg, options){
-        $.extend({}, options, {
-            'timeout': false // confirmation must wait user interaction
+        
+        options = $.extend(options, {
+            timeout: false // confirmation must wait user interaction
         });
 
         return $.Deferred(function( defer )
@@ -37,6 +38,7 @@
 
     closeAll = function(group, instantly){
         $.UIkit.notify.closeAll(group, instantly);
+        return this;
     },
 
     loadAssets = function() {
