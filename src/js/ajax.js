@@ -19,7 +19,7 @@
         delete settings.queue;
 
         // set request defaults
-        settings = $.extend({
+        settings = $.extend(true, {
             dataType: 'json',
             type: 'POST'
         }, settings);
@@ -120,7 +120,7 @@
             if(notify.group) ZX.notify.closeAll(notify.group);
 
             // display message
-            if(response.message) ZX.notify(response.message, $.extend({
+            if(response.message) ZX.notify(response.message, $.extend(true, {
                 status: 'success'
             }, notify));
             
@@ -131,7 +131,7 @@
 
             // display errors
             if(response.errors && response.errors.length) $.each(response.errors, function(){
-                ZX.notify(this, $.extend({
+                ZX.notify(this, $.extend(true, {
                     status: 'danger'
                 }, notify));
             });
@@ -140,7 +140,7 @@
 
             // display notices
             if(response.notices && response.notices.length) $.each(response.notices, function(){
-                ZX.notify(this, $.extend({
+                ZX.notify(this, $.extend(true, {
                     status: 'warning'
                 }, notify));
             });
