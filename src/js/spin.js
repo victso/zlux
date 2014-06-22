@@ -25,6 +25,8 @@
             if($this.icon.length) {
                 // save original class
                 $this.icon_class = $this.icon.attr('class');
+                // hardcode the width to avoid movement effects
+                $this.icon.width($this.icon.width());
                 // set new class
                 $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin');
 
@@ -52,6 +54,9 @@
 
             // recover class, if any
             if($this.icon_class) $this.icon.attr('class', $this.icon_class);
+
+            // remove hardcoded width
+            $this.icon.width('');
 
             // remove spin instance from element
             $this.element.removeData('spin');
