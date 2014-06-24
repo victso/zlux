@@ -446,7 +446,7 @@
                     $object.path = $object.path.replace(/(\w|[-.])+$/, new_name);
 
                     // update the cache
-                    $.zlux.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData = $this.oTable.fnGetData();
+                    $.zx.filesManager.aAjaxDataCache[$this.sCurrentPath].aaData = $this.oTable.fnGetData();
 
                     // redraw the other instances
                     $this.redrawInstances();
@@ -511,7 +511,7 @@
             return $.Deferred(function( defer )
             {
                 $.ajax({
-                    "url": $.zlux.url.ajax('zlux', 'moveObject'),
+                    "url": $.zx.url.ajax('zlux', 'moveObject'),
                     "data": aoData,
                     "dataType": "json",
                     "type": "post"
@@ -605,4 +605,4 @@
         });
     });
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);

@@ -33,7 +33,7 @@
             // if ($(this).data('submited')) return; $(this).data('submited', true);
 
             var request = {
-                url: $.zlux.url.ajax('zlux', 'deleteResource'),
+                url: $.zx.url.ajax('zlux', 'deleteResource'),
                 data: {
                     type: $this.type
                 }
@@ -285,7 +285,7 @@
 
             if (!dropdown) {
 
-                dropdown = $('<div class="uk-dropdown zx-manager zlux"></div>');
+                dropdown = $('<div class="uk-dropdown zx-manager zx"></div>');
                 
                 // init searh feature
                 var thread = null;
@@ -376,4 +376,4 @@
         }
     });
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);

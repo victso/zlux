@@ -1,7 +1,7 @@
 ;(function ($, window, document, undefined) {
     "use strict";
 
-    var ZX = $.zlux || {};
+    var ZX = $.zx || {};
 
     if (ZX.fn) {
         return ZX;
@@ -253,7 +253,7 @@
 
 
     // declare zlux
-    $.zlux = ZX;
+    $.zx = ZX;
     $.fn.zx = ZX.fn;
 
 })(jQuery, window, document);

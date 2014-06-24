@@ -6,7 +6,7 @@
         var notify = $.UIkit.notify(msg, options);
 
         // add zlux class for the holding content styling
-        notify.element.parent().addClass('zlux');
+        notify.element.parent().addClass('zx');
 
         return notify;
     },
@@ -42,7 +42,7 @@
     },
 
     loadAssets = function() {
-        return $.zlux.assets.load(ZX.url.get('zlux:js/uikit/addons/notify.min.js'));
+        return $.zx.assets.load(ZX.url.get('zlux:js/uikit/addons/notify.min.js'));
     };
 
     ZX.notify             = notify;
@@ -55,4 +55,4 @@
         ZX.notify.loadAssets();
     });
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);

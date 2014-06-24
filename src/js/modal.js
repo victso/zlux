@@ -25,7 +25,7 @@
         });
 
         // add zlux class for the holding content styling
-        modal.element.addClass('zlux');
+        modal.element.addClass('zx');
 
         return modal;
     },
@@ -67,4 +67,4 @@
     ZX.modal.alert    = alert;
     ZX.modal.confirm  = confirm;
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);

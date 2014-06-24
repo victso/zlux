@@ -63,4 +63,4 @@
         }
     });
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);

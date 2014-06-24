@@ -118,4 +118,4 @@
         this.components[component].plugins[name] = def;
     };
 
-})(jQuery, jQuery.zlux, window, document);
+})(jQuery, jQuery.zx, window, document);
