@@ -49,7 +49,8 @@ module.exports = function(grunt) {
 					{ 'dist/js/zlux.min.js': ['dist/js/zlux.js'] },
 					{ 'dist/js/addons/datatables.min.js': ['dist/js/addons/datatables.js'] },
 					{ 'dist/js/addons/nestable.min.js': ['dist/js/addons/nestable.js'] },
-					{ 'dist/js/addons/notify.min.js': ['dist/js/addons/notify.js'] }
+					{ 'dist/js/addons/notify.min.js': ['dist/js/addons/notify.js'] },
+					{ 'dist/js/addons/animate.min.js': ['dist/js/addons/animate.js'] }
 				]
 			}
 		},
