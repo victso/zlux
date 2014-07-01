@@ -4,7 +4,7 @@
     var instance_id = 0,
         cache = {};
     
-    ZX.component('filesManager', $.extend(true, {}, ZX.components['manager'], {
+    ZX.component('filesManager', $.extend(true, {}, ZX.extensions['manager'], {
 
         defaults: {
             root: '', // relative path to the root folder
@@ -19,7 +19,7 @@
             var $this = this;
 
             // init main manager
-            ZX.components['manager'].init.apply(this);
+            ZX.extensions['manager'].init.apply(this);
             
             // set instance id
             this.id = instance_id++;

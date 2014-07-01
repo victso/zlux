@@ -17,7 +17,7 @@
             var $this = this;
 
             // init main manager
-            ZX.components.manager.init.apply(this);
+            ZX.extensions.manager.init.apply(this);
             
             // set instance id
             this.id = instance_id++;
@@ -209,14 +209,14 @@
     };
 
 
-    ZX.component('itempicker', $.extend(true, {}, itemsManagerSettings, ZX.components.managerDropdown, {
+    ZX.component('itempicker', $.extend(true, {}, itemsManagerSettings, ZX.extensions.managerDropdown, {
 
         init: function() {
             var $this = this;
 
             // init functions
             itemsManagerSettings.init.apply(this);
-            ZX.components.managerDropdown.init.apply(this);
+            ZX.extensions.managerDropdown.init.apply(this);
 
             this.on("click", function(){
                if(active!==$this) $this.pick(this.value);
@@ -258,7 +258,7 @@
         },
 
         pick: function(inititem) {
-           ZX.components.managerDropdown.pick.apply(this, [inititem]);
+           ZX.extensions.managerDropdown.pick.apply(this, [inititem]);
 
            active = this;
         },

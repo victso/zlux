@@ -144,7 +144,7 @@ module.exports = function(grunt) {
 		        },
 		        src: [
 		            "src/js/core.js",
-		            "src/js/component.js",
+		            "src/js/extensions.js",
 		            "src/js/ajax.js",
 		            "src/js/modal.js",
 		            "src/js/spin.js",

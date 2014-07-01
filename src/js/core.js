@@ -9,22 +9,6 @@
 
     ZX.version = '2.0';
 
-    ZX.fn = function(command, options) {
-
-        var args = arguments, cmd = command.match(/^([a-z\-]+)(?:\.([a-z]+))?/i), component = cmd[1], method = cmd[2];
-
-        if (!ZX[component]) {
-            $.error("UIkit component [" + component + "] does not exist.");
-            return this;
-        }
-
-        return this.each(function() {
-            var $this = $(this), data = $this.data(component);
-            if (!data) $this.data(component, (data = ZX[component](this, method ? undefined : options)));
-            if (method) data[method].apply(data, Array.prototype.slice.call(args, 1));
-        });
-    };
-
 
     /** URI **/
     ZX.url = {};
@@ -254,6 +238,5 @@
 
     // declare zlux
     $.zx = ZX;
-    $.fn.zx = ZX.fn;
 
 })(jQuery, window, document);

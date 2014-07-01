@@ -3,7 +3,7 @@
 
     var dropdown;
 
-    ZX.components.manager = {
+    ZX.extensions.manager = {
 
         id: 0,
 
@@ -232,7 +232,7 @@
     ---------------------------------------------- */
 
     // extends itemsManager
-    ZX.components.managerDropdown = $.extend(true, {}, ZX.components.manager, {
+    ZX.extensions.managerDropdown = $.extend(true, {}, ZX.extensions.manager, {
 
         defaults: {
             init_display: '',
