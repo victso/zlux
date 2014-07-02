@@ -136,7 +136,9 @@
 
         $.extend(true, fn.prototype, {
 
-            type: 'plugin'
+            type: 'plugin',
+
+            init: function(){}
 
         }, def);
 
