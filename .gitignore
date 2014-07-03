@@ -1,7 +1,6 @@
 ### Grunt ###
 node_modules/
 bower_components/
-dist/
 zlux_1.0/
 .grunt
 config.codekit
