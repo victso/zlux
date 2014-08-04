@@ -270,14 +270,17 @@
 
             this.init();
 
-            (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
+	        if(this.options.plugins.length || Object.keys)
+	        {
+	            (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
 
-                if (fn.plugins[plugin].init) {
-                    fn.plugins[plugin].init($this);
-                    $this.plugins[plugin] = true;
-                }
+	                if (fn.plugins[plugin].init) {
+	                    fn.plugins[plugin].init($this);
+	                    $this.plugins[plugin] = true;
+	                }
 
-            });
+	            });
+	        }
 
             this.trigger('init', [this]);
         };
@@ -564,7 +567,7 @@
                     {
                         try {
                             // parse response detecting if there was some server side error
-                            json = $.parseJSON(result);
+                            var json = $.parseJSON(result);
 
                         // handle exception
                         } catch(e) {
@@ -866,8 +869,8 @@
     ZX.component('spin', {
 
         defaults: {
-            class: '',
-            affix:  'append' // append, prepend or replace
+            'class': '',
+             affix:  'append' // append, prepend or replace
         },
 
         init: function() {
