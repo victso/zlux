@@ -4,20 +4,18 @@
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
 		<title>zlux Items Manager</title>
-		<link rel="stylesheet" href="../../dist/css/zlux-theme.min.css">
+		<link rel="stylesheet" href="../../dist/css/zlux.uikit.min.css">
 		<link rel="stylesheet" href="../../dist/css/zlux.min.css">
 		<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
 		<script src="../../bower_components/uikit/dist/js/uikit.min.js"></script>
 		<script src="../../bower_components/uikit/dist/js/addons/datepicker.min.js"></script>
-		<script src="../../bower_components/uikit/dist/js/addons/notify.min.js"></script>
 		<script src="../../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
 		<script src="../../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
 		<script src="../js/core.js"></script>
 		<script src="../js/ajax.js"></script>
-		<script src="../js/component.js"></script>
-		<script src="../js/notify.js"></script>
-		<script src="../js/manager.js"></script>
-		<script src="../js/manager-items.js"></script>
+		<script src="../js/extensions.js"></script>
+		<script src="../js/addons/manager.js"></script>
+		<script src="../js/addons/manager-items.js"></script>
 		<script type="text/javascript">
 			jQuery.zx.url.push({"zlux":"\/dist", "root":""});		
 		</script>
@@ -42,14 +40,6 @@
 	<body class="tm-background zx test">
 		<div class="uk-container uk-container-center">
 
-		<form class="uk-form">
-			<input type="" data-uk-datepicker="{format:'DD.MM'}">
-		</form>
-
-		<form class="uk-form">
-			<input type="" data-uk-datepicker="{format:'DD.MM.YYYY'}">
-		</form>
-
 			<form class="uk-form">
 				<input type="text" data-zx-itempicker="{init_display:'My selected Item'}">
 			</form>
@@ -57,7 +47,6 @@
 			<form class="uk-form">
 				<input type="text" data-zx-itempicker="{init_display:'My selected Item'}" value="34">
 			</form>
-
 
 		</div>
 
