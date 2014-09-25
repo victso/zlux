@@ -22,6 +22,7 @@
     ZX.url.urls = {
         ajax: '',
         root: '',
+        root_path: '',
         zlux: ''
     };
     /**
@@ -40,9 +41,23 @@
     ZX.url.get = function (url, params) {
         url = url.split(':');
         params = params === undefined ? {} : params;
+        var result;
 
-        return ZX.url.clean(url.length === 2 ? ZX.url._get(url[0]) + '/' + url[1] : url[0]) +
-            ($.isEmptyObject(params) ? '' : '&' + $.param(params));
+        if(url.length === 2 && url[1] !== '') {
+
+            var root_path = ZX.url.urls.root_path.replace(/^\//, '');
+
+            result = ZX.url._get(url[0]) + '/' + url[1]
+
+            // make sure the joomla root path is not present
+            .replace(new RegExp('^'+root_path, 'g'), '')
+            .replace(new RegExp('^\/'+root_path, 'g'), '');
+
+        } else {
+            result = url[0] + ($.isEmptyObject(params) ? '' : '&' + $.param(params));
+        }
+
+        return ZX.url.clean(result);
     };
     ZX.url._get = function (url) {
         return ZX.url.urls[url] !== undefined ? ZX.url.urls[url] : url;
@@ -60,8 +75,8 @@
         // replace \ with /
         .replace(/\\/g, '/')
 
-        // replace // with /
-        .replace(/\/\//g, '/')
+        // replace double or more slashes
+        .replace(/\/\/+/g, '/')
 
         // remove undefined
         .replace(/undefined/g, '')
@@ -270,17 +285,14 @@
 
             this.init();
 
-	        if(this.options.plugins.length || Object.keys)
-	        {
-	            (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
+            (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
 
-	                if (fn.plugins[plugin].init) {
-	                    fn.plugins[plugin].init($this);
-	                    $this.plugins[plugin] = true;
-	                }
+                if (fn.plugins[plugin].init) {
+                    fn.plugins[plugin].init($this);
+                    $this.plugins[plugin] = true;
+                }
 
-	            });
-	        }
+            });
 
             this.trigger('init', [this]);
         };
@@ -567,7 +579,7 @@
                     {
                         try {
                             // parse response detecting if there was some server side error
-                            var json = $.parseJSON(result);
+                            json = $.parseJSON(result);
 
                         // handle exception
                         } catch(e) {
@@ -869,8 +881,8 @@
     ZX.component('spin', {
 
         defaults: {
-            'class': '',
-             affix:  'append' // append, prepend or replace
+            class: '',
+            affix:  'append' // append, prepend or replace
         },
 
         init: function() {
