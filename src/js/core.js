@@ -7,7 +7,7 @@
         return ZX;
     }
 
-    ZX.version = '2.0.1';
+    ZX.version = '2.0.2';
 
 
     /** URI **/

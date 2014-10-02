@@ -25,9 +25,8 @@
     });
 
     // init code
-    $(document).on('uk-domready', function(e) {
-
-        $('.zx-manager [data-zx-manager-upload]').each(function() {
+    $.UIkit.ready(function(context) {
+        $('.zx-manager [data-zx-manager-upload]', context).each(function() {
             var manager = $(this);
 
             if (!manager.data('uploadManager')) {

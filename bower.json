@@ -4,7 +4,7 @@
   "main": "",
   "dependencies": {
     "jquery": "~2.1.1",
-    "uikit": "~2.7",
+    "uikit": "~2.10.0",
     "datatables": "~1.10",
     "jquery-mockjax": "~1.5.3",
     "plupload": "~2.1.2"

@@ -198,8 +198,8 @@ module.exports = function(grunt) {
 
 	// register tasks
 	// ========================================================================
-	grunt.registerTask('build', ['copy:uikit']);
+	grunt.registerTask('default', ['copy:uikit']);
 	grunt.registerTask('dev', ['less:dev']);
-	grunt.registerTask('default', ['clean:dist', 'less:dist', 'concat:dist', 'copy:addons', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts', 'copy:svg']);
+	grunt.registerTask('dist', ['clean:dist', 'less:dist', 'concat:dist', 'copy:addons', 'uglify:dist', 'usebanner:dist', 'clean:dist_sources', 'copy:uikit_js', 'copy:uikit_fonts', 'copy:svg']);
 	
 };
