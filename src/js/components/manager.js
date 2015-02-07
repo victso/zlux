@@ -79,7 +79,7 @@
             dom = dom === undefined ? $this.find('.zx-manager-resources') : dom;
 
             // load DataTables
-            ZX.assets.load(ZX.url.get('zlux:js/addons/datatables.min.js')).done(function(){
+            ZX.assets.load(ZX.url.get('zlux:js/components/datatables.min.js')).done(function(){
 
                 // init DT
                 ZX.datatables();
