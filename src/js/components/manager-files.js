@@ -27,7 +27,7 @@
             // clean settings
             this.options.max_file_size = parseSize(this.options.max_file_size);
             this.options.extensions = this.options.extensions.replace(/\|/g, ',');
-            this.options.root = ZX.utils.cleanURI(this.options.root);
+            this.options.root = ZX.url.clean(this.options.root);
 
             // check storage param
             if (this.options.storage === '' || this.options.storage === undefined || this.options.storage === null) {
@@ -110,7 +110,7 @@
                     },
                     createdCell: function (cell, cellData, rowData) {
                         // store path in data
-                        $(cell).parent('tr').attr('data-id', ZX.utils.cleanURI(rowData.name));
+                        $(cell).parent('tr').attr('data-id', ZX.url.clean(rowData.name));
                     }
                 }
             ],
@@ -214,7 +214,7 @@
             var $this = this,
 
             // set the new root
-            root = ZX.utils.cleanURI($this.currentPath + '/' + $this._goToPath);
+            root = ZX.url.clean($this.currentPath + '/' + $this._goToPath);
 
             // if available use cache data instead
 
