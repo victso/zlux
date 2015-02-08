@@ -42,7 +42,7 @@
     },
 
     loadAssets = function() {
-        return $.zx.assets.load(ZX.url.get('zlux:js/uikit/components/notify.min.js'));
+        return $.zx.assets.load(ZX.url.get('zlux:vendor/uikit/js/components/notify.min.js'));
     };
 
     ZX.notify             = notify;

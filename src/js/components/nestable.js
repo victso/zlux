@@ -5,7 +5,7 @@
 
     // load Uikit Nestable
     loadAssets = function() {
-        return $.zx.assets.load(ZX.url.get('zlux:js/uikit/components/nestable.min.js'));
+        return $.zx.assets.load(ZX.url.get('zlux:vendor/uikit/js/components/nestable.min.js'));
     };
 
     ZX.nestable             = nestable;
