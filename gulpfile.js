@@ -32,6 +32,13 @@ gulp.task('lint', function() {
   return gulp.src('src/js/**').pipe(jshint()).pipe(jshint.reporter('default'));
 });
 
+
+/* dist */
+
+gulp.task('default', ['dist'], function(cb) {
+    cb();
+});
+
 gulp.task('dist', function(cb) {
     runSeq('dist-clean', 'dist-copy', 'dist-compile', 'dist-concat', 'dist-minify', 'dist-headers', cb);
 });
