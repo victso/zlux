@@ -1,0 +1,197 @@
+// Name:            Calendar
+// Description:     Defines styles for a calendar
+//
+// Component:       `zx-calendar`
+//
+// Modifiers:       `uk-calendar-nav`
+//                  `uk-calendar-previous`
+//                  `uk-calendar-next`
+//                  `uk-calendar-heading`
+//                  `uk-calendar-table`
+//                  `uk-calendar-table-muted`
+//
+// ========================================================================
+
+
+// Variables
+// ========================================================================
+
+@calendar-z-index:                            1050;
+@calendar-animation:                          uk-fade;
+
+@calendar-nav-height:                         20px;
+@calendar-nav-margin-bottom:                  15px;
+@calendar-nav-color:                          #444;
+@calendar-nav-hover-color:                    #444;
+@calendar-previous-icon:                      "\f053";
+@calendar-next-icon:                          "\f054";
+
+@calendar-table-width:                        26px;
+@calendar-table-height:                       24px;
+@calendar-table-color:                        #444;
+
+@calendar-table-hover-background:             #ddd;
+@calendar-table-hover-color:                  #444;
+@calendar-table-onclick-background:           #ccc;
+@calendar-table-onclick-color:                #444;
+
+@calendar-table-active-background:            #00a8e6;
+@calendar-table-active-color:                 #fff;
+
+@calendar-table-muted-color:                  #999;
+
+
+/* ========================================================================
+   Component: calendar
+ ========================================================================== */
+
+/*
+ * 1. Highest z-index
+ * 2. Reset dropdown width
+ * 3. Set animation
+ * 4. Needed for scale animation
+ */
+
+.zx-calendar {
+    /* 1 */
+    z-index: @calendar-z-index;
+    /* 2 */
+    width: auto;
+    /* 3 */
+    -webkit-animation: @calendar-animation 0.2s ease-in-out;
+    animation: @calendar-animation 0.2s ease-in-out;
+    /* 4 */
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+}
+
+
+/* Sub-object: `zx-calendar-nav`
+========================================================================== */
+
+.zx-calendar-nav {
+    margin-bottom: @calendar-nav-margin-bottom;
+    text-align: center;
+    line-height: @calendar-nav-height;
+    .hook-calendar-nav;
+}
+
+/*
+ * Micro clearfix
+ */
+
+.zx-calendar-nav:before,
+.zx-calendar-nav:after {
+    content: "";
+    display: table;
+}
+
+.zx-calendar-nav:after { clear: both; }
+
+/*
+ * Previous and next navigation
+ */
+
+.zx-calendar-nav a {
+    color: @calendar-nav-color;
+    text-decoration: none;
+    .hook-calendar-nav-item;
+}
+
+.zx-calendar-nav a:hover { color: @calendar-nav-hover-color; }
+
+.zx-calendar-previous { float: left; }
+.zx-calendar-next { float: right; }
+
+.zx-calendar-previous:after,
+.zx-calendar-next:after {
+    width: @calendar-nav-height;
+    font-family: FontAwesome;
+}
+
+.zx-calendar-previous:after { content: @calendar-previous-icon; }
+.zx-calendar-next:after { content: @calendar-next-icon; }
+
+
+/* Sub-object: `zx-calendar-heading`
+========================================================================== */
+
+.zx-calendar-heading {}
+
+
+/* Sub-object: `zx-calendar-table`
+========================================================================== */
+
+/* Block element behavior */
+.zx-calendar-table { width: 100%; }
+
+.zx-calendar-table th,
+.zx-calendar-table td { padding: 2px; }
+
+.zx-calendar-table th { font-size: 12px; }
+
+/*
+ * Item
+ */
+
+.zx-calendar-table a {
+    display: block;
+    width: @calendar-table-width;
+    line-height: @calendar-table-height;
+    text-align: center;
+    color: @calendar-table-color;
+    text-decoration: none;
+    .hook-calendar-table-item;
+}
+
+/*
+ * Sub-object: `zx-calendar-table-muted`
+ */
+
+a.zx-calendar-table-muted { color: @calendar-table-muted-color; }
+
+/*
+ * Hover
+ * 1. Apply hover style also to focus state
+ * 2. Remove default focus style
+ */
+
+.zx-calendar-table a:hover,
+.zx-calendar-table a:focus { // 1
+    background-color: @calendar-table-hover-background;
+    color: @calendar-table-hover-color;
+    /* 2 */
+    outline: none;
+    .hook-calendar-table-item-hover;
+}
+
+/* OnClick */
+.zx-calendar-table a:active {
+    background-color: @calendar-table-onclick-background;
+    color: @calendar-table-onclick-color;
+    .hook-calendar-table-item-onclick;
+}
+
+/*
+ * Active
+ */
+
+.zx-calendar-table a.uk-active {
+    background: @calendar-table-active-background;
+    color: @calendar-table-active-color;
+    .hook-calendar-table-item-active;
+}
+
+
+// Hooks
+// ========================================================================
+
+.hook-calendar-misc;
+
+.hook-calendar-nav() {}
+.hook-calendar-nav-item() {}
+.hook-calendar-table-item() {}
+.hook-calendar-table-item-hover() {}
+.hook-calendar-table-item-onclick() {}
+.hook-calendar-table-item-active() {}
+.hook-calendar-misc() {}
