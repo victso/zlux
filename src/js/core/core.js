@@ -156,6 +156,15 @@
        return hash;
     };
 
+
+    // style workaround wrapping root elements with zlux
+    $(document).ready(function($){
+        
+        $('[data-uk-nestable]').on('nestable-start', function() {
+            $('.uk-nestable-list-dragged').wrap('<div class="zx" />');
+        });
+    });
+
     // declare zlux
     $.zx = ZX;
 
