@@ -39,20 +39,10 @@
     closeAll = function(group, instantly){
         $.UIkit.notify.closeAll(group, instantly);
         return this;
-    },
-
-    loadAssets = function() {
-        return $.zx.assets.load(ZX.url.get('zlux:vendor/uikit/js/components/notify.min.js'));
     };
 
     ZX.notify             = notify;
     ZX.notify.confirm     = confirm;
     ZX.notify.closeAll    = closeAll;
-    ZX.notify.loadAssets  = loadAssets;
-
-
-    $.when(ZX.ready()).done(function(){
-        ZX.notify.loadAssets();
-    });
 
 })(jQuery, jQuery.zx, window, document);

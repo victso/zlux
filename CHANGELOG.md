@@ -3,6 +3,7 @@
 ### WIP
 
   - UIkit updated to 2.16.3
+  - Removed async assets loading
 
 ### 2.0.2
 

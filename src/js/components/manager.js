@@ -78,70 +78,66 @@
 
             dom = dom === undefined ? $this.find('.zx-manager-resources') : dom;
 
-            // load DataTables
-            ZX.assets.load(ZX.url.get('zlux:js/components/datatables.min.js')).done(function(){
+            // init DT
+            ZX.datatables();
 
-                // init DT
-                ZX.datatables();
+            // init DataTables instance
+            $this.resources = dom.dataTable($.extend(true, {}, ZX.datatables.settings, $this.DTsettings)).DataTable();
 
-                // init DataTables instance
-                $this.resources = dom.dataTable($.extend(true, {}, ZX.datatables.settings, $this.DTsettings)).DataTable();
+            // hide DT wrapper, must be unhiden by the extending component
+            $this.DT_wrapper = dom.closest('.dataTables_wrapper').addClass('uk-hidden');
 
-                // hide DT wrapper, must be unhiden by the extending component
-                $this.DT_wrapper = dom.closest('.dataTables_wrapper').addClass('uk-hidden');
+            // when DT inited
+            $this.resources.on('init', function() {
+                // trigger resources init event
+                $this.trigger('resourcesInit');
+            });
 
-                // when DT inited
-                $this.resources.on('init', function() {
-                    // trigger resources init event
-                    $this.trigger('resourcesInit');
-                });
+            // details
+            $this.resources.on('click', '.zx-x-details-btn', function(){
+                var toggle = $(this),
+                    resource = toggle.closest('.zx-manager-resource'),
+                    details = $('.zx-x-details', resource);
 
-                // details
-                $this.resources.on('click', '.zx-x-details-btn', function(){
-                    var toggle = $(this),
-                        resource = toggle.closest('.zx-manager-resource'),
-                        details = $('.zx-x-details', resource);
+                // open the details
+                if (!resource.hasClass('zx-open')) {
+                    resource.addClass('zx-open');
+                    toggle.removeClass('uk-icon-angle-down').addClass('uk-icon-angle-up');
 
-                    // open the details
-                    if (!resource.hasClass('zx-open')) {
-                        resource.addClass('zx-open');
-                        toggle.removeClass('uk-icon-angle-down').addClass('uk-icon-angle-up');
+                    // scroll to the Object with animation
+                    // $this.zluxdialog.content.stop().animate({
+                    //     'scrollTop': $resource.get(0).offsetTop
+                    // }, 900, 'swing');
 
-                        // scroll to the Object with animation
-                        // $this.zluxdialog.content.stop().animate({
-                        //     'scrollTop': $resource.get(0).offsetTop
-                        // }, 900, 'swing');
-
-                        // open, when done...
-                        details.slideDown('fast', function(){
-                            // $this.zluxdialog.scrollbar('refresh');
-                        });
-
-                    // close them
-                    } else {
-                        toggle.addClass('uk-icon-angle-down').removeClass('uk-icon-angle-up');
-                        resource.removeClass('zx-open');
-                        details.slideUp('fast', function(){
-                            // $this.zluxdialog.scrollbar('refresh');
-                        });
-                    }
-                });
-
-                // EVENT trigger resourceSelected
-                $this.resources.on('click', '.zx-manager-resource .zx-x-name a', function (e) {
-                    e.preventDefault();
-                    $this.trigger('resourceSelected', $this.getResource($(this).closest('.zx-manager-resource')));
-                });
-
-                // delete resource event
-                $this.resources.on('click', '.zx-manager-resource .zx-x-remove', function(e){
-                    e.preventDefault();
-                    var resource = $this.getResource($(this).closest('.zx-manager-resource'));
-
-                    // prompt confirmation
-                    ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE'), {timeout: false}).done(function(){
-                        $this.deleteResource(resource);
+                    // open, when done...
+                    details.slideDown('fast', function(){
+                        // $this.zluxdialog.scrollbar('refresh');
                     });
+
+                // close them
+                } else {
+                    toggle.addClass('uk-icon-angle-down').removeClass('uk-icon-angle-up');
+                    resource.removeClass('zx-open');
+                    details.slideUp('fast', function(){
+                        // $this.zluxdialog.scrollbar('refresh');
+                    });
+                }
+            });
+
+            // EVENT trigger resourceSelected
+            $this.resources.on('click', '.zx-manager-resource .zx-x-name a', function (e) {
+                e.preventDefault();
+                $this.trigger('resourceSelected', $this.getResource($(this).closest('.zx-manager-resource')));
+            });
+
+            // delete resource event
+            $this.resources.on('click', '.zx-manager-resource .zx-x-remove', function(e){
+                e.preventDefault();
+                var resource = $this.getResource($(this).closest('.zx-manager-resource'));
+
+                // prompt confirmation
+                ZX.notify.confirm(ZX.lang._('DELETE_THIS_RESOURCE'), {timeout: false}).done(function(){
+                    $this.deleteResource(resource);
                 });
             });
         },

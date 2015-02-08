@@ -1,20 +1,7 @@
 ;(function ($, ZX, window, document, undefined) {
     "use strict";
 
-    var nestable = function(){},
-
-    // load Uikit Nestable
-    loadAssets = function() {
-        return $.zx.assets.load(ZX.url.get('zlux:vendor/uikit/js/components/nestable.min.js'));
-    };
-
-    ZX.nestable             = nestable;
-    ZX.nestable.loadAssets  = loadAssets;
-
-
-    $.when(ZX.ready()).done(function(){
-        ZX.nestable.loadAssets();
-    });
+    ZX.nestable = nestable;
 
     $(document).ready(function($){
         // style workaround, when sortable item is dragged wrap it with zlux
