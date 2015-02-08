@@ -11,6 +11,7 @@ concat  = require('gulp-concat'),
 util    = require('gulp-util'),
 uglify  = require('gulp-uglify'),
 header  = require('gulp-header'),
+jshint  = require('gulp-jshint'),
 merge   = require('merge-stream'),
 runSeq  = require('run-sequence'),
 
@@ -26,6 +27,10 @@ output = util.env.output || util.env.o || 'dist';
 
 
 /** TASKS **/
+
+gulp.task('lint', function() {
+  return gulp.src('src/js/**').pipe(jshint()).pipe(jshint.reporter('default'));
+});
 
 gulp.task('dist', function(cb) {
     runSeq('dist-clean', 'dist-copy', 'dist-compile', 'dist-concat', 'dist-minify', 'dist-headers', cb);

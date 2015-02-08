@@ -23,6 +23,7 @@
 	    "gulp-concat": "^2.3.4",
 	    "gulp-util": "^3.0.1",
 	    "gulp-header":"^1.2.2",
+	    "gulp-jshint":"^1.9.2",
 	    "merge-stream": "^0.1.6",
 	    "run-sequence": "^0.3.7"
 	}
