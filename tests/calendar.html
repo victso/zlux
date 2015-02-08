@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en-gb" dir="ltr">
+	<head>
+		<meta charset="utf-8"></meta>
+		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+		<title>zlux Items</title>
+
+		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
+		<link rel="stylesheet" href="../dist/css/zlux.css">
+
+		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
+		<script src="../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
+		<script src="../bower_components/moment/min/moment.min.js"></script>
+		<script src="../bower_components/underscore/underscore-min.js"></script>
+		<script src="../bower_components/clndr/clndr.min.js"></script>
+		
+		<script src="../bower_components/uikit/js/uikit.js"></script>
+		
+
+		<script src="../dist/js/zlux.js"></script>
+		<script src="../dist/js/components/calendar.js"></script>
+
+		<style type="text/css">
+
+			html { font-size: 14px; }
+			body { font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+			body.uk-container { padding-bottom: 250px; }
+
+		</style>
+	</head>
+	<body class="tm-background zx test">
+		<div class="uk-container uk-container-center">
+
+			<div class="zx-calendar" data-zx-calendar></div>
+
+		</div>
+
+		<script type="text/template">
+			<div class='zx-calendar-nav'>
+				<span class='zx-calendar-previous clndr-previous-button'></span>
+				<span class='zx-calendar-next clndr-next-button'></span>
+				<div class='uk-datepicker-heading'><%= month %> <%= year %></div>
+			</div>
+			
+            <table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>
+                <thead>
+                <tr class='header-days'>
+                <% for(var i = 0; i < daysOfTheWeek.length; i++) { %>
+                  <th class='header-day'><%= daysOfTheWeek[i] %></th>
+                <% } %>
+                </tr>
+                </thead>
+                <tbody>
+                <% for(var i = 0; i < numberOfRows; i++){ %>
+                  <tr>
+                  <% for(var j = 0; j < 7; j++){ %>
+                  <% var d = j + i * 7; %>
+                  <td>
+                  	<span class='<%= days[d].classes %>'><%= days[d].day %></span>
+                  </td>
+                  <% } %>
+                  </tr>
+                <% } %>
+                </tbody>
+            </table>
+		</script>
+
+	</body>
+</html>

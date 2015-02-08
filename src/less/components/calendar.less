@@ -3,12 +3,12 @@
 //
 // Component:       `zx-calendar`
 //
-// Modifiers:       `uk-calendar-nav`
-//                  `uk-calendar-previous`
-//                  `uk-calendar-next`
-//                  `uk-calendar-heading`
-//                  `uk-calendar-table`
-//                  `uk-calendar-table-muted`
+// Modifiers:       `zx-calendar-nav`
+//                  `zx-calendar-previous`
+//                  `zx-calendar-next`
+//                  `zx-calendar-heading`
+//                  `zx-calendar-table`
+//                  `zx-calendar-table-muted`
 //
 // ========================================================================
 
@@ -18,6 +18,7 @@
 
 @calendar-z-index:                            1050;
 @calendar-animation:                          uk-fade;
+@calendar-width:                              210px;
 
 @calendar-nav-height:                         20px;
 @calendar-nav-margin-bottom:                  15px;
@@ -45,26 +46,9 @@
    Component: calendar
  ========================================================================== */
 
-/*
- * 1. Highest z-index
- * 2. Reset dropdown width
- * 3. Set animation
- * 4. Needed for scale animation
- */
-
 .zx-calendar {
-    /* 1 */
-    z-index: @calendar-z-index;
-    /* 2 */
-    width: auto;
-    /* 3 */
-    -webkit-animation: @calendar-animation 0.2s ease-in-out;
-    animation: @calendar-animation 0.2s ease-in-out;
-    /* 4 */
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
+    width: @calendar-width;
 }
-
 
 /* Sub-object: `zx-calendar-nav`
 ========================================================================== */
@@ -92,13 +76,13 @@
  * Previous and next navigation
  */
 
-.zx-calendar-nav a {
+.zx-calendar-nav span {
     color: @calendar-nav-color;
     text-decoration: none;
     .hook-calendar-nav-item;
 }
 
-.zx-calendar-nav a:hover { color: @calendar-nav-hover-color; }
+.zx-calendar-nav span:hover { color: @calendar-nav-hover-color; }
 
 .zx-calendar-previous { float: left; }
 .zx-calendar-next { float: right; }
@@ -107,6 +91,7 @@
 .zx-calendar-next:after {
     width: @calendar-nav-height;
     font-family: FontAwesome;
+    cursor: pointer;
 }
 
 .zx-calendar-previous:after { content: @calendar-previous-icon; }
@@ -134,7 +119,8 @@
  * Item
  */
 
-.zx-calendar-table a {
+.zx-calendar-table a,
+.zx-calendar-table span {
     display: block;
     width: @calendar-table-width;
     line-height: @calendar-table-height;
@@ -148,7 +134,8 @@
  * Sub-object: `zx-calendar-table-muted`
  */
 
-a.zx-calendar-table-muted { color: @calendar-table-muted-color; }
+a.zx-calendar-table-muted,
+span.zx-calendar-table-muted { color: @calendar-table-muted-color; }
 
 /*
  * Hover
@@ -176,7 +163,7 @@ a.zx-calendar-table-muted { color: @calendar-table-muted-color; }
  * Active
  */
 
-.zx-calendar-table a.uk-active {
+.zx-calendar-table .uk-active {
     background: @calendar-table-active-background;
     color: @calendar-table-active-color;
     .hook-calendar-table-item-active;
