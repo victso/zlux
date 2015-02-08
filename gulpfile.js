@@ -47,7 +47,7 @@ gulp.task('dist-compile', function() {
 });
 
 gulp.task('dist-concat', function() {
-    return gulp.src(['src/js/core/*.js']).pipe(concat('zlux.js')).pipe(gulp.dest(output+'/js'));
+    return gulp.src(['src/js/core/core.js', 'src/js/core/extensions.js', 'src/js/core/*.js']).pipe(concat('zlux.js')).pipe(gulp.dest(output+'/js'));
 });
 
 gulp.task('dist-minify', function() {
