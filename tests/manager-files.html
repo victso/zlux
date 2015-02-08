@@ -3,20 +3,24 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
-		<title>Zlux Files</title>
-		<link rel="stylesheet" href="../../dist/css/zlux.min.css">
-		<script src="../../bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="../../bower_components/uikit/dist/js/uikit.min.js"></script>
-		<script src="../../bower_components/uikit/dist/js/addons/notify.min.js"></script>
-		<script src="../../bower_components/datatables/media/js/jquery.datatables.js"></script>
-		<script src="../../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
-		<script src="../../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
-		<script src="../js/core.js"></script>
-		<script src="../js/ajax.js"></script>
-		<script src="../js/component.js"></script>
-		<script src="../js/notify.js"></script>
-		<script src="../js/manager.js"></script>
-		<script src="../js/manager-files.js"></script>
+		<title>zlux Files</title>
+
+		<link rel="stylesheet" href="../dist/css/zlux-uikit.min.css">
+		<link rel="stylesheet" href="../dist/css/zlux.min.css">
+
+		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+		<script src="../bower_components/datatables/media/js/jquery.datatables.js"></script>
+		<script src="../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
+		<script src="../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
+
+		<script src="../bower_components/uikit/js/uikit.js"></script>
+		<script src="../bower_components/uikit/js/components/notify.js"></script>
+
+		<script src="../dist/js/zlux.js"></script>
+		<script src="../dist/js/components/notify.js"></script>
+		<script src="../dist/js/components/datatables.js"></script>
+		<script src="../dist/js/components/manager.js"></script>
+		<script src="../dist/js/components/manager-files.js"></script>
 	</head>
 	<body class="tm-background zlux">
 
@@ -40,9 +44,8 @@
 		</div>
 
 		<script type="text/javascript">
-
 			// mock DT request
-			$.mockjax(function(settings) {
+			jQuery.mockjax(function(settings) {
 				var service = settings.url.match(/index\.php\?option\=com_zoolanders\&format\=raw\&controller\=zlux\&task\=getFilesManagerData/);
 				if ( service ) {
 					// emulate 1 level folder tree
@@ -60,7 +63,7 @@
 			});
 
 			// mock the 
-			$.mockjax({
+			jQuery.mockjax({
 				url: 'index.php?option=com_zoolanders&format=raw&controller=zlux&task=deleteResource',
 				contentType: 'text/html',
 				responseText: {success:true, errors:[], notices:[]}
@@ -68,7 +71,6 @@
 				// 	"success|0-1": true
 				// })
 			});
-			
 		</script>
 
 	</body>
