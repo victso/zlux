@@ -237,7 +237,7 @@
 
             // request
             ZX.ajax.requestAndNotify({
-                url: ZX.url.ajax('zlux', 'getFilesManagerData'),
+                url: ZX.url.get('ajax:', {controller: 'zlux', task: 'getFilesManagerData'}),
                 data: data,
                 queue: 'filesmanager',
                 // beforeSend: function(){
