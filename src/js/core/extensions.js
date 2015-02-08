@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+;(function ($, ZX, UI) {
     "use strict";
 
     ZX.extensions = {};
@@ -41,6 +41,7 @@
 
             defaults: {plugins: []},
 
+            boot: function(){},
             init: function(){},
 
             on: function(){
@@ -120,7 +121,26 @@
             ZX.extensions[name].plugins[plugin] = def;
         };
 
+        if (UI.domready) {
+            UI.component.boot(name);
+        }
+
         return fn;
+    };
+
+    ZX.component.boot = function(name) {
+
+        if (ZX.extensions[name].prototype && ZX.extensions[name].prototype.boot && !ZX.extensions[name].booted) {
+            ZX.extensions[name].prototype.boot.apply(ZX, []);
+            ZX.extensions[name].booted = true;
+        }
+    };
+
+    ZX.component.bootComponents = function() {
+
+        for (var component in ZX.extensions) {
+            ZX.component.boot(component);
+        }
     };
 
 
@@ -220,4 +240,4 @@
 
     $.fn.zx = ZX.fn;
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);

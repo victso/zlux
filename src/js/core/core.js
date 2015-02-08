@@ -1,4 +1,4 @@
-;(function ($, window, document, undefined) {
+(function ($, UI) {
     "use strict";
 
     var ZX = $.zx || {};
@@ -157,15 +157,18 @@
     };
 
 
-    // style workaround wrapping root elements with zlux
-    $(document).ready(function($){
-        
+    window.zlux  = ZX;
+    $.zx         = ZX;
+
+
+    UI.ready(function() {
+
+        // style workaround wrapping root elements with zlux    
         $('[data-uk-nestable]').on('nestable-start', function() {
             $('.uk-nestable-list-dragged').wrap('<div class="zx" />');
         });
+
+        ZX.component.bootComponents();
     });
 
-    // declare zlux
-    $.zx = ZX;
-
-})(jQuery, window, document);
+})(jQuery, UIkit);
