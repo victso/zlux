@@ -22,57 +22,36 @@
 
             var $this   = this,
                 element = this.element[0],
-                templateUI =
-                  "<div class='clndr-controls'>" +
-                    "<div class='clndr-control-button'><span class='clndr-previous-button'>previous</span></div><div class='month'>{{ month }} {{ year }}</div><div class='clndr-control-button rightalign'><span class='clndr-next-button'>next</span></div>" +
-                  "</div>" +
-                  "<table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>" +
+                template = 
+                "<div class='zx-calendar-nav'>" +
+                    "<span class='zx-calendar-previous clndr-previous-button'></span>" +
+                    "<span class='zx-calendar-next clndr-next-button'></span>" +
+                    "<div class='uk-datepicker-heading'>{{ month }} {{ year }}</div>" +
+                "</div>" +
+                "<table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>" +
                     "<thead>" +
-                    "<tr class='header-days'>" +
-                    "{{~daysOfTheWeek}}" +
-                      "<td class='header-day'>{{$item}}</td>" +
-                    "{{/daysOfTheWeek}}" +
-                    "</tr>" +
+                        "<tr class='header-days'>" +
+                        "{{~daysOfTheWeek}}" +
+                            "<th class='header-day'>{{ $item }}</th>" +
+                        "{{/daysOfTheWeek}}" +
+                        "</tr>" +
                     "</thead>" +
                     "<tbody>" +
-                    "<% for(var i = 0; i < numberOfRows; i++){ %>" +
-                      "<tr>" +
-                      "<% for(var j = 0; j < 7; j++){ %>" +
-                      "<% var d = j + i * 7; %>" +
-                      "<td class='<%= days[d].classes %>'><div class='day-contents'><%= days[d].day %>" +
-                      "</div></td>" +
-                      "<% } %>" +
-                      "</tr>" +
-                    "<% } %>" +
-                    "</tbody>" +
-                  "</table>",
-
-                underscoreJStmpl =
-                "<div class='clndr-controls'>" +
-                    "<div class='clndr-control-button'><span class='clndr-previous-button'>previous</span></div><div class='month'><%= month %> <%= year %></div><div class='clndr-control-button rightalign'><span class='clndr-next-button'>next</span></div>" +
-                    "</div>" +
-                  "<table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>" +
-                    "<thead>" +
-                    "<tr class='header-days'>" +
-                    "<% for(var i = 0; i < daysOfTheWeek.length; i++) { %>" +
-                      "<td class='header-day'><%= daysOfTheWeek[i] %></td>" +
-                    "<% } %>" +
-                    "</tr>" +
-                    "</thead>" +
-                    "<tbody>" +
-                    "<% for(var i = 0; i < numberOfRows; i++){ %>" +
-                      "<tr>" +
-                      "<% for(var j = 0; j < 7; j++){ %>" +
-                      "<% var d = j + i * 7; %>" +
-                      "<td class='<%= days[d].classes %>'><div class='day-contents'><%= days[d].day %>" +
-                      "</div></td>" +
-                      "<% } %>" +
-                      "</tr>" +
-                    "<% } %>" +
+                    "{{:grid}}" +
+                        "<tr>" +
+                        "{{~$val}}" +
+                            "<td>" +
+                                "<span class='{{ $item.classes }}'>{{ $item.day }}</span>" +
+                            "</td>" +
+                        "{{/$val}}" +
+                        "</tr>" +
+                    "{{/grid}}" +
                     "</tbody>" +
                 "</table>";
 
             this.element.clndr({
+
+                weekOffset: 1,
                 
                 // override default classes
                 classes: {
@@ -81,7 +60,7 @@
                     past: 'zx-calendar-past',
                     lastMonth: 'zx-calendar-last-month',
                     nextMonth: 'zx-calendar-next-month',
-                    adjacentMonth: 'zx-calendar-adjacent-month',
+                    adjacentMonth: 'zx-calendar-table-muted',
                     inactive: 'zx-calendar-inactive'
                 },
 
@@ -91,17 +70,27 @@
                     empty: 'clndr-empty'
                 },
 
-                template: $('[type="text/template"]').html()
+                // override template rendering
+                render: function(data){
 
-                // render: function(data){
-                //     console.log(data);
+                    var grid = [];
+                    for (var i = 0; i < data.numberOfRows; i++) {
+
+                        var row = [];                        
+                        for (var j = 0; j < 7; j++) {
+                            var d = j + i * 7;
+                            row.push(data.days[d]);
+                        }
+
+                        grid.push(row);
+                    }
+
+                    data.grid = grid;
                     
-                //     return UI.Utils.template(templateUI, data);
-                // }
-
+                    return UI.Utils.template(template, data);
+                }
             });
         }
-
     });
 
 })(jQuery, zlux, UIkit);
