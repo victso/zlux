@@ -33,11 +33,26 @@
 
 		</div>
 
+		<script type="text/javascript">
+			var events = [
+			  { start: '2015-02-04', end: '2015-02-08', title: 'Monday to Friday Event', link:'http://yootheme.com' },
+			  { start: '2015-02-10', end: '2015-02-13', title: 'Another Long Event' },
+			  { date: '2015-07-16', title: 'Birthday' }
+			];
+
+			jQuery(function($) {
+
+				var myCalendar = zlux.calendar('.zx-calendar').clndr;
+				
+				myCalendar.setEvents(events);
+			});
+		</script>
+
 		<script type="text/template">
 		<div class='zx-calendar-nav'>
-			<span class='zx-calendar-previous clndr-previous-button'></span>
-			<span class='zx-calendar-next clndr-next-button'></span>
-			<div class='uk-datepicker-heading'>{{ month }} {{ year }}</div>
+			<span class='zx-calendar-previous'></span>
+			<span class='zx-calendar-next'></span>
+			<div class='zx-calendar-heading'>{{ month }} {{ year }}</div>
 		</div>
         <table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>
             <thead>
@@ -52,7 +67,12 @@
               	<tr>
                 {{~$val}}
                   	<td>
-                  		<span class='{{ $item.classes }}'>{{ $item.day }}</span>
+                  		{{#$item.link}}
+                  		<a href='{{ $item.link }}' {{ $item.attr }}>{{ $item.day }}</span>
+                  		{{/endif}}
+                  		{{^$item.link}}
+                  		<span {{ $item.attr }}>{{ $item.day }}</span>
+                  		{{/endif}}
                   	</td>
                 {{/$val}}
             	</tr>

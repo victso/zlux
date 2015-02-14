@@ -24,9 +24,9 @@
                 element = this.element[0],
                 template = 
                 "<div class='zx-calendar-nav'>" +
-                    "<span class='zx-calendar-previous clndr-previous-button'></span>" +
-                    "<span class='zx-calendar-next clndr-next-button'></span>" +
-                    "<div class='uk-datepicker-heading'>{{ month }} {{ year }}</div>" +
+                    "<span class='zx-calendar-previous'></span>" +
+                    "<span class='zx-calendar-next'></span>" +
+                    "<div class='zx-calendar-heading'>{{ month }} {{ year }}</div>" +
                 "</div>" +
                 "<table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>" +
                     "<thead>" +
@@ -41,7 +41,12 @@
                         "<tr>" +
                         "{{~$val}}" +
                             "<td>" +
-                                "<span class='{{ $item.classes }}'>{{ $item.day }}</span>" +
+                                "{{#$item.link}}" +
+                                "<a href='{{ $item.link }}' {{ $item.attr }}>{{ $item.day }}</span>" +
+                                "{{/endif}}" +
+                                "{{^$item.link}}" +
+                                "<span {{ $item.attr }}>{{ $item.day }}</span>" +
+                                "{{/endif}}" +
                             "</td>" +
                         "{{/$val}}" +
                         "</tr>" +
@@ -49,7 +54,7 @@
                     "</tbody>" +
                 "</table>";
 
-            this.element.clndr({
+            this.clndr = this.element.clndr({
 
                 weekOffset: 1,
                 
@@ -66,8 +71,17 @@
 
                 // override defaults targets
                 targets: {
+                    previousButton: 'zx-calendar-previous',
+                    nextButton: 'zx-calendar-next',
                     day: 'clndr-day',
                     empty: 'clndr-empty'
+                },
+
+                // set events data mapping
+                multiDayEvents: {
+                    startDate: 'start',
+                    endDate: 'end',
+                    singleDay: 'date'
                 },
 
                 // override template rendering
@@ -78,8 +92,24 @@
 
                         var row = [];                        
                         for (var j = 0; j < 7; j++) {
-                            var d = j + i * 7;
-                            row.push(data.days[d]);
+                            var d = j + i * 7, day = data.days[d], attr = [];
+
+                            if (day.events.length) {
+                                day.classes += ' uk-active';
+
+                                attr.push('data-uk-tooltip');
+                                attr.push('title=\''+day.events[0].title+'\'');
+
+                                if (day.events[0].link) {
+                                    day.link = day.events[0].link;
+                                }
+                            }
+
+                            attr.push('class=\''+day.classes+'\'');
+
+                            day.attr = attr.join(' ');
+
+                            row.push(day);
                         }
 
                         grid.push(row);
