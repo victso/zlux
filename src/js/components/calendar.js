@@ -13,7 +13,7 @@
                 var ele = UI.$(this);
 
                 if(!ele.data("calendar")) {
-                    var plugin = ZX.calendar(ele, UI.Utils.options(ele.attr("data-uk-calendar")));
+                    var plugin = ZX.calendar(ele, UI.Utils.options(ele.attr("data-zx-calendar")));
                 }
             });
         },
