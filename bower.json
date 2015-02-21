@@ -8,7 +8,9 @@
     "datatables": "~1.10",
     "jquery-mockjax": "~1.5.3",
     "jquery-mockjson": "master",
-    "plupload": "~2.1.2"
+    "plupload": "~2.1.2",
+    "moment": "~2.9.0",
+    "clndr": "~1.2.7"
   },
   "ignore": [
     "node_modules",
