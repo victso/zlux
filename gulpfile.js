@@ -49,8 +49,10 @@ gulp.task('dist-copy', ['dist-clean'], function() {
         gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg')),
         gulp.src(['CHANGELOG.md']).pipe(gulp.dest(output)),
 
+        // vendor
         gulp.src(['bower_components/uikit/js/**/*.min.js', '!bower_components/uikit/js/core/**']).pipe(gulp.dest(output+'/vendor/uikit/js')),
-        gulp.src(['bower_components/uikit/fonts/**']).pipe(gulp.dest(output+'/vendor/uikit/fonts'))
+        gulp.src(['bower_components/uikit/fonts/**']).pipe(gulp.dest(output+'/vendor/uikit/fonts')),
+        gulp.src(['bower_components/clndr/clndr.min.js', 'bower_components/moment/min/moment.min.js']).pipe(gulp.dest(output+'/vendor'))
     );
 });
 
