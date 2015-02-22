@@ -4,7 +4,9 @@
 
     ZX.component('calendar', {
 
-        defaults: {},
+        defaults: {
+            weekOffset: 1
+        },
 
         boot: function() {
 
@@ -54,9 +56,7 @@
                     "</tbody>" +
                 "</table>";
 
-            this.clndr = this.element.clndr({
-
-                weekOffset: 1,
+            this.clndr = this.element.clndr($.extend(true, $this.options, {
                 
                 // override default classes
                 classes: {
@@ -119,7 +119,7 @@
                     
                     return UI.Utils.template(template, data);
                 }
-            });
+            }));
         }
     });
 
