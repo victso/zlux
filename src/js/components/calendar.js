@@ -84,6 +84,34 @@
                     singleDay: 'date'
                 },
 
+                 // set click callbacks as plugin events
+                clickEvents: {
+                    click: function(target){
+                        $this.trigger('day.zx.calendar', [target]);
+                    },
+                    previousMonth: function(date){
+                        $this.trigger('prevMonth.zx.calendar', [date]);
+                    },
+                    nextMonth: function(date){
+                        $this.trigger('nextMonth.zx.calendar', [date]);
+                    },
+                    previousYear: function(date) {
+                        $this.trigger('prevYear.zx.calendar', [date]);
+                    },
+                    nextYear: function(date) {
+                        $this.trigger('nextYear.zx.calendar', [date]);
+                    },
+                    onMonthChange: function(date) {
+                        $this.trigger('month.zx.calendar', [date]);
+                    },
+                    onYearChange: function(date) {
+                        $this.trigger('year.zx.calendar', [date]);
+                    },
+                    today: function(date){
+                        $this.trigger('today.zx.calendar', [date]);
+                    }
+                },
+
                 // override template rendering
                 render: function(data){
 
