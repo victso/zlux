@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+(function ($, ZX, UI) {
     "use strict";
     
     ZX.component('spin', {
@@ -63,4 +63,4 @@
         }
     });
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);

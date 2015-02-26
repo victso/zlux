@@ -39,7 +39,7 @@ gulp.task('default', ['dist'], function(cb) {
     cb();
 });
 
-gulp.task('dist', function(cb) {
+gulp.task('build', function(cb) {
     runSeq('dist-clean', 'dist-copy', 'dist-compile', 'dist-concat', 'dist-minify', 'dist-headers', cb);
 });
 
@@ -47,12 +47,7 @@ gulp.task('dist-copy', ['dist-clean'], function() {
     return merge(
         gulp.src(['src/js/components/**']).pipe(gulp.dest(output+'/js/components')),
         gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg')),
-        gulp.src(['CHANGELOG.md']).pipe(gulp.dest(output)),
-
-        // vendor
-        gulp.src(['bower_components/uikit/js/**/*.min.js', '!bower_components/uikit/js/core/**']).pipe(gulp.dest(output+'/vendor/uikit/js')),
-        gulp.src(['bower_components/uikit/fonts/**']).pipe(gulp.dest(output+'/vendor/uikit/fonts')),
-        gulp.src(['bower_components/clndr/clndr.min.js', 'bower_components/moment/min/moment.min.js']).pipe(gulp.dest(output+'/vendor'))
+        gulp.src(['CHANGELOG.md']).pipe(gulp.dest(output))
     );
 });
 

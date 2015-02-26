@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+(function ($, ZX, UI) {
     "use strict";
 
     var modal = function(){},
@@ -67,4 +67,4 @@
     ZX.modal.alert    = alert;
     ZX.modal.confirm  = confirm;
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);

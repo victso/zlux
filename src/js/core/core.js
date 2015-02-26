@@ -1,14 +1,9 @@
 (function ($, UI) {
     "use strict";
 
-    var ZX = $.zx || {};
-
-    if (ZX.fn) {
-        return ZX;
-    }
+    var ZX = {};
 
     ZX.version = '2.0.2';
-
 
     /** URI **/
     ZX.url = {};
@@ -157,8 +152,8 @@
     };
 
 
-    window.zlux  = ZX;
-    $.zx         = ZX;
+    window.zlux = ZX;
+    $.zx        = ZX;
 
 
     UI.ready(function() {
@@ -170,5 +165,7 @@
 
         ZX.component.bootComponents();
     });
+
+    return ZX;
 
 })(jQuery, UIkit);

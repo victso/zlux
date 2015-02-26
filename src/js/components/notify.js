@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+(function ($, ZX, UI) {
     "use strict";
 
     var notify = function(msg, options){
@@ -45,4 +45,4 @@
     ZX.notify.confirm     = confirm;
     ZX.notify.closeAll    = closeAll;
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);

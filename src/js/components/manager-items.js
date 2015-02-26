@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+(function ($, ZX, UI) {
     "use strict";
 
     var instance_id = 0, active = false, cache = {}, dropdown,
@@ -295,4 +295,4 @@
         });
     });
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);

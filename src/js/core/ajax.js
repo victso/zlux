@@ -1,4 +1,4 @@
-;(function ($, ZX, window, document, undefined) {
+(function ($, ZX, UI) {
     "use strict";
 
     ZX.ajax = {};
@@ -268,4 +268,4 @@
         }
     };
 
-})(jQuery, jQuery.zx, window, document);
+})(jQuery, zlux, UIkit);
