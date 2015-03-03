@@ -3,7 +3,7 @@
 
     var ZX = {};
 
-    ZX.version = '2.0.2';
+    ZX.version = '2.0.3';
 
     /** URI **/
     ZX.url = {};
