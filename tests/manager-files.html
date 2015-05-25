@@ -5,73 +5,48 @@
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
 		<title>zlux Files</title>
 
-		<link rel="stylesheet" href="../dist/css/zlux-uikit.min.css">
-		<link rel="stylesheet" href="../dist/css/zlux.min.css">
+		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
+		<link rel="stylesheet" href="../dist/css/zlux.css">
 
-		<script src="../bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="../bower_components/datatables/media/js/jquery.datatables.js"></script>
-		<script src="../bower_components/jquery-mockjax/jquery.mockjax.js"></script>
-		<script src="../bower_components/jquery-mockjson/js/jquery.mockjson.js"></script>
-
-		<script src="../bower_components/uikit/js/uikit.js"></script>
-		<script src="../bower_components/uikit/js/components/notify.js"></script>
-
+		<script src="../vendor/jquery/dist/jquery.min.js"></script>
+		<script src="../vendor/jquery-mockjax/dist/jquery.mockjax.js"></script>
+		<script src="../vendor/uikit/js/uikit.js"></script>
+		<script src="../vendor/vue/dist/vue.js"></script>
 		<script src="../dist/js/zlux.js"></script>
-		<script src="../dist/js/components/notify.js"></script>
-		<script src="../dist/js/components/datatables.js"></script>
-		<script src="../dist/js/components/manager.js"></script>
-		<script src="../dist/js/components/manager-files.js"></script>
+
+		<script type="text/javascript">
+
+			$.mockjax({
+				url: '/files',
+				proxy: 'data/files.json',
+				response: function(settings) {
+
+				    // get folders object
+				    var folders = JSON.parse(this.responseText);
+
+				    this.responseText = {
+				    	"success": true,
+						"root": settings.data.path,
+						"total": 1,
+						"filtered": 1,
+						"data": folders[settings.data.path]
+				    }
+
+				}
+			});
+			
+		</script>
+
 	</head>
-	<body class="tm-background zlux">
+	<body class="tm-background zx">
 
 		<div class="uk-container uk-container-center">
 
-			<div class="uk-grid">
-
-				<!-- main wrapper -->
-				<div data-zx-manager-files class="zx-manager uk-width-1-1">
-
-					<!-- menu -->
-					<nav class="uk-navbar zx-manager-nav"></nav>
-
-					<!-- table -->
-					<table class="uk-table uk-table-striped zx-manager-resources"></table>
-
-				</div>
-
-			</div>
+			<div data-zx-manager-files></div>
 
 		</div>
 
-		<script type="text/javascript">
-			// mock DT request
-			jQuery.mockjax(function(settings) {
-				var service = settings.url.match(/index\.php\?option\=com_zoolanders\&format\=raw\&controller\=zlux\&task\=getFilesManagerData/);
-				if ( service ) {
-					// emulate 1 level folder tree
-					if (settings.data.root === '') {
-						return {
-							proxy: 'data/filesManager.json'
-						};
-					} else {
-						return {
-							proxy: 'data/filesManager.subfolder.json'
-						};
-					}
-				}
-				return;
-			});
-
-			// mock the 
-			jQuery.mockjax({
-				url: 'index.php?option=com_zoolanders&format=raw&controller=zlux&task=deleteResource',
-				contentType: 'text/html',
-				responseText: {success:true, errors:[], notices:[]}
-				// responseText: $.mockJSON.generateFromTemplate({
-				// 	"success|0-1": true
-				// })
-			});
-		</script>
+		<script src="../dist/js/components/manager-files.js"></script>
 
 	</body>
 </html>

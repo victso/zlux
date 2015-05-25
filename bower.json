@@ -1,21 +1,13 @@
 {
-  "name": "zlux",
-  "version": "2.0.2",
-  "main": "",
-  "dependencies": {
-    "jquery": ">= 1.9.0",
-    "uikit": ">= 2.10.0",
-    "datatables": "~1.10",
-    "jquery-mockjax": "~1.5.3",
-    "jquery-mockjson": "master",
-    "plupload": "~2.1.2",
-    "moment": "~2.9.0",
-    "clndr": "~1.2.7"
-  },
-  "ignore": [
-    "node_modules",
-    "bower_components",
-    "vendor",
-    "index.html"
-  ]
+    "name": "zlux",
+    "dependencies": {
+        "jquery": ">= 1.9.0",
+        "uikit": ">= 2.20.0",
+        "jquery-mockjax": "~2.0.0",
+        "moment": "~2.9.0",
+        "clndr": "~1.2.7",
+        "vue": "~0.11.10",
+        "vue-resource": "~0.1.0"
+    },
+    "private":true
 }
