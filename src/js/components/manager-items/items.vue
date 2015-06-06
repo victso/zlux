@@ -8,11 +8,32 @@
 
             return {
                 
-                items: [
-                    {name: 'Item 1', type: 'Article'},
-                    {name: 'Item 2', type: 'Article'}
-                ]
+                items: []
                 
+            }
+
+        },
+
+        created: function() {
+
+            this.fetchData('root');
+
+        },
+
+        methods: {
+
+            fetchData: function(path) {
+
+                this.$http.get('/items', {path:path}, function(response) {
+
+                    this.items = response.data;
+
+                }).error(function(e) {
+
+                    console.log(e);
+
+                });
+
             }
 
         }
@@ -37,7 +58,7 @@
                 </td>
 
                 <td>
-                    {{ item.type }}
+                    {{ item.type.name }}
                 </td>
             </tr>
         </tbody>

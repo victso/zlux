@@ -3,71 +3,37 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
-		<title>zlux Items</title>
+		<title>zlux Items Manager</title>
 
-		<link rel="stylesheet" href="../dist/css/zlux-uikit.min.css">
-		<link rel="stylesheet" href="../dist/css/zlux.min.css">
+		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
+		<link rel="stylesheet" href="../dist/css/zlux.css">
 
 		<script src="../vendor/jquery/dist/jquery.min.js"></script>
-		<script src="../vendor/datatables/media/js/jquery.datatables.js"></script>
-		<script src="../vendor/jquery-mockjax/jquery.mockjax.js"></script>
-		<script src="../vendor/jquery-mockjson/js/jquery.mockjson.js"></script>
-
 		<script src="../vendor/uikit/js/uikit.js"></script>
-		<script src="../vendor/uikit/js/components/datepicker.js"></script>
-		<script src="../vendor/uikit/js/components/notify.js"></script>
-
+		<script src="../vendor/vue/dist/vue.js"></script>
+		<script src="../vendor/vue-resource/dist/vue-resource.js"></script>
 		<script src="../dist/js/zlux.js"></script>
-		<script src="../dist/js/components/notify.js"></script>
-		<script src="../dist/js/components/datatables.js"></script>
-		<script src="../dist/js/components/manager.js"></script>
-		<script src="../dist/js/components/manager-items.js"></script>
-
-		<style type="text/css">
-
-			html { font-size: 14px; }
-
-			body { font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
-
-			body.uk-container { padding-bottom: 250px; }
-
-/*			.test .uk-dropdown {
-				display: block;
-				position: relative;
-				z-index: 0;
-				-moz-box-sizing: border-box;
-				box-sizing: border-box;
-			}*/
-
-		</style>
-	</head>
-	<body class="tm-background zx test">
-		<div class="uk-container uk-container-center">
-
-			<form class="uk-form">
-				<input type="text" data-zx-itempicker="{init_display:'My selected Item'}">
-			</form>
-
-			<form class="uk-form">
-				<input type="text" data-zx-itempicker="{init_display:'My selected Item'}" value="34">
-			</form>
-
-		</div>
 
 		<script type="text/javascript">
 
-			// mock DT request
-			$.mockjax(function(settings) {
-				var service = settings.url.match(/&controller\=zlux\&task\=getItemsManagerData/);
-				if ( service ) {
-					return {
-						proxy: 'data/manager-items.json'
-					};
-				}
-				return;
-			});
+            Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+            Vue.http.options.emulateHTTP = true;
+            Vue.http.options.beforeSend = function (request, options) {
+                options.url = 'http://localhost:3000/items';
+            };
 			
 		</script>
+
+	</head>
+	<body class="tm-background zx">
+
+		<div class="uk-container uk-container-center">
+
+			<div data-zx-manager-items></div>
+
+		</div>
+
+		<script src="../dist/js/components/manager-items.js"></script>
 
 	</body>
 </html>

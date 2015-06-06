@@ -1,34 +1,28 @@
 <script>
 
+    var UI = require('uikit');
+
     module.exports = {
 
         data:  {
 
-            currentView: 'items',
-
             nav: [
-                {title: 'Items', view: 'items'}
+                {title: 'Filter'}
             ]
 
         },
 
-        created: function() {
+        ready: function() {
+
+            UI.$('a[href="#"]', this.$el).on('click', function(e) {
+
+                e.preventDefault();
+
+            });
 
         },
 
         methods: {
-
-            changeView: function(view) {
-
-                this.currentView = view;
-                    
-            },
-
-            prevDef: function(e) {
-
-                e.preventDefault();
-
-            }
 
         },
 
@@ -48,12 +42,12 @@
         <ul class="uk-navbar-nav">
 
             <li class="uk-parent uk-active" v-repeat="item: nav">
-                <a href="" v-on="click: this.changeView(item.view), click: prevDef"> {{ item.title }}</a>
+                <a href="#"> {{ item.title }}</a>
             </li>
 
         </ul>
     </nav>
 
-    <div v-component="{{ currentView }}" keep-alive></div>
+    <div v-component="items"></div>
 
 </template>
