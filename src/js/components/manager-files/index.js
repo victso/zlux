@@ -19,7 +19,9 @@ UI.component('zx-manager-files', {
                 }
 
             });
+
         });
+        
     }
 
 });
