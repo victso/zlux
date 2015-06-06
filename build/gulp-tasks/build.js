@@ -26,7 +26,11 @@ banner = ['/**',
 output = util.env.output || util.env.o || 'dist';
 
 gulp.task('build', function(cb) {
-    runSeq('build-copy', 'build-concat', 'build-minify', 'build-headers', cb);
+    runSeq('build-clean', 'build-copy', 'build-concat', 'build-minify', 'build-headers', cb);
+});
+
+gulp.task('build-clean', function(cb) {
+    del(output, cb);
 });
 
 gulp.task('build-copy', function(cb) {
