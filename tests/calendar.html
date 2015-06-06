@@ -3,83 +3,31 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
-		<title>zlux Items</title>
+		<title>zlux Calendar</title>
 
 		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
 		<link rel="stylesheet" href="../dist/css/zlux.css">
 
 		<script src="../vendor/jquery/dist/jquery.min.js"></script>
-		<script src="../vendor/jquery-mockjax/jquery.mockjax.js"></script>
-		<script src="../vendor/jquery-mockjson/js/jquery.mockjson.js"></script>
-		<script src="../vendor/moment/min/moment.min.js"></script>
-		<script src="../vendor/clndr/clndr.min.js"></script>
 		<script src="../vendor/uikit/js/uikit.js"></script>
-		
+		<script src="../vendor/vue/dist/vue.js"></script>
+		<script src="../vendor/moment/min/moment.min.js"></script>
 		<script src="../dist/js/zlux.js"></script>
-		<script src="../dist/js/components/calendar.js"></script>
 
-		<style type="text/css">
+		<script type="text/javascript">
+			
+		</script>
 
-			html { font-size: 14px; }
-			body { font-family:  "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
-			body.uk-container { padding-bottom: 250px; }
-
-		</style>
 	</head>
-	<body class="tm-background zx test">
+	<body class="tm-background zx">
+
 		<div class="uk-container uk-container-center">
 
 			<div class="zx-calendar" data-zx-calendar></div>
 
 		</div>
 
-		<script type="text/javascript">
-			var events = [
-			  { start: '2015-02-04', end: '2015-02-08', title: 'Monday to Friday Event', link:'http://yootheme.com' },
-			  { start: '2015-02-10', end: '2015-02-13', title: 'Another Long Event' },
-			  { date: '2015-07-16', title: 'Birthday' }
-			];
-
-			jQuery(function($) {
-
-				var myCalendar = zlux.calendar('.zx-calendar').clndr;
-				
-				myCalendar.setEvents(events);
-			});
-		</script>
-
-		<script type="text/template">
-		<div class='zx-calendar-nav'>
-			<span class='zx-calendar-previous'></span>
-			<span class='zx-calendar-next'></span>
-			<div class='zx-calendar-heading'>{{ month }} {{ year }}</div>
-		</div>
-        <table class='zx-calendar-table' border='0' cellspacing='0' cellpadding='0'>
-            <thead>
-                <tr class='header-days'>
-                {{~daysOfTheWeek}}
-                  	<th class='header-day'>{{ $item }}</th>
-                {{/daysOfTheWeek}}
-                </tr>
-            </thead>
-            <tbody>
-            {{:grid}}
-              	<tr>
-                {{~$val}}
-                  	<td>
-                  		{{#$item.link}}
-                  		<a href='{{ $item.link }}' {{ $item.attr }}>{{ $item.day }}</span>
-                  		{{/endif}}
-                  		{{^$item.link}}
-                  		<span {{ $item.attr }}>{{ $item.day }}</span>
-                  		{{/endif}}
-                  	</td>
-                {{/$val}}
-            	</tr>
-            {{/grid}}
-            </tbody>
-        </table>
-		</script>
+		<script src="../dist/js/components/calendar.js"></script>
 
 	</body>
 </html>
