@@ -36,5 +36,8 @@
     "run-sequence": "^0.3.7",
     "vue-loader": "^1.1.6",
     "webpack": "^1.9.9"
+  },
+  "dependencies": {
+    "gulp-run": "^1.6.8"
   }
 }
