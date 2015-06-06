@@ -9,7 +9,8 @@
             return {
                 
                 root: '',
-                files: []
+                files: [],
+                cache: {}
                 
             }
 
@@ -17,17 +18,7 @@
 
         created: function() {
 
-            // this.$http.get('/styles', function(data) {
-
-            //     this.files = response.data;
-
-            // }).error(function(e) {
-
-            //     console.log(e);
-
-            // });
-
-            this.fetchData('/');
+            this.fetchData('root');
 
         },
 
@@ -41,14 +32,23 @@
 
             fetchData: function(path) {
 
-                var resource = '/files';
+                if (this.cache[path]) {
 
-                var that = this;
+                    this.root  = path;
+                    this.files = this.cache[path];
+                    return;
 
-                $.getJSON(resource, { path:path }, function(response) {
+                }
 
-                    that.root  = response.root;
-                    that.files = response.data;
+                this.$http.get('/files', {path:path}, function(response) {
+
+                    this.root  = response.root;
+                    this.files = response.data;
+                    this.cache[path] = response;
+
+                }).error(function(e) {
+
+                    console.log(e);
 
                 });
 
@@ -84,13 +84,6 @@
                 <tr v-component="file" v-repeat="files"></tr>
             </tbody>
         </table>
-
-        <ul class="uk-pagination">
-            <li><a href="#">...</a></li>
-            <li class="uk-active"><span>...</span></li>
-            <li class="uk-disabled"><span>...</span></li>
-            <li><span>...</span></li>
-        </ul>
 
     </div>
 

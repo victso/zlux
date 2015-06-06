@@ -1,0 +1,39 @@
+{
+    "type": "object",
+    "properties": {
+        "/": { "$ref": "#/definitions/resource" }
+    },
+    "patternProperties": {
+        "^(/[^/]+)+$": { "$ref": "#/definitions/resource" }
+    },
+    "additionalProperties": false,
+    "required": [ "/" ],
+    "definitions":{
+        "resource":{
+            "oneOf": [
+                { "$ref": "#/definitions/folder" },
+                { "$ref": "#/definitions/file" }
+            ]
+        },
+        "folder":{
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "pattern": "^(/[^/]+)+$"
+                }
+            },
+            "required": [ "path" ]
+        },
+        "file":{
+            "type": "object",
+            "properties": {
+                "path": {
+                    "type": "string",
+                    "pattern": "^(/[^/]+)+$"
+                }
+            },
+            "required": [ "path" ]
+        }
+    }
+}

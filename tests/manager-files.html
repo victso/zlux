@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="utf-8"></meta>
 		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
-		<title>zlux Files</title>
+		<title>zlux Files Manager</title>
 
 		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
 		<link rel="stylesheet" href="../dist/css/zlux.css">
@@ -12,28 +12,16 @@
 		<script src="../vendor/jquery-mockjax/dist/jquery.mockjax.js"></script>
 		<script src="../vendor/uikit/js/uikit.js"></script>
 		<script src="../vendor/vue/dist/vue.js"></script>
+		<script src="../vendor/vue-resource/dist/vue-resource.js"></script>
 		<script src="../dist/js/zlux.js"></script>
 
 		<script type="text/javascript">
 
-			$.mockjax({
-				url: '/files',
-				proxy: 'data/files.json',
-				response: function(settings) {
-
-				    // get folders object
-				    var folders = JSON.parse(this.responseText);
-
-				    this.responseText = {
-				    	"success": true,
-						"root": settings.data.path,
-						"total": 1,
-						"filtered": 1,
-						"data": folders[settings.data.path]
-				    }
-
-				}
-			});
+            Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+            Vue.http.options.emulateHTTP = true;
+            Vue.http.options.beforeSend = function (request, options) {
+                options.url = 'http://localhost:3000/' + options.data.path;
+            };
 			
 		</script>
 
