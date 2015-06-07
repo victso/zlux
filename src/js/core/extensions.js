@@ -147,7 +147,7 @@ ZX.component.bootComponents = function() {
 ZX.plugin = function(name, def) {
 
     var fn = function(element, options) {
-        this.element = element ? $(element) : null;
+        this.element = element ? UI.$(element) : null;
         this.init(options);
     };
 
