@@ -1,5 +1,5 @@
-var UI  = require('uikit');
-var ZX  = require('zlux');
+var ZX = require('zlux');
+var UI = require('uikit');
 
 ZX.extensions = {};
 
@@ -7,14 +7,11 @@ ZX.extensions = {};
 ZX.plugin = function(name, def) {
 
     var fn = function(element, options) {
-        var $this = this;
-
         this.element = element ? $(element) : null;
-
         this.init(options);
     };
 
-    $.extend(true, fn.prototype, {
+    UI.$.extend(true, fn.prototype, {
 
         type: 'plugin',
 
@@ -36,7 +33,7 @@ ZX.plugin = function(name, def) {
                 case 1:
 
                     if (typeof arguments[0] === "string" || arguments[0].nodeType || arguments[0] instanceof jQuery) {
-                        element = $(arguments[0]);
+                        element = UI.$(arguments[0]);
                     } else {
                         options = arguments[0];
                     }
@@ -44,7 +41,7 @@ ZX.plugin = function(name, def) {
                     break;
                 case 2:
 
-                    element = $(arguments[0]);
+                    element = UI.$(arguments[0]);
                     options = arguments[1];
                     break;
             }
@@ -63,7 +60,7 @@ ZX.fn = function(command, options) {
     var args = arguments, cmd = command.match(/^([a-z\-]+)(?:\.([a-z]+))?/i), extension = cmd[1], method = cmd[2];
 
     if (!ZX[extension]) {
-        $.error("ZLUX extension [" + extension + "] does not exist.");
+        UI.$.error("ZLUX extension [" + extension + "] does not exist.");
         return this;
     }
 
@@ -72,7 +69,7 @@ ZX.fn = function(command, options) {
 
         return this.each(function() {
             // the element
-            var $this = $(this),
+            var $this = UI.$(this),
 
             // get the saved instance
             data = $this.data(extension);
@@ -97,4 +94,4 @@ ZX.fn = function(command, options) {
     }
 };
 
-$.fn.zx = ZX.fn;
+UI.$.fn.zx = ZX.fn;

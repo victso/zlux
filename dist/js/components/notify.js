@@ -5,51 +5,112 @@
  * @license     GNU General Public License v2 or later
  */
 
-(function ($, ZX, UI) {
-    "use strict";
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
 
-    var notify = function(msg, options){
-        // display message
-        var notify = $.UIkit.notify(msg, options);
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
 
-        // add zlux class for the holding content styling
-        notify.element.parent().addClass('zx');
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId])
+/******/ 			return installedModules[moduleId].exports;
 
-        return notify;
-    },
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			exports: {},
+/******/ 			id: moduleId,
+/******/ 			loaded: false
+/******/ 		};
 
-    confirm = function(msg, options){
-        
-        options = $.extend(options, {
-            timeout: false // confirmation must wait user interaction
-        });
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
 
-        return $.Deferred(function( defer )
-        {
-            var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
-                    <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
-                    <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
-                </div>',
-            options);
+/******/ 		// Flag the module as loaded
+/******/ 		module.loaded = true;
 
-            notify.element.on('click', '.zx-x-confirm', function(e, b){
-                defer.resolve();
-            });
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
 
-            notify.element.on('click', function(e, b){
-                defer.reject();
-            });
 
-        }).promise();
-    },
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
 
-    closeAll = function(group, instantly){
-        $.UIkit.notify.closeAll(group, instantly);
-        return this;
-    };
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
 
-    ZX.notify             = notify;
-    ZX.notify.confirm     = confirm;
-    ZX.notify.closeAll    = closeAll;
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
 
-})(jQuery, zlux, UIkit);
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ZX = __webpack_require__(2);
+	var UI = __webpack_require__(3);
+
+	var notify = function(msg, options){
+	    // display message
+	    var notify = UI.$.UIkit.notify(msg, options);
+
+	    // add zlux class for the holding content styling
+	    notify.element.parent().addClass('zx');
+
+	    return notify;
+	},
+
+	confirm = function(msg, options){
+	    
+	    options = UI.$.extend(options, {
+	        timeout: false // confirmation must wait user interaction
+	    });
+
+	    return UI.$.Deferred(function( defer )
+	    {
+	        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
+	                <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
+	                <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
+	            </div>',
+	        options);
+
+	        notify.element.on('click', '.zx-x-confirm', function(e, b){
+	            defer.resolve();
+	        });
+
+	        notify.element.on('click', function(e, b){
+	            defer.reject();
+	        });
+
+	    }).promise();
+	},
+
+	closeAll = function(group, instantly){
+	    UI.$.UIkit.notify.closeAll(group, instantly);
+	    return this;
+	};
+
+	ZX.notify             = notify;
+	ZX.notify.confirm     = confirm;
+	ZX.notify.closeAll    = closeAll;
+
+
+/***/ },
+/* 1 */,
+/* 2 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = zlux;
+
+/***/ },
+/* 3 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = UIkit;
+
+/***/ }
+/******/ ]);

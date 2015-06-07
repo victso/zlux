@@ -26,7 +26,7 @@ banner = ['/**',
 output = util.env.output || util.env.o || 'dist';
 
 gulp.task('build', function(cb) {
-    runSeq('build-clean', 'build-copy', 'build-concat', 'build-minify', 'build-headers', cb);
+    runSeq('build-clean', 'build-copy', 'build-minify', 'build-headers', cb);
 });
 
 gulp.task('build-clean', function(cb) {
@@ -34,39 +34,23 @@ gulp.task('build-clean', function(cb) {
 });
 
 gulp.task('build-copy', function(cb) {
-
-    runSeq('build-compile-less', 'build-compile-js', 'build-copy-js', cb);
-    
+    runSeq('build-compile-less', 'build-compile-js', 'build-copy-assets', cb);
 });
 
-gulp.task('build-copy-js', function(cb) {
-
-    return merge(
-        gulp.src(['src/js/components/*.js']).pipe(gulp.dest(output+'/js/components')),
-        gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg'))
-    );
-
+gulp.task('build-copy-assets', function(cb) {
+    return gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg'));
 });
 
 gulp.task('build-compile-js', function(cb) {
-
-    run('webpack --config build/webpack-dev-config.js').exec('', cb);
-
+    run('webpack --config build/webpack-dev-config.js && webpack --config build/webpack-dev-config.js --output-file [name].min.js -p').exec('', cb);
 });
 
 gulp.task('build-compile-less', function() {
     return gulp.src(['src/less/zlux.less', 'src/less/zlux-uikit.less']).pipe(less()).pipe(gulp.dest(output+'/css'));
 });
 
-gulp.task('build-concat', function() {
-    return gulp.src(['src/js/core/index.js', 'src/js/core/extensions.js', 'src/js/core/*.js']).pipe(concat('zlux.js')).pipe(gulp.dest(output+'/js'));
-});
-
 gulp.task('build-minify', function() {
-    return merge(
-        gulp.src(['dist/css/**/*.css']).pipe(rename({ suffix: '.min' })).pipe(minify()).pipe(gulp.dest('dist/css')),
-        gulp.src(['dist/js/**/*.js']).pipe(rename({ suffix: '.min' })).pipe(uglify()).pipe(gulp.dest('dist/js'))  
-    );
+    return gulp.src(['dist/css/**/*.css']).pipe(rename({ suffix: '.min' })).pipe(minify()).pipe(gulp.dest('dist/css'));
 });
 
 gulp.task('build-headers', function() {

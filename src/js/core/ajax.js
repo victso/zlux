@@ -1,271 +1,269 @@
-(function ($, ZX, UI) {
-    "use strict";
+var ZX = require('zlux');
+var UI = require('uikit');
 
-    ZX.ajax = {};
+ZX.ajax = {};
 
-    /**
-     * Ajax request
-     * @param Object settings The request settings
-     * @return Promise The ajax promise
-     */
-    ZX.ajax.request = function(settings)
+/**
+ * Ajax request
+ * @param Object settings The request settings
+ * @return Promise The ajax promise
+ */
+ZX.ajax.request = function(settings)
+{
+    // set defaults
+    var response = {success:false, errors:[], notices:[]},
+        queue = settings.queue ? settings.queue : null,
+        request = null;
+
+    // delete custom params, just in case
+    delete settings.queue;
+
+    // set request defaults
+    settings = UI.$.extend(true, {
+        dataType: 'json',
+        type: 'POST'
+    }, settings);
+
+    // return a promise
+    return UI.$.Deferred(function( defer )
     {
-        // set defaults
-        var response = {success:false, errors:[], notices:[]},
-            queue = settings.queue ? settings.queue : null,
-            request = null;
-
-        // delete custom params, just in case
-        delete settings.queue;
-
-        // set request defaults
-        settings = $.extend(true, {
-            dataType: 'json',
-            type: 'POST'
-        }, settings);
-
-        // return a promise
-        return $.Deferred(function( defer )
+        // perform the request
+        if (queue) {
+            request = ZX.ajax.queue(queue, settings);
+        } else {
+            request = UI.$.ajax(settings);
+        }
+        
+        // if response recieved
+        request.done(function(result, a, b)
         {
-            // perform the request
-            if (queue) {
-                request = ZX.ajax.queue(queue, settings);
-            } else {
-                request = $.ajax(settings);
-            }
-            
-            // if response recieved
-            request.done(function(result, a, b)
+            // if dataType is json
+            if (settings.dataType === 'json')
             {
-                // if dataType is json
-                if (settings.dataType === 'json')
+                // check if object returned
+                if(ZX.utils.typeOf(result) !== 'object')
                 {
-                    // check if object returned
-                    if(ZX.utils.typeOf(result) !== 'object')
-                    {
-                        try {
-                            // parse response detecting if there was some server side error
-                            json = $.parseJSON(result);
+                    try {
+                        // parse response detecting if there was some server side error
+                        json = UI.$.parseJSON(result);
 
-                        // handle exception
-                        } catch(e) {
-                            response.errors.push(String(result));
-                            response.errors.push('An server-side error occurred. ' + String(e));
-                            defer.reject(response);
-                        }
+                    // handle exception
+                    } catch(e) {
+                        response.errors.push(String(result));
+                        response.errors.push('An server-side error occurred. ' + String(e));
+                        defer.reject(response);
                     }
+                }
 
-                    // check if status set
-                    else if (result.success === undefined) {
-                        result.errors = ['Response format error: status not specified'];
-                        defer.reject(result);
-                    } else if (result.success)
-                        defer.resolve(result);
-                    else
-                        defer.reject(result);
-
-                // else just send the result over
-                } else {
+                // check if status set
+                else if (result.success === undefined) {
+                    result.errors = ['Response format error: status not specified'];
+                    defer.reject(result);
+                } else if (result.success)
                     defer.resolve(result);
-                }
-            })
-            
-            // if something went wrong
-            .fail(function(jqxhr, status, error)
-            {
-                // handle errors
-                switch (jqxhr.status) {
-                    case 0: // if request canceled no error is logged
-                        break;
-                    case 403:
-                        response.errors.push('The session has expired.');
-                        break;
-                    case 404:
-                        response.errors.push('The requested URL is not accesible.');
-                        break;
-                    case 500:
-                        response.errors.push('A server-side error has occurred.');
-                        break;
+                else
+                    defer.reject(result);
 
-                    default:
-                        response.errors.push('An ' + status + ' occurred<br />' + error + '<br /><br />Returned' + jqxhr.responseText);
-                        break;
-                }
+            // else just send the result over
+            } else {
+                defer.resolve(result);
+            }
+        })
+        
+        // if something went wrong
+        .fail(function(jqxhr, status, error)
+        {
+            // handle errors
+            switch (jqxhr.status) {
+                case 0: // if request canceled no error is logged
+                    break;
+                case 403:
+                    response.errors.push('The session has expired.');
+                    break;
+                case 404:
+                    response.errors.push('The requested URL is not accesible.');
+                    break;
+                case 500:
+                    response.errors.push('A server-side error has occurred.');
+                    break;
 
-                // set response status
-                response.status = jqxhr.status;
+                default:
+                    response.errors.push('An ' + status + ' occurred<br />' + error + '<br /><br />Returned' + jqxhr.responseText);
+                    break;
+            }
 
-                // reject
-                defer.reject(response);
-            });
+            // set response status
+            response.status = jqxhr.status;
 
-        }).promise();
-    };
-    /**
-     * Ajax request and notify the answer
-     * @param Object request The ajax request
-     * @param Object notify The notify settings
-     * @return Promise The ajax promise
-     */
-    ZX.ajax.requestAndNotify = function(request, notify)
-    {
-        // set defaults
-        notify = notify === undefined ? {} : notify;
+            // reject
+            defer.reject(response);
+        });
 
-        // request
-        return ZX.ajax.request(request)
-        .done(function(response){
+    }).promise();
+};
+/**
+ * Ajax request and notify the answer
+ * @param Object request The ajax request
+ * @param Object notify The notify settings
+ * @return Promise The ajax promise
+ */
+ZX.ajax.requestAndNotify = function(request, notify)
+{
+    // set defaults
+    notify = notify === undefined ? {} : notify;
 
-            // close others, then notify
-            if(notify.group) ZX.notify.closeAll(notify.group);
+    // request
+    return ZX.ajax.request(request)
+    .done(function(response){
 
-            // display message
-            if(response.message) ZX.notify(response.message, $.extend(true, {
-                status: 'success'
+        // close others, then notify
+        if(notify.group) ZX.notify.closeAll(notify.group);
+
+        // display message
+        if(response.message) ZX.notify(response.message, UI.$.extend(true, {
+            status: 'success'
+        }, notify));
+        
+    }).fail(function(response){
+
+        // close others, then notify
+        if(notify.group) ZX.notify.closeAll(notify.group);
+
+        // display errors
+        if(response.errors && response.errors.length) UI.$.each(response.errors, function(){
+            ZX.notify(this, UI.$.extend(true, {
+                status: 'danger'
             }, notify));
-            
-        }).fail(function(response){
-
-            // close others, then notify
-            if(notify.group) ZX.notify.closeAll(notify.group);
-
-            // display errors
-            if(response.errors && response.errors.length) $.each(response.errors, function(){
-                ZX.notify(this, $.extend(true, {
-                    status: 'danger'
-                }, notify));
-            });
-           
-        }).always(function(response){
-
-            // display notices
-            if(response.notices && response.notices.length) $.each(response.notices, function(){
-                ZX.notify(this, $.extend(true, {
-                    status: 'warning'
-                }, notify));
-            });
         });
-    };
+       
+    }).always(function(response){
 
-
-    // Original code from AjaxQ jQuery Plugin
-    // Copyright (c) 2012 Foliotek Inc.
-    // MIT License
-    // https://github.com/Foliotek/ajaxq
-    var queues = {};
-
-    // Register an $.ajaxq function, which follows the $.ajax interface, but allows a queue name which will force only one request per queue to fire.
-    ZX.ajax.queue = function(qname, opts) {
-
-        if (typeof opts === "undefined") {
-            throw ("AjaxQ: queue name is not provided");
-        }
-
-        // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of $.ajax
-        var deferred = $.Deferred(),
-            promise = deferred.promise();
-
-        promise.success = promise.done;
-        promise.error = promise.fail;
-        promise.complete = promise.always;
-
-        // Create a deep copy of the arguments, and enqueue this request.
-        var clonedOptions = $.extend(true, {}, opts);
-        enqueue(function() {
-
-            // Send off the ajax request now that the item has been removed from the queue
-            var jqXHR = $.ajax.apply(window, [clonedOptions]).always(dequeue);
-
-            // Notify the returned deferred object with the correct context when the jqXHR is done or fails
-            // Note that 'always' will automatically be fired once one of these are called: http://api.jquery.com/category/deferred-object/.
-            jqXHR.done(function() {
-                deferred.resolve.apply(this, arguments);
-            });
-            jqXHR.fail(function() {
-                deferred.reject.apply(this, arguments);
-            });
+        // display notices
+        if(response.notices && response.notices.length) UI.$.each(response.notices, function(){
+            ZX.notify(this, UI.$.extend(true, {
+                status: 'warning'
+            }, notify));
         });
+    });
+};
 
-        return promise;
 
-        // If there is no queue, create an empty one and instantly process this item.
-        // Otherwise, just add this item onto it for later processing.
-        function enqueue(cb) {
-            if (!queues[qname]) {
-                queues[qname] = [];
-                cb();
-            }
-            else {
-                queues[qname].push(cb);
-            }
-        }
+// Original code from AjaxQ jQuery Plugin
+// Copyright (c) 2012 Foliotek Inc.
+// MIT License
+// https://github.com/Foliotek/ajaxq
+var queues = {};
 
-        // Remove the next callback from the queue and fire it off.
-        // If the queue was empty (this was the last item), delete it from memory so the next one can be instantly processed.
-        function dequeue() {
-            if (!queues[qname]) {
-                return;
-            }
-            var nextCallback = queues[qname].shift();
-            if (nextCallback) {
-                nextCallback();
-            }
-            else {
-                delete queues[qname];
-            }
-        }
-    };
+// Register an UI.$.ajaxq function, which follows the UI.$.ajax interface, but allows a queue name which will force only one request per queue to fire.
+ZX.ajax.queue = function(qname, opts) {
 
-    // Register a $.postq and $.getq method to provide shortcuts for $.get and $.post
-    // Copied from jQuery source to make sure the functions share the same defaults as $.get and $.post.
-    $.each( [ "getq", "postq" ], function( i, method ) {
-        $[ method ] = function( qname, url, data, callback, type ) {
+    if (typeof opts === "undefined") {
+        throw ("AjaxQ: queue name is not provided");
+    }
 
-            if ( $.isFunction( data ) ) {
-                type = type || callback;
-                callback = data;
-                data = undefined;
-            }
+    // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of UI.$.ajax
+    var deferred = UI.$.Deferred(),
+        promise = deferred.promise();
 
-            return ZX.ajax.queue(qname, {
-                type: method === "postq" ? "post" : "get",
-                url: url,
-                data: data,
-                success: callback,
-                dataType: type
-            });
-        };
+    promise.success = promise.done;
+    promise.error = promise.fail;
+    promise.complete = promise.always;
+
+    // Create a deep copy of the arguments, and enqueue this request.
+    var clonedOptions = UI.$.extend(true, {}, opts);
+    enqueue(function() {
+
+        // Send off the ajax request now that the item has been removed from the queue
+        var jqXHR = UI.$.ajax.apply(window, [clonedOptions]).always(dequeue);
+
+        // Notify the returned deferred object with the correct context when the jqXHR is done or fails
+        // Note that 'always' will automatically be fired once one of these are called: http://api.jquery.com/category/deferred-object/.
+        jqXHR.done(function() {
+            deferred.resolve.apply(this, arguments);
+        });
+        jqXHR.fail(function() {
+            deferred.reject.apply(this, arguments);
+        });
     });
 
-    var isQueueRunning = function(qname) {
-        return queues.hasOwnProperty(qname);
-    };
+    return promise;
 
-    var isAnyQueueRunning = function() {
-        for (var i in queues) {
-            if (isQueueRunning(i)) return true;
-        }
-        return false;
-    };
-
-    ZX.ajax.queue.isRunning = function(qname) {
-        if (qname) return isQueueRunning(qname);
-        else return isAnyQueueRunning();
-    };
-    
-    ZX.ajax.queue.clear = function(qname) {
-        if (!qname) {
-            for (var i in queues) {
-                if (queues.hasOwnProperty(i)) {
-                    delete queues[i];
-                }
-            }
+    // If there is no queue, create an empty one and instantly process this item.
+    // Otherwise, just add this item onto it for later processing.
+    function enqueue(cb) {
+        if (!queues[qname]) {
+            queues[qname] = [];
+            cb();
         }
         else {
-            if (queues[qname]) {
-                delete queues[qname];
+            queues[qname].push(cb);
+        }
+    }
+
+    // Remove the next callback from the queue and fire it off.
+    // If the queue was empty (this was the last item), delete it from memory so the next one can be instantly processed.
+    function dequeue() {
+        if (!queues[qname]) {
+            return;
+        }
+        var nextCallback = queues[qname].shift();
+        if (nextCallback) {
+            nextCallback();
+        }
+        else {
+            delete queues[qname];
+        }
+    }
+};
+
+// Register a UI.$.postq and UI.$.getq method to provide shortcuts for UI.$.get and UI.$.post
+// Copied from jQuery source to make sure the functions share the same defaults as UI.$.get and UI.$.post.
+UI.$.each( [ "getq", "postq" ], function( i, method ) {
+    UI.$[ method ] = function( qname, url, data, callback, type ) {
+
+        if ( UI.$.isFunction( data ) ) {
+            type = type || callback;
+            callback = data;
+            data = undefined;
+        }
+
+        return ZX.ajax.queue(qname, {
+            type: method === "postq" ? "post" : "get",
+            url: url,
+            data: data,
+            success: callback,
+            dataType: type
+        });
+    };
+});
+
+var isQueueRunning = function(qname) {
+    return queues.hasOwnProperty(qname);
+};
+
+var isAnyQueueRunning = function() {
+    for (var i in queues) {
+        if (isQueueRunning(i)) return true;
+    }
+    return false;
+};
+
+ZX.ajax.queue.isRunning = function(qname) {
+    if (qname) return isQueueRunning(qname);
+    else return isAnyQueueRunning();
+};
+
+ZX.ajax.queue.clear = function(qname) {
+    if (!qname) {
+        for (var i in queues) {
+            if (queues.hasOwnProperty(i)) {
+                delete queues[i];
             }
         }
-    };
-
-})(jQuery, zlux, UIkit);
+    }
+    else {
+        if (queues[qname]) {
+            delete queues[qname];
+        }
+    }
+};

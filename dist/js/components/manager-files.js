@@ -53,7 +53,7 @@
 
 	"use strict";
 
-	var Vue = __webpack_require__(2);
+	var Vue = __webpack_require__(4);
 	var UI  = __webpack_require__(3);
 
 	UI.component('zx-manager-files', {
@@ -67,7 +67,7 @@
 
 	                if ( ! this.__vue__) {
 
-	                    new Vue(__webpack_require__(4)).$mount(this);
+	                    new Vue(__webpack_require__(9)).$mount(this);
 
 	                }
 
@@ -82,12 +82,7 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = Vue;
-
-/***/ },
+/* 2 */,
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -95,6 +90,16 @@
 
 /***/ },
 /* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = Vue;
+
+/***/ },
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<nav class=\"uk-navbar\">\n        <ul class=\"uk-navbar-nav\">\n\n            <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                <a href=\"#\" v-on=\"click: this.changeView(item.view)\"> {{ item.title }}</a>\n                \n            </li>\n\n        </ul>\n    </nav>\n\n    <div v-component=\"{{ currentView }}\" keep-alive=\"\"></div>";
@@ -135,8 +140,8 @@
 
 	        components: {
 
-	            files: __webpack_require__(7),
-	            uploader: __webpack_require__(8)
+	            files: __webpack_require__(13),
+	            uploader: __webpack_require__(14)
 
 	        }
 
@@ -145,9 +150,10 @@
 
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<div v-if=\"files.length\">\n\n        <ul class=\"uk-breadcrumb\" v-component=\"breadcrumb\" path=\"{{ root }}\"></ul>\n\n        <table class=\"uk-table\">\n            <thead>\n                <tr>\n                    <th>File</th>\n                    <th>Size</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr v-component=\"file\" v-repeat=\"files\"></tr>\n            </tbody>\n        </table>\n\n    </div>";
@@ -209,8 +215,8 @@
 
 	        components: {
 
-	            file: __webpack_require__(10),
-	            breadcrumb: __webpack_require__(11)
+	            file: __webpack_require__(16),
+	            breadcrumb: __webpack_require__(17)
 
 	        }
 
@@ -219,7 +225,7 @@
 
 
 /***/ },
-/* 8 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
@@ -232,12 +238,12 @@
 
 
 /***/ },
-/* 9 */,
-/* 10 */
+/* 15 */,
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<td v-set-type=\"{{ type }}\">\n\n        <a href=\"#\" v-on=\"click: $parent.goTo(path)\">{{ path | basename }}</a>\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
-	var helper = __webpack_require__(12);
+	var helper = __webpack_require__(18);
 
 	    module.exports = {
 
@@ -310,7 +316,7 @@
 
 
 /***/ },
-/* 11 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<li v-repeat=\"crumbs\" v-ifactive=\"{{ path == $parent.path }}\">\n        \n        <a href=\"#\" v-on=\"click: $parent.$parent.goTo(path)\">{{ name }}</a>\n\n    </li>";
@@ -367,7 +373,7 @@
 
 	                update: function () {
 
-	                    if (this.expression == true) {
+	                    if (this.expression === true) {
 
 	                        $(this.el).addClass('uk-active').find('a').remove();
 	                        $(this.el).append($('<span />').html(this.vm.name));
@@ -385,189 +391,185 @@
 
 
 /***/ },
-/* 12 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = {
+	
+	// http://phpjs.org/functions/basename
+	exports.basename = function(path, suffix) {
 
-	    // http://phpjs.org/functions/basename
-	    basename: function(path, suffix) {
+	    var b = path;
+	    var lastChar = b.charAt(b.length - 1);
 
-	        var b = path;
-	        var lastChar = b.charAt(b.length - 1);
-
-	        if (lastChar === '/' || lastChar === '\\') {
-	            b = b.slice(0, -1);
-	        }
-
-	        b = b.replace(/^.*[\/\\]/g, '');
-
-	        if (typeof suffix === 'string' && b.substr(b.length - suffix.length) == suffix) {
-	            b = b.substr(0, b.length - suffix.length);
-	        }
-
-	        return b;
-	    },
-
-	    // parses the specified size string into a byte value
-	    parseSize: function(size){
-
-	        if (typeof(size) !== 'string' || size === '') return size;
-
-	        var muls = {
-	                t: 1099511627776,
-	                g: 1073741824,
-	                m: 1048576,
-	                k: 1024
-	            },
-	            mul;
-
-	        size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
-	        mul = size[2];
-	        size = +size[1];
-	        
-	        if (muls.hasOwnProperty(mul)) {
-	            size *= muls[mul];
-	        }
-
-	        return size;
-	    },
-
-	    /**
-	      * https://github.com/avoidwork/filesize.js - v3.1.2
-	      * Copyright (c) 2015, Jason Mulligan
-	      *
-	      * @param  {Mixed}   arg        String, Int or Float to transform
-	      * @param  {Object}  descriptor [Optional] Flags
-	      * @return {String}             Readable file size String
-	    */
-	    filesize: function(arg) {
-
-	        var bit = /b$/;
-	        var si = {
-	            bits: ["B", "kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
-	            bytes: ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
-	        };
-
-	        var descriptor = arguments[1] === undefined ? {} : arguments[1];
-
-	        var result = [];
-	        var skip = false;
-	        var val = 0;
-	        var e = undefined,
-	            base = undefined,
-	            bits = undefined,
-	            ceil = undefined,
-	            neg = undefined,
-	            num = undefined,
-	            output = undefined,
-	            round = undefined,
-	            unix = undefined,
-	            spacer = undefined,
-	            suffixes = undefined;
-
-	        if (isNaN(arg)) {
-	            throw new Error("Invalid arguments");
-	        }
-
-	        bits = descriptor.bits === true;
-	        unix = descriptor.unix === true;
-	        base = descriptor.base !== undefined ? descriptor.base : 2;
-	        round = descriptor.round !== undefined ? descriptor.round : unix ? 1 : 2;
-	        spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? "" : " ";
-	        suffixes = descriptor.suffixes !== undefined ? descriptor.suffixes : {};
-	        output = descriptor.output !== undefined ? descriptor.output : "string";
-	        e = descriptor.exponent !== undefined ? descriptor.exponent : -1;
-	        num = Number(arg);
-	        neg = num < 0;
-	        ceil = base > 2 ? 1000 : 1024;
-
-	        // Flipping a negative number to determine the size
-	        if (neg) {
-	            num = -num;
-	        }
-
-	        // Zero is now a special case because bytes divide by 1
-	        if (num === 0) {
-	            result[0] = 0;
-
-	            if (unix) {
-	                result[1] = "";
-	            } else {
-	                result[1] = "B";
-	            }
-	        } else {
-	            // Determining the exponent
-	            if (e === -1 || isNaN(e)) {
-	                e = Math.floor(Math.log(num) / Math.log(ceil));
-	            }
-
-	            // Exceeding supported length, time to reduce & multiply
-	            if (e > 8) {
-	                val = val * (1000 * (e - 8));
-	                e = 8;
-	            }
-
-	            if (base === 2) {
-	                val = num / Math.pow(2, e * 10);
-	            } else {
-	                val = num / Math.pow(1000, e);
-	            }
-
-	            if (bits) {
-	                val = val * 8;
-
-	                if (val > ceil) {
-	                    val = val / ceil;
-	                    e++;
-	                }
-	            }
-
-	            result[0] = Number(val.toFixed(e > 0 ? round : 0));
-	            result[1] = si[bits ? "bits" : "bytes"][e];
-
-	            if (!skip && unix) {
-	                if (bits && bit.test(result[1])) {
-	                    result[1] = result[1].toLowerCase();
-	                }
-
-	                result[1] = result[1].charAt(0);
-
-	                if (result[1] === "B") {
-	                    result[0] = Math.floor(result[0]);
-	                    result[1] = "";
-	                } else if (!bits && result[1] === "k") {
-	                    result[1] = "K";
-	                }
-	            }
-	        }
-
-	        // Decorating a 'diff'
-	        if (neg) {
-	            result[0] = -result[0];
-	        }
-
-	        // Applying custom suffix
-	        result[1] = suffixes[result[1]] || result[1];
-
-	        // Returning Array, Object, or String (default)
-	        if (output === "array") {
-	            return result;
-	        }
-
-	        if (output === "exponent") {
-	            return e;
-	        }
-
-	        if (output === "object") {
-	            return { value: result[0], suffix: result[1] };
-	        }
-
-	        return result.join(spacer);
+	    if (lastChar === '/' || lastChar === '\\') {
+	        b = b.slice(0, -1);
 	    }
 
+	    b = b.replace(/^.*[\/\\]/g, '');
+
+	    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) == suffix) {
+	        b = b.substr(0, b.length - suffix.length);
+	    }
+
+	    return b;
 	}
 
+	// parses the specified size string into a byte value
+	exports.parseSize = function(size){
+
+	    if (typeof(size) !== 'string' || size === '') return size;
+
+	    var muls = {
+	            t: 1099511627776,
+	            g: 1073741824,
+	            m: 1048576,
+	            k: 1024
+	        },
+	        mul;
+
+	    size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
+	    mul = size[2];
+	    size = +size[1];
+	    
+	    if (muls.hasOwnProperty(mul)) {
+	        size *= muls[mul];
+	    }
+
+	    return size;
+	}
+
+	/**
+	  * https://github.com/avoidwork/filesize.js - v3.1.2
+	  * Copyright (c) 2015, Jason Mulligan
+	  *
+	  * @param  {Mixed}   arg        String, Int or Float to transform
+	  * @param  {Object}  descriptor [Optional] Flags
+	  * @return {String}             Readable file size String
+	*/
+	exports.filesize = function(arg) {
+
+	    var bit = /b$/;
+	    var si = {
+	        bits: ["B", "kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
+	        bytes: ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+	    };
+
+	    var descriptor = arguments[1] === undefined ? {} : arguments[1];
+
+	    var result = [];
+	    var skip = false;
+	    var val = 0;
+	    var e = undefined,
+	        base = undefined,
+	        bits = undefined,
+	        ceil = undefined,
+	        neg = undefined,
+	        num = undefined,
+	        output = undefined,
+	        round = undefined,
+	        unix = undefined,
+	        spacer = undefined,
+	        suffixes = undefined;
+
+	    if (isNaN(arg)) {
+	        throw new Error("Invalid arguments");
+	    }
+
+	    bits = descriptor.bits === true;
+	    unix = descriptor.unix === true;
+	    base = descriptor.base !== undefined ? descriptor.base : 2;
+	    round = descriptor.round !== undefined ? descriptor.round : unix ? 1 : 2;
+	    spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? "" : " ";
+	    suffixes = descriptor.suffixes !== undefined ? descriptor.suffixes : {};
+	    output = descriptor.output !== undefined ? descriptor.output : "string";
+	    e = descriptor.exponent !== undefined ? descriptor.exponent : -1;
+	    num = Number(arg);
+	    neg = num < 0;
+	    ceil = base > 2 ? 1000 : 1024;
+
+	    // Flipping a negative number to determine the size
+	    if (neg) {
+	        num = -num;
+	    }
+
+	    // Zero is now a special case because bytes divide by 1
+	    if (num === 0) {
+	        result[0] = 0;
+
+	        if (unix) {
+	            result[1] = "";
+	        } else {
+	            result[1] = "B";
+	        }
+	    } else {
+	        // Determining the exponent
+	        if (e === -1 || isNaN(e)) {
+	            e = Math.floor(Math.log(num) / Math.log(ceil));
+	        }
+
+	        // Exceeding supported length, time to reduce & multiply
+	        if (e > 8) {
+	            val = val * (1000 * (e - 8));
+	            e = 8;
+	        }
+
+	        if (base === 2) {
+	            val = num / Math.pow(2, e * 10);
+	        } else {
+	            val = num / Math.pow(1000, e);
+	        }
+
+	        if (bits) {
+	            val = val * 8;
+
+	            if (val > ceil) {
+	                val = val / ceil;
+	                e++;
+	            }
+	        }
+
+	        result[0] = Number(val.toFixed(e > 0 ? round : 0));
+	        result[1] = si[bits ? "bits" : "bytes"][e];
+
+	        if (!skip && unix) {
+	            if (bits && bit.test(result[1])) {
+	                result[1] = result[1].toLowerCase();
+	            }
+
+	            result[1] = result[1].charAt(0);
+
+	            if (result[1] === "B") {
+	                result[0] = Math.floor(result[0]);
+	                result[1] = "";
+	            } else if (!bits && result[1] === "k") {
+	                result[1] = "K";
+	            }
+	        }
+	    }
+
+	    // Decorating a 'diff'
+	    if (neg) {
+	        result[0] = -result[0];
+	    }
+
+	    // Applying custom suffix
+	    result[1] = suffixes[result[1]] || result[1];
+
+	    // Returning Array, Object, or String (default)
+	    if (output === "array") {
+	        return result;
+	    }
+
+	    if (output === "exponent") {
+	        return e;
+	    }
+
+	    if (output === "object") {
+	        return { value: result[0], suffix: result[1] };
+	    }
+
+	    return result.join(spacer);
+	}
 
 /***/ }
 /******/ ]);

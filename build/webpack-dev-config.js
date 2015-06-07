@@ -1,9 +1,10 @@
 module.exports = {
     entry: {
-        './dist/js/zlux': './src/js/core/zlux',
+        './dist/js/zlux': './src/js/core',
         './dist/js/components/manager-files': './src/js/components/manager-files',
         './dist/js/components/manager-items': './src/js/components/manager-items',
-        './dist/js/components/calendar': './src/js/components/calendar'
+        './dist/js/components/calendar': './src/js/components/calendar',
+        './dist/js/components/notify': './src/js/components/notify'
     },
     output: {
         filename: "./[name].js"

@@ -1,4 +1,3 @@
-var $  = require('jquery');
 var UI = require('uikit');
 
 /**
@@ -172,6 +171,8 @@ UI.ready(function() {
 });
 
 // include core extensions
-// require('./extensions');
-
-module.exports = ZX;
+require('./extensions');
+require('./ajax');
+require('./animate');
+require('./modal');
+require('./spin');

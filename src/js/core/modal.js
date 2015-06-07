@@ -1,70 +1,68 @@
-(function ($, ZX, UI) {
-    "use strict";
+var ZX = require('zlux');
+var UI = require('uikit');
 
-    var modal = function(){},
+var modal = function(){},
 
-    dialog = function(content, options){
+dialog = function(content, options){
 
-        var modal = $.UIkit.modal.dialog(content, options);
+    var modal = UI.$.UIkit.modal.dialog(content, options);
 
-        // extend modal with
-        $.extend(modal, {
+    // extend modal with
+    UI.$.extend(modal, {
 
-            // update content
-            content: function(html) {
-                var container = this.dialog;
+        // update content
+        content: function(html) {
+            var container = this.dialog;
 
-                if(!html) {
-                    return container.html();
-                }
-
-                container.html(html);
-
-                return this;
+            if(!html) {
+                return container.html();
             }
-        });
 
-        // add zlux class for the holding content styling
-        modal.element.addClass('zx');
+            container.html(html);
 
-        return modal;
-    },
+            return this;
+        }
+    });
 
-    alert = function(content, options){
+    // add zlux class for the holding content styling
+    modal.element.addClass('zx');
 
-        var modal = $.UIkit.modal.dialog(([
-            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-            '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
-        ]).join(""), $.extend({bgclose:false, keyboard:false}, options));
+    return modal;
+},
 
-        modal.show();
+alert = function(content, options){
 
-        return modal;
-    },
+    var modal = UI.$.UIkit.modal.dialog(([
+        '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+        '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
+    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
 
-    confirm = function(content, onconfirm, options){
+    modal.show();
 
-        onconfirm = $.isFunction(onconfirm) ? onconfirm : function(){};
+    return modal;
+},
 
-        var modal = $.UIkit.modal.dialog(([
-           '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
-        ]).join(""), $.extend({bgclose:false, keyboard:false}, options));
+confirm = function(content, onconfirm, options){
 
-        modal.element.find(".js-modal-confirm").on("click", function(){
-           onconfirm();
-           modal.hide();
-        });
+    onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
 
-        modal.show();
+    var modal = UI.$.UIkit.modal.dialog(([
+       '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+       '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
+    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
 
-        return modal;
-    };
+    modal.element.find(".js-modal-confirm").on("click", function(){
+       onconfirm();
+       modal.hide();
+    });
+
+    modal.show();
+
+    return modal;
+};
 
 
-    ZX.modal          = modal;
-    ZX.modal.dialog   = dialog;
-    ZX.modal.alert    = alert;
-    ZX.modal.confirm  = confirm;
-
-})(jQuery, zlux, UIkit);
+ZX.modal          = modal;
+ZX.modal.dialog   = dialog;
+ZX.modal.alert    = alert;
+ZX.modal.confirm  = confirm;

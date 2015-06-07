@@ -1,48 +1,46 @@
-(function ($, ZX, UI) {
-    "use strict";
+var ZX = require('zlux');
+var UI = require('uikit');
 
-    var notify = function(msg, options){
-        // display message
-        var notify = $.UIkit.notify(msg, options);
+var notify = function(msg, options){
+    // display message
+    var notify = UI.$.UIkit.notify(msg, options);
 
-        // add zlux class for the holding content styling
-        notify.element.parent().addClass('zx');
+    // add zlux class for the holding content styling
+    notify.element.parent().addClass('zx');
 
-        return notify;
-    },
+    return notify;
+},
 
-    confirm = function(msg, options){
-        
-        options = $.extend(options, {
-            timeout: false // confirmation must wait user interaction
+confirm = function(msg, options){
+    
+    options = UI.$.extend(options, {
+        timeout: false // confirmation must wait user interaction
+    });
+
+    return UI.$.Deferred(function( defer )
+    {
+        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
+                <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
+                <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
+            </div>',
+        options);
+
+        notify.element.on('click', '.zx-x-confirm', function(e, b){
+            defer.resolve();
         });
 
-        return $.Deferred(function( defer )
-        {
-            var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
-                    <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
-                    <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
-                </div>',
-            options);
+        notify.element.on('click', function(e, b){
+            defer.reject();
+        });
 
-            notify.element.on('click', '.zx-x-confirm', function(e, b){
-                defer.resolve();
-            });
+    }).promise();
+},
 
-            notify.element.on('click', function(e, b){
-                defer.reject();
-            });
+closeAll = function(group, instantly){
+    UI.$.UIkit.notify.closeAll(group, instantly);
+    return this;
+};
 
-        }).promise();
-    },
-
-    closeAll = function(group, instantly){
-        $.UIkit.notify.closeAll(group, instantly);
-        return this;
-    };
-
-    ZX.notify             = notify;
-    ZX.notify.confirm     = confirm;
-    ZX.notify.closeAll    = closeAll;
-
-})(jQuery, zlux, UIkit);
+ZX.notify             = notify;
+ZX.notify.confirm     = confirm;
+ZX.notify.closeAll    = closeAll;

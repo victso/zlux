@@ -53,7 +53,7 @@
 
                 update: function () {
 
-                    if (this.expression == true) {
+                    if (this.expression === true) {
 
                         $(this.el).addClass('uk-active').find('a').remove();
                         $(this.el).append($('<span />').html(this.vm.name));
