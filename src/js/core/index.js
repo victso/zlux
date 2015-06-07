@@ -154,7 +154,6 @@ String.prototype.hashCode = function(){
    return hash;
 };
 
-
 window.zlux = ZX;
 UI.$.zx     = ZX;
 
@@ -176,3 +175,4 @@ require('./ajax');
 require('./animate');
 require('./modal');
 require('./spin');
+require('./vue');
