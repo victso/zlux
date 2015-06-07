@@ -140,8 +140,8 @@
 
 	        components: {
 
-	            files: __webpack_require__(13),
-	            uploader: __webpack_require__(14)
+	            files: __webpack_require__(14),
+	            uploader: __webpack_require__(15)
 
 	        }
 
@@ -153,7 +153,8 @@
 /* 10 */,
 /* 11 */,
 /* 12 */,
-/* 13 */
+/* 13 */,
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<div v-if=\"files.length\">\n\n        <ul class=\"uk-breadcrumb\" v-component=\"breadcrumb\" path=\"{{ root }}\"></ul>\n\n        <table class=\"uk-table\">\n            <thead>\n                <tr>\n                    <th>File</th>\n                    <th>Size</th>\n                </tr>\n            </thead>\n            <tbody>\n                <tr v-component=\"file\" v-repeat=\"files\"></tr>\n            </tbody>\n        </table>\n\n    </div>";
@@ -225,7 +226,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
@@ -238,7 +239,6 @@
 
 
 /***/ },
-/* 15 */,
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 

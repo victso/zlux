@@ -132,7 +132,7 @@
 
 	        components: {
 
-	            items: __webpack_require__(15),
+	            items: __webpack_require__(13),
 
 	        }
 
@@ -143,9 +143,7 @@
 /***/ },
 /* 11 */,
 /* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>Name</th>\n                <th>Type</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"item: items\">\n                <td>\n                    {{ item.name }}\n                </td>\n\n                <td>\n                    {{ item.type.name }}\n                </td>\n            </tr>\n        </tbody>\n    </table>\n\n    <ul class=\"uk-pagination\">\n        <li><a href=\"\">...</a></li>\n        <li class=\"uk-active\"><span>...</span></li>\n        <li class=\"uk-disabled\"><span>...</span></li>\n        <li><span>...</span></li>\n    </ul>";
