@@ -51,7 +51,7 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(3);
+	var UI = __webpack_require__(2);
 
 	/**
 	 * The main ZX object
@@ -207,7 +207,6 @@
 	   return hash;
 	};
 
-
 	window.zlux = ZX;
 	UI.$.zx     = ZX;
 
@@ -224,152 +223,102 @@
 	});
 
 	// include core extensions
+	__webpack_require__(5);
 	__webpack_require__(6);
 	__webpack_require__(7);
-	__webpack_require__(5);
-	__webpack_require__(1);
 	__webpack_require__(8);
+	__webpack_require__(1);
+	__webpack_require__(9);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
+	    
+	ZX.component('spin', {
 
-	var modal = function(){},
+	    defaults: {
+	        class: '',
+	        affix:  'append' // append, prepend or replace
+	    },
 
-	dialog = function(content, options){
+	    init: function() {
+	        // run default
+	        this.on();
+	    },
 
-	    var modal = UI.$.UIkit.modal.dialog(content, options);
+	    on: function() {
+	        var $this = this;
 
-	    // extend modal with
-	    UI.$.extend(modal, {
+	        $this.icon_class = false;
 
-	        // update content
-	        content: function(html) {
-	            var container = this.dialog;
+	        // find and existing icon
+	        $this.icon = $this.element.is('i') ? $this.element : UI.$('i', $this.element).first();
 
-	            if(!html) {
-	                return container.html();
+	        // use it if found
+	        if($this.icon.length) {
+	            // save original class
+	            $this.icon_class = $this.icon.attr('class');
+	            // hardcode the width to avoid movement effects
+	            $this.icon.width($this.icon.width());
+	            // set new class
+	            $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin');
+
+	        // else, create one
+	        } else {
+	            $this.icon = UI.$('<i class="uk-icon-zx-spinner uk-icon-spin"></i>');
+
+	            // place the icon
+	            if($this.options.affix == 'replace') {
+	                $this.element.html($this.icon);
+	            } else {
+	                $this.element[$this.options.affix]($this.icon);
 	            }
-
-	            container.html(html);
-
-	            return this;
 	        }
-	    });
 
-	    // add zlux class for the holding content styling
-	    modal.element.addClass('zx');
+	        // add custom class
+	        $this.icon.addClass($this.options['class']);
+	    },
 
-	    return modal;
-	},
+	    off: function() {
+	        var $this = this;
 
-	alert = function(content, options){
+	        // remove the spin classes but not the icon
+	        $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin');
 
-	    var modal = UI.$.UIkit.modal.dialog(([
-	        '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-	        '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
-	    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
+	        // recover class, if any
+	        if($this.icon_class) $this.icon.attr('class', $this.icon_class);
 
-	    modal.show();
+	        // remove hardcoded width
+	        $this.icon.width('');
 
-	    return modal;
-	},
-
-	confirm = function(content, onconfirm, options){
-
-	    onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
-
-	    var modal = UI.$.UIkit.modal.dialog(([
-	       '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-	       '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
-	    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
-
-	    modal.element.find(".js-modal-confirm").on("click", function(){
-	       onconfirm();
-	       modal.hide();
-	    });
-
-	    modal.show();
-
-	    return modal;
-	};
-
-
-	ZX.modal          = modal;
-	ZX.modal.dialog   = dialog;
-	ZX.modal.alert    = alert;
-	ZX.modal.confirm  = confirm;
+	        // remove spin instance from element
+	        $this.element.removeData('spin');
+	    }
+	});
 
 /***/ },
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = zlux;
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
 	module.exports = UIkit;
 
 /***/ },
-/* 4 */,
+/* 3 */,
+/* 4 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = zlux;
+
+/***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
-
-	ZX.plugin('animate', {
-
-	    init: function(options) {
-	        var $this = this,
-
-	        // set animation class
-	        animation = 'zx-animate-' + UI.$.trim(options[0]),
-
-	        // set callback
-	        callback = options[1] ? options[1] : null;
-	            
-	        // animate
-	        $this.animate(animation).done(function(){
-
-	            // execute any callback passing the element as scope
-	            if (callback) callback.apply($this.element);
-	        });
-	    },
-
-	    animate: function(animation) {
-	        var $this = this;
-
-	        return UI.$.Deferred(function(defer) {
-
-	            // animate the element with CSS3
-	            $this.element.addClass(animation)
-
-	            // when done
-	            .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
-
-	                // remove the class to allow further animation
-	                $this.element.removeClass(animation);
-
-	                defer.resolve();
-	            });
-
-	        }).promise();
-	    }
-	});
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
 
 	ZX.extensions = {};
 
@@ -608,11 +557,11 @@
 
 
 /***/ },
-/* 7 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
 
 	ZX.ajax = {};
 
@@ -882,73 +831,157 @@
 	};
 
 /***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
+
+	ZX.plugin('animate', {
+
+	    init: function(options) {
+	        var $this = this,
+
+	        // set animation class
+	        animation = 'zx-animate-' + UI.$.trim(options[0]),
+
+	        // set callback
+	        callback = options[1] ? options[1] : null;
+	            
+	        // animate
+	        $this.animate(animation).done(function(){
+
+	            // execute any callback passing the element as scope
+	            if (callback) callback.apply($this.element);
+	        });
+	    },
+
+	    animate: function(animation) {
+	        var $this = this;
+
+	        return UI.$.Deferred(function(defer) {
+
+	            // animate the element with CSS3
+	            $this.element.addClass(animation)
+
+	            // when done
+	            .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
+
+	                // remove the class to allow further animation
+	                $this.element.removeClass(animation);
+
+	                defer.resolve();
+	            });
+
+	        }).promise();
+	    }
+	});
+
+/***/ },
 /* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
-	    
-	ZX.component('spin', {
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
 
-	    defaults: {
-	        class: '',
-	        affix:  'append' // append, prepend or replace
-	    },
+	var modal = function(){},
 
-	    init: function() {
-	        // run default
-	        this.on();
-	    },
+	dialog = function(content, options){
 
-	    on: function() {
-	        var $this = this;
+	    var modal = UI.$.UIkit.modal.dialog(content, options);
 
-	        $this.icon_class = false;
+	    // extend modal with
+	    UI.$.extend(modal, {
 
-	        // find and existing icon
-	        $this.icon = $this.element.is('i') ? $this.element : UI.$('i', $this.element).first();
+	        // update content
+	        content: function(html) {
+	            var container = this.dialog;
 
-	        // use it if found
-	        if($this.icon.length) {
-	            // save original class
-	            $this.icon_class = $this.icon.attr('class');
-	            // hardcode the width to avoid movement effects
-	            $this.icon.width($this.icon.width());
-	            // set new class
-	            $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin');
-
-	        // else, create one
-	        } else {
-	            $this.icon = UI.$('<i class="uk-icon-zx-spinner uk-icon-spin"></i>');
-
-	            // place the icon
-	            if($this.options.affix == 'replace') {
-	                $this.element.html($this.icon);
-	            } else {
-	                $this.element[$this.options.affix]($this.icon);
+	            if(!html) {
+	                return container.html();
 	            }
+
+	            container.html(html);
+
+	            return this;
 	        }
+	    });
 
-	        // add custom class
-	        $this.icon.addClass($this.options['class']);
-	    },
+	    // add zlux class for the holding content styling
+	    modal.element.addClass('zx');
 
-	    off: function() {
-	        var $this = this;
+	    return modal;
+	},
 
-	        // remove the spin classes but not the icon
-	        $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin');
+	alert = function(content, options){
 
-	        // recover class, if any
-	        if($this.icon_class) $this.icon.attr('class', $this.icon_class);
+	    var modal = UI.$.UIkit.modal.dialog(([
+	        '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+	        '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
+	    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
 
-	        // remove hardcoded width
-	        $this.icon.width('');
+	    modal.show();
 
-	        // remove spin instance from element
-	        $this.element.removeData('spin');
+	    return modal;
+	},
+
+	confirm = function(content, onconfirm, options){
+
+	    onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
+
+	    var modal = UI.$.UIkit.modal.dialog(([
+	       '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
+	       '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
+	    ]).join(""), UI.$.extend({bgclose:false, keyboard:false}, options));
+
+	    modal.element.find(".js-modal-confirm").on("click", function(){
+	       onconfirm();
+	       modal.hide();
+	    });
+
+	    modal.show();
+
+	    return modal;
+	};
+
+
+	ZX.modal          = modal;
+	ZX.modal.dialog   = dialog;
+	ZX.modal.alert    = alert;
+	ZX.modal.confirm  = confirm;
+
+/***/ },
+/* 9 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var ZX = __webpack_require__(4);
+	    
+	ZX.vue = {};
+	ZX.vue.mixins = [{
+
+	    created: function() {
+
+	    	var config = window.$zlux_config;
+
+	        Vue.url.options.root = config.url;
+
+	        Vue.http.headers.common['X-XSRF-TOKEN'] = config.csrf;
+	        Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+	        Vue.http.options.emulateHTTP = true;
+
+	        Vue.http.options.beforeSend = function (request, options) {
+
+	        	var url = options.url.split('/');
+	        	url[0] = 'controller=' + url[0];
+	        	url[1] = 'task=' + url[1];
+
+	            options.url = config.route + '&' + url.join('&');
+
+	        };
+
 	    }
-	});
+
+	}];
 
 /***/ }
 /******/ ]);

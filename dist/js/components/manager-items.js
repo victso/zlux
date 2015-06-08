@@ -47,14 +47,15 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
 
-	var Vue = __webpack_require__(4);
-	var UI  = __webpack_require__(3);
+	var Vue = __webpack_require__(3);
+	var UI  = __webpack_require__(2);
 
 	UI.component('zx-manager-items', {
 
@@ -67,7 +68,7 @@
 
 	                if ( ! this.__vue__) {
 
-	                    new Vue(__webpack_require__(10)).$mount(this);
+	                    new Vue(__webpack_require__(11)).$mount(this);
 
 	                }
 
@@ -81,30 +82,26 @@
 
 
 /***/ },
-/* 1 */,
-/* 2 */,
-/* 3 */
+
+/***/ 2:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 4 */
+
+/***/ 3:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue;
 
 /***/ },
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */
+
+/***/ 11:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<nav class=\"uk-navbar\">\n        <ul class=\"uk-navbar-nav\">\n\n            <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n                <a href=\"#\"> {{ item.title }}</a>\n            </li>\n\n        </ul>\n    </nav>\n\n    <div v-component=\"items\"></div>";
-	var UI = __webpack_require__(3);
+	var UI = __webpack_require__(2);
 
 	    module.exports = {
 
@@ -132,7 +129,7 @@
 
 	        components: {
 
-	            items: __webpack_require__(13),
+	            items: __webpack_require__(16),
 
 	        }
 
@@ -141,9 +138,8 @@
 
 
 /***/ },
-/* 11 */,
-/* 12 */,
-/* 13 */
+
+/***/ 16:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>Name</th>\n                <th>Type</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"item: items\">\n                <td>\n                    {{ item.name }}\n                </td>\n\n                <td>\n                    {{ item.type.name }}\n                </td>\n            </tr>\n        </tbody>\n    </table>\n\n    <ul class=\"uk-pagination\">\n        <li><a href=\"\">...</a></li>\n        <li class=\"uk-active\"><span>...</span></li>\n        <li class=\"uk-disabled\"><span>...</span></li>\n        <li><span>...</span></li>\n    </ul>";
@@ -190,4 +186,5 @@
 
 
 /***/ }
-/******/ ]);
+
+/******/ });

@@ -53,8 +53,8 @@
 
 	"use strict";
 
-	var Vue = __webpack_require__(4);
-	var UI  = __webpack_require__(3);
+	var Vue = __webpack_require__(3);
+	var UI  = __webpack_require__(2);
 
 	UI.component('zx-manager-files', {
 
@@ -67,7 +67,7 @@
 
 	                if ( ! this.__vue__) {
 
-	                    new Vue(__webpack_require__(9)).$mount(this);
+	                    new Vue(__webpack_require__(10)).$mount(this);
 
 	                }
 
@@ -82,28 +82,29 @@
 
 /***/ },
 /* 1 */,
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue;
 
 /***/ },
+/* 4 */,
 /* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */,
-/* 9 */
+/* 9 */,
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<nav class=\"uk-navbar\">\n        <ul class=\"uk-navbar-nav\">\n\n            <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                <a href=\"#\" v-on=\"click: this.changeView(item.view)\"> {{ item.title }}</a>\n                \n            </li>\n\n        </ul>\n    </nav>\n\n    <div v-component=\"{{ currentView }}\" keep-alive=\"\"></div>";
-	var UI = __webpack_require__(3);
+	var UI = __webpack_require__(2);
 
 	    module.exports = {
 
@@ -150,7 +151,6 @@
 
 
 /***/ },
-/* 10 */,
 /* 11 */,
 /* 12 */,
 /* 13 */,
@@ -216,8 +216,8 @@
 
 	        components: {
 
-	            file: __webpack_require__(16),
-	            breadcrumb: __webpack_require__(17)
+	            file: __webpack_require__(17),
+	            breadcrumb: __webpack_require__(18)
 
 	        }
 
@@ -239,11 +239,12 @@
 
 
 /***/ },
-/* 16 */
+/* 16 */,
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<td v-set-type=\"{{ type }}\">\n\n        <a href=\"#\" v-on=\"click: $parent.goTo(path)\">{{ path | basename }}</a>\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
-	var helper = __webpack_require__(18);
+	var helper = __webpack_require__(19);
 
 	    module.exports = {
 
@@ -316,7 +317,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<li v-repeat=\"crumbs\" v-ifactive=\"{{ path == $parent.path }}\">\n        \n        <a href=\"#\" v-on=\"click: $parent.$parent.goTo(path)\">{{ name }}</a>\n\n    </li>";
@@ -391,7 +392,7 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	

@@ -51,8 +51,8 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var ZX = __webpack_require__(2);
-	var UI = __webpack_require__(3);
+	var ZX = __webpack_require__(4);
+	var UI = __webpack_require__(2);
 
 	var notify = function(msg, options){
 	    // display message
@@ -104,13 +104,14 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = zlux;
+	module.exports = UIkit;
 
 /***/ },
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = UIkit;
+	module.exports = zlux;
 
 /***/ }
 /******/ ]);

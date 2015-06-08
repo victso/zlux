@@ -53,8 +53,8 @@
 
 	"use strict";
 
-	var Vue = __webpack_require__(4);
-	var UI  = __webpack_require__(3);
+	var Vue = __webpack_require__(3);
+	var UI  = __webpack_require__(2);
 
 	UI.component('zx-calendar', {
 
@@ -67,7 +67,7 @@
 
 	                if ( ! this.__vue__) {
 
-	                    new Vue(__webpack_require__(11)).$mount(this);
+	                    new Vue(__webpack_require__(12)).$mount(this);
 
 	                }
 
@@ -82,31 +82,32 @@
 
 /***/ },
 /* 1 */,
-/* 2 */,
-/* 3 */
+/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = Vue;
 
 /***/ },
+/* 4 */,
 /* 5 */,
 /* 6 */,
 /* 7 */,
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<table class=\"uk-datepicker-table\">\n\n        <thead>\n    \n            <tr><th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-repeat=\"week: rows.days\">\n\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate &amp;&amp; day.day > maxDate,\n                        zx-calendar-inactive: minDate &amp;&amp; minDate > day.day\n\n                    \">\n\n                        {{ day.day.format(\"D\") }}\n\n                    </a>\n\n                </td>\n\n            </tr>\n\n\n        </tbody>\n\n    </table>";
-	var UI = __webpack_require__(3);
-	    var moment = __webpack_require__(12);
+	var UI = __webpack_require__(2);
+	    var moment = __webpack_require__(13);
 
 	    module.exports = {
 
@@ -263,7 +264,7 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = moment;
