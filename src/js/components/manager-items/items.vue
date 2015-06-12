@@ -7,14 +7,19 @@
         data: function() {
 
             return {
-                
+
                 items: []
-                
+
             }
 
         },
 
         created: function() {
+
+            if (!this.$http) {
+                console.warn('vue-resource plugin not loaded');
+                return;
+            }
 
             this.fetchData('root');
 
