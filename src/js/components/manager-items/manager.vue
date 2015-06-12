@@ -4,11 +4,15 @@
 
     module.exports = {
 
-        data:  {
+        data:  function() {
 
-            nav: [
-                {title: 'Filter'}
-            ]
+            return {
+
+                nav: [
+                    {title: 'Filter'}
+                ]
+
+            }
 
         },
 

@@ -1,11 +1,17 @@
 "use strict";
 
-var Vue = require('vue');
-var UI  = require('uikit');
+var UI = require('uikit');
 
 UI.component('zx-manager-items', {
 
     boot: function() {
+
+        if (!window.Vue) {
+            UI.$zlux.warn('Vue not loaded but required by Items Manager');
+            return;
+        }
+
+        Vue.component('zx-manager-items', require('./manager.vue'));
 
         // auto init
         UI.ready(function(context) {
@@ -14,14 +20,14 @@ UI.component('zx-manager-items', {
 
                 if ( ! this.__vue__) {
 
-                    new Vue(require('./manager.vue')).$mount(this);
+                    new Vue.component('zx-manager-items').$mount(this);
 
                 }
 
             });
 
         });
-        
+
     }
 
 });

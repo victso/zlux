@@ -1,14 +1,12 @@
 var ZX = require('zlux');
 var UI = require('uikit');
 
-ZX.ajax = {};
-
 /**
  * Ajax request
  * @param Object settings The request settings
  * @return Promise The ajax promise
  */
-ZX.ajax.request = function(settings)
+module.request = function(settings)
 {
     // set defaults
     var response = {success:false, errors:[], notices:[]},
@@ -33,7 +31,7 @@ ZX.ajax.request = function(settings)
         } else {
             request = UI.$.ajax(settings);
         }
-        
+
         // if response recieved
         request.done(function(result, a, b)
         {
@@ -69,7 +67,7 @@ ZX.ajax.request = function(settings)
                 defer.resolve(result);
             }
         })
-        
+
         // if something went wrong
         .fail(function(jqxhr, status, error)
         {
@@ -107,7 +105,7 @@ ZX.ajax.request = function(settings)
  * @param Object notify The notify settings
  * @return Promise The ajax promise
  */
-ZX.ajax.requestAndNotify = function(request, notify)
+module.requestAndNotify = function(request, notify)
 {
     // set defaults
     notify = notify === undefined ? {} : notify;
@@ -123,7 +121,7 @@ ZX.ajax.requestAndNotify = function(request, notify)
         if(response.message) ZX.notify(response.message, UI.$.extend(true, {
             status: 'success'
         }, notify));
-        
+
     }).fail(function(response){
 
         // close others, then notify
@@ -135,7 +133,7 @@ ZX.ajax.requestAndNotify = function(request, notify)
                 status: 'danger'
             }, notify));
         });
-       
+
     }).always(function(response){
 
         // display notices
@@ -155,7 +153,7 @@ ZX.ajax.requestAndNotify = function(request, notify)
 var queues = {};
 
 // Register an UI.$.ajaxq function, which follows the UI.$.ajax interface, but allows a queue name which will force only one request per queue to fire.
-ZX.ajax.queue = function(qname, opts) {
+module.queue = function(qname, opts) {
 
     if (typeof opts === "undefined") {
         throw ("AjaxQ: queue name is not provided");
@@ -248,12 +246,12 @@ var isAnyQueueRunning = function() {
     return false;
 };
 
-ZX.ajax.queue.isRunning = function(qname) {
+module.queue.isRunning = function(qname) {
     if (qname) return isQueueRunning(qname);
     else return isAnyQueueRunning();
 };
 
-ZX.ajax.queue.clear = function(qname) {
+module.queue.clear = function(qname) {
     if (!qname) {
         for (var i in queues) {
             if (queues.hasOwnProperty(i)) {

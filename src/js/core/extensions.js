@@ -1,6 +1,7 @@
 var ZX = require('zlux');
 var UI = require('uikit');
 
+ZX.components = {};
 ZX.extensions = {};
 
 /** COMPONENT **/
