@@ -1,64 +1,68 @@
-var ZX = require('zlux');
-var UI = require('uikit');
-    
-ZX.component('spin', {
+var UI = require('uikit')
 
-    defaults: {
-        class: '',
-        affix:  'append' // append, prepend or replace
-    },
+module.exports = function(ZX) {
 
-    init: function() {
-        // run default
-        this.on();
-    },
+    ZX.component('spin', {
 
-    on: function() {
-        var $this = this;
+        defaults: {
+            class: '',
+            affix:  'append' // append, prepend or replace
+        },
 
-        $this.icon_class = false;
+        init: function() {
+            // run default
+            this.on()
+        },
 
-        // find and existing icon
-        $this.icon = $this.element.is('i') ? $this.element : UI.$('i', $this.element).first();
+        on: function() {
+            var $this = this
 
-        // use it if found
-        if($this.icon.length) {
-            // save original class
-            $this.icon_class = $this.icon.attr('class');
-            // hardcode the width to avoid movement effects
-            $this.icon.width($this.icon.width());
-            // set new class
-            $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin');
+            $this.icon_class = false
 
-        // else, create one
-        } else {
-            $this.icon = UI.$('<i class="uk-icon-zx-spinner uk-icon-spin"></i>');
+            // find and existing icon
+            $this.icon = $this.element.is('i') ? $this.element : UI.$('i', $this.element).first()
 
-            // place the icon
-            if($this.options.affix == 'replace') {
-                $this.element.html($this.icon);
+            // use it if found
+            if($this.icon.length) {
+                // save original class
+                $this.icon_class = $this.icon.attr('class')
+                // hardcode the width to avoid movement effects
+                $this.icon.width($this.icon.width())
+                // set new class
+                $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin')
+
+            // else, create one
             } else {
-                $this.element[$this.options.affix]($this.icon);
+                $this.icon = UI.$('<i class="uk-icon-zx-spinner uk-icon-spin"></i>')
+
+                // place the icon
+                if($this.options.affix == 'replace') {
+                    $this.element.html($this.icon)
+                } else {
+                    $this.element[$this.options.affix]($this.icon)
+                }
             }
+
+            // add custom class
+            $this.icon.addClass($this.options['class'])
+        },
+
+        off: function() {
+            var $this = this;
+
+            // remove the spin classes but not the icon
+            $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin')
+
+            // recover class, if any
+            if($this.icon_class) $this.icon.attr('class', $this.icon_class)
+
+            // remove hardcoded width
+            $this.icon.width('')
+
+            // remove spin instance from element
+            $this.element.removeData('spin')
         }
 
-        // add custom class
-        $this.icon.addClass($this.options['class']);
-    },
+    })
 
-    off: function() {
-        var $this = this;
-
-        // remove the spin classes but not the icon
-        $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin');
-
-        // recover class, if any
-        if($this.icon_class) $this.icon.attr('class', $this.icon_class);
-
-        // remove hardcoded width
-        $this.icon.width('');
-
-        // remove spin instance from element
-        $this.element.removeData('spin');
-    }
-});
+}

@@ -1,11 +1,12 @@
 var UI = require('uikit')
 var _  = require('./util')
+var extend = _.extend
 
-var ZX = {version: '2.0.3'}
-
-ZX.warn = _.warn
-
-UI.$zlux = window.zlux = ZX
+var ZX = {
+    version: '2.0.3',
+    config: require('./config'),
+    warn: _.warn,
+}
 
 UI.ready(function() {
 
@@ -14,17 +15,23 @@ UI.ready(function() {
         UI.$('.uk-nestable-list-dragged').wrap('<div class="zx" />')
     })
 
+    // extend config
+    ZX.config = _.extend(ZX.config, window.$zlux_config)
+
 })
 
-ZX.url  = require('./core/resources')
-ZX.lang = require('./core/locale')
-ZX.ajax = require('./core/ajax')
+extend(ZX, require('./core/extensions'))
+extend(ZX, require('./core/resource'))
+extend(ZX, require('./core/locale'))
+extend(ZX, require('./core/modal'))
 
-require('./core/extensions')
-require('./core/animate')
-require('./core/modal')
-require('./core/spin')
+require('./core/animate')(ZX)
+require('./core/spin')(ZX)
 require('./core/vue')
+
+UI.$.fn.zx = ZX.fn;
+
+module.exports = UI.$zlux = _.zlux = ZX
 
 /**
 * @see http://stackoverflow.com/q/7616461/940217

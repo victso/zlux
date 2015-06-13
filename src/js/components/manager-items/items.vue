@@ -1,5 +1,7 @@
 <script>
 
+    var _ = require('../../util')
+
     module.exports = {
 
         inherit: true,
@@ -16,23 +18,29 @@
 
         created: function() {
 
-            // this.fetchData('root');
+            this.fetchData();
 
         },
 
         methods: {
 
-            fetchData: function(path) {
+            fetchData: function() {
 
-                this.$http.get('/items', {path:path}, function(response) {
+                var vm = this;
 
-                    this.items = response.data;
+                // this.$http.get();
 
-                }).error(function(e) {
+                UI.$zlux.http.get('/items45').done(function(response) {
 
-                    console.log(e);
+                    vm.items = response.items;
 
-                });
+                    // console.log(this);
+
+                    // console.log(this);
+
+                }).fail(function(result) {
+                    console.log(result);
+                })
 
             }
 

@@ -1,42 +1,46 @@
-var ZX = require('zlux');
-var UI = require('uikit');
+var UI = require('uikit')
 
-ZX.plugin('animate', {
+module.exports = function(ZX) {
 
-    init: function(options) {
-        var $this = this,
+    ZX.plugin('animate', {
 
-        // set animation class
-        animation = 'zx-animate-' + UI.$.trim(options[0]),
+        init: function(options) {
+            var $this = this,
 
-        // set callback
-        callback = options[1] ? options[1] : null;
-            
-        // animate
-        $this.animate(animation).done(function(){
+            // set animation class
+            animation = 'zx-animate-' + UI.$.trim(options[0]),
 
-            // execute any callback passing the element as scope
-            if (callback) callback.apply($this.element);
-        });
-    },
+            // set callback
+            callback = options[1] ? options[1] : null
 
-    animate: function(animation) {
-        var $this = this;
+            // animate
+            $this.animate(animation).done(function(){
 
-        return UI.$.Deferred(function(defer) {
+                // execute any callback passing the element as scope
+                if (callback) callback.apply($this.element)
 
-            // animate the element with CSS3
-            $this.element.addClass(animation)
-
-            // when done
-            .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
-
-                // remove the class to allow further animation
-                $this.element.removeClass(animation);
-
-                defer.resolve();
             });
+        },
 
-        }).promise();
-    }
-});
+        animate: function(animation) {
+            var $this = this;
+
+            return UI.$.Deferred(function(defer) {
+
+                // animate the element with CSS3
+                $this.element.addClass(animation)
+
+                // when done
+                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
+
+                    // remove the class to allow further animation
+                    $this.element.removeClass(animation)
+                    defer.resolve()
+
+                });
+
+            }).promise()
+        }
+    })
+
+}

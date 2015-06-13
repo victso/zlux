@@ -1,9 +1,29 @@
-var vueZlux = {};
+var _  = require('../util')
 
-vueZlux.install = function (Vue) {
+var vueZlux = {
 
-    Vue.prototype.$zlux = require('zlux');
+    install: function (Vue) {
 
-};
+        Object.defineProperty(Vue.prototype, '$http', {
 
-if (window.Vue) Vue.use(vueZlux);
+            get: function () {
+                console.log(this);
+                // return _.extend(Http.bind(this), Http);
+            }
+
+        })
+
+        // Vue.$http = function(url, params) {
+
+        //     console.log(url)
+        //     console.log(this)
+
+        //     // return ZX.$http.apply(this, url, params)
+
+        // }
+
+    }
+
+}
+
+if (window.Vue) Vue.use(vueZlux)

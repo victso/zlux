@@ -1,11 +1,11 @@
-var ZX = require('zlux');
-var UI = require('uikit');
+var _  = require('../util')
+var UI = require('uikit')
+var ZX = _.zlux
 
-ZX.components = {};
-ZX.extensions = {};
+exports.extensions = {};
 
 /** COMPONENT **/
-ZX.component = function(name, def) {
+exports.component = function(name, def) {
 
     var fn = function(element, options) {
         var $this = this;
@@ -128,15 +128,15 @@ ZX.component = function(name, def) {
     return fn;
 };
 
-ZX.component.boot = function(name) {
+exports.component.boot = function(name) {
 
     if (ZX.extensions[name].prototype && ZX.extensions[name].prototype.boot && !ZX.extensions[name].booted) {
         ZX.extensions[name].prototype.boot.apply(ZX, []);
         ZX.extensions[name].booted = true;
     }
-};
+}
 
-ZX.component.bootComponents = function() {
+exports.component.bootComponents = function() {
 
     for (var component in ZX.extensions) {
         ZX.component.boot(component);
@@ -145,7 +145,7 @@ ZX.component.bootComponents = function() {
 }
 
 /** PLUGIN **/
-ZX.plugin = function(name, def) {
+exports.plugin = function(name, def) {
 
     var fn = function(element, options) {
         this.element = element ? UI.$(element) : null;
@@ -196,7 +196,7 @@ ZX.plugin = function(name, def) {
 
 
 /** FN **/
-ZX.fn = function(command, options) {
+exports.fn = function(command, options) {
 
     var args = arguments, cmd = command.match(/^([a-z\-]+)(?:\.([a-z]+))?/i), extension = cmd[1], method = cmd[2];
 
@@ -233,6 +233,4 @@ ZX.fn = function(command, options) {
             ZX[extension](this, Array.prototype.slice.call(args, 1));
         });
     }
-};
-
-UI.$.fn.zx = ZX.fn;
+}

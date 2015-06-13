@@ -1,5 +1,4 @@
-var ZX = require('zlux');
-var UI = require('uikit');
+var UI = require('uikit')
 
 var notify = function(msg, options){
     // display message
@@ -12,14 +11,14 @@ var notify = function(msg, options){
 },
 
 confirm = function(msg, options){
-    
+
     options = UI.$.extend(options, {
         timeout: false // confirmation must wait user interaction
     });
 
     return UI.$.Deferred(function( defer )
     {
-        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
+        var notify = UI.$zlux.notify(msg + '<div class="uk-text-center uk-margin-top">\
                 <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
                 <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
             </div>',
@@ -41,6 +40,6 @@ closeAll = function(group, instantly){
     return this;
 };
 
-ZX.notify             = notify;
-ZX.notify.confirm     = confirm;
-ZX.notify.closeAll    = closeAll;
+UI.$zlux.notify             = notify;
+UI.$zlux.notify.confirm     = confirm;
+UI.$zlux.notify.closeAll    = closeAll;

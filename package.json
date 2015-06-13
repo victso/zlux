@@ -12,7 +12,7 @@
     }
   ],
   "scripts": {
-    "dev": "webpack --watch --config build/webpack-dev-config.js --output-file [name].min.js"
+    "dev": "webpack --watch --config build/webpack-config.js --output-file [name].min.js"
   },
   "devDependencies": {
     "browser-sync": "^2.7.4",
