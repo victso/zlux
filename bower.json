@@ -6,8 +6,7 @@
         "jquery-mockjax": "~2.0.0",
         "moment": "~2.9.0",
         "clndr": "~1.2.7",
-        "vue": "~0.11.10",
-        "vue-resource": "~0.1.0"
+        "vue": "~0.11.10"
     },
     "private":true
 }
