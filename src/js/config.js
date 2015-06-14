@@ -17,6 +17,14 @@ module.exports = {
     route: '',
 
     /**
+     * The routes mapping.
+     *
+     * @type {Object}
+     */
+
+    routes_map: {},
+
+    /**
      * The token number.
      *
      * @type {String}
@@ -31,14 +39,6 @@ module.exports = {
      */
 
     locales: {},
-
-    /**
-     * The url mapping.
-     *
-     * @type {Object}
-     */
-
-    urls_map: {},
 
     /**
      * Whether to print debug messages.

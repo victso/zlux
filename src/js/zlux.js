@@ -1,11 +1,10 @@
-var UI = require('uikit')
 var _  = require('./util')
+var UI = require('uikit')
 var extend = _.extend
 
 var ZX = {
     version: '2.0.3',
-    config: require('./config'),
-    warn: _.warn,
+    config: require('./config')
 }
 
 UI.ready(function() {
@@ -16,14 +15,15 @@ UI.ready(function() {
     })
 
     // extend config
-    ZX.config = _.extend(ZX.config, window.$zlux_config)
+    ZX.config = extend(ZX.config, window.$zlux_config)
 
 })
 
 extend(ZX, require('./core/extensions'))
-extend(ZX, require('./core/resource'))
 extend(ZX, require('./core/locale'))
 extend(ZX, require('./core/modal'))
+
+ZX.http = require('./core/http')(ZX)
 
 require('./core/animate')(ZX)
 require('./core/spin')(ZX)

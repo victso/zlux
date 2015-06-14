@@ -1,4 +1,5 @@
-var _  = require('../util')
+var _ = require('../util')
+var http = require('./http')()
 
 var vueZlux = {
 
@@ -7,20 +8,10 @@ var vueZlux = {
         Object.defineProperty(Vue.prototype, '$http', {
 
             get: function () {
-                console.log(this);
-                // return _.extend(Http.bind(this), Http);
+                return _.extend(http.bind(this), http)
             }
 
         })
-
-        // Vue.$http = function(url, params) {
-
-        //     console.log(url)
-        //     console.log(this)
-
-        //     // return ZX.$http.apply(this, url, params)
-
-        // }
 
     }
 

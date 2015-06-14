@@ -1,5 +1,6 @@
 <script>
 
+    var UI = require('uikit')
     var _ = require('../../util')
 
     module.exports = {
@@ -26,20 +27,10 @@
 
             fetchData: function() {
 
-                var vm = this;
+                this.$http.get('/items').done(function(response) {
 
-                // this.$http.get();
+                    this.items = response.items;
 
-                UI.$zlux.http.get('/items45').done(function(response) {
-
-                    vm.items = response.items;
-
-                    // console.log(this);
-
-                    // console.log(this);
-
-                }).fail(function(result) {
-                    console.log(result);
                 })
 
             }
