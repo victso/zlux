@@ -11,7 +11,7 @@ UI.component('zx-manager-items', {
             return;
         }
 
-        Vue.component('zx-manager-items', require('./manager.vue'));
+        Vue.component('manager-items', require('./manager.vue'));
 
         // auto init
         UI.ready(function(context) {
@@ -20,7 +20,7 @@ UI.component('zx-manager-items', {
 
                 if ( ! this.__vue__) {
 
-                    new Vue.component('zx-manager-items').$mount(this);
+                    new Vue.component('manager-items').$mount(this);
 
                 }
 

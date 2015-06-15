@@ -4,6 +4,8 @@
 
     module.exports = {
 
+        replace: true,
+
         data:  function() {
 
             return {
@@ -22,7 +24,7 @@
 
                 e.preventDefault();
 
-            });
+            })
 
         },
 
@@ -52,6 +54,6 @@
         </ul>
     </nav>
 
-    <div v-component="items"></div>
+    <items></items>
 
 </template>

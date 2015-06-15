@@ -7,9 +7,9 @@
         data: function() {
 
             return {
-                
+
                 path: ''
-                
+
             }
 
         },
@@ -32,13 +32,13 @@
                         });
 
                     });
-                    
+
                 }
 
                 crumbs.unshift({
                     'name': 'root',
                     'path': '/'
-                });   
+                });
 
                 return crumbs;
 
@@ -72,10 +72,14 @@
 
 <template>
 
-    <li v-repeat="crumbs" v-ifactive="{{ path == $parent.path }}">
-        
-        <a href="#" v-on="click: $parent.$parent.goTo(path)">{{ name }}</a>
+    <ul class="uk-breadcrumb">
 
-    </li>
+        <li v-repeat="crumbs" v-ifactive="{{ path == $parent.path }}">
+
+            <a href="#" v-on="click: $parent.$parent.goTo(path)">{{ name }}</a>
+
+        </li>
+
+    </ul>
 
 </template>

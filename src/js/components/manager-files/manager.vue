@@ -30,7 +30,7 @@
             changeView: function(view) {
 
                 this.currentView = view;
-                    
+
             }
 
         },
@@ -54,12 +54,12 @@
             <li class="uk-parent uk-active" v-repeat="item: nav">
 
                 <a href="#" v-on="click: this.changeView(item.view)"> {{ item.title }}</a>
-                
+
             </li>
 
         </ul>
     </nav>
 
-    <div v-component="{{ currentView }}" keep-alive></div>
+    <component is="{{ currentView }}"></component>
 
 </template>

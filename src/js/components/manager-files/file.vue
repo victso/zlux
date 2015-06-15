@@ -7,11 +7,11 @@
         data: function() {
 
             return {
-                
+
                 type: '',
                 path: '',
                 size: null
-                
+
             }
 
         },
@@ -74,16 +74,20 @@
 
 <template>
 
-    <td v-set-type="{{ type }}">
+    <tr>
 
-        <a href="#" v-on="click: $parent.goTo(path)">{{ path | basename }}</a>
+        <td v-set-type="{{ type }}">
 
-    </td>
+            <a href="#" v-on="click: $parent.goTo(path)">{{ path | basename }}</a>
 
-    <td>
+        </td>
 
-        {{ size | parseSize }}
+        <td>
 
-    </td>
+            {{ size | parseSize }}
+
+        </td>
+
+    </tr>
 
 </template>

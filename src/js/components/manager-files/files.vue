@@ -76,7 +76,7 @@
 
     <div v-if="files.length">
 
-        <ul class="uk-breadcrumb" v-component="breadcrumb" path="{{ root }}"></ul>
+        <breadcrumb path="{{ root }}"></breadcrumb>
 
         <table class="uk-table">
             <thead>
@@ -86,7 +86,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr v-component="file" v-repeat="files"></tr>
+                <file v-repeat="files"></file>
             </tbody>
         </table>
 

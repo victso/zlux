@@ -6,6 +6,7 @@
     module.exports = {
 
         inherit: true,
+        replace: true,
 
         data: function() {
 
@@ -15,49 +16,73 @@
                 total: null,
                 totalFiltered: null,
                 columns: [],
-                sortKey: '',
+                order: [],
                 // filterKey: '',
-                reversed: {}
+                reversed: {},
+                currentPage: 1
             }
 
         },
 
         created: function() {
 
-            this.fetchData();
+            this.fetchData()
 
         },
 
         methods: {
 
-            fetchData: function() {
+            fetchData: function(params) {
 
-                this.$http.get('/items', {}).done(function(response) {
+                params = _.extend({
 
-                    this.columns = response.gridColumns
-                    this.data = response.gridData
-                    this.total = response.gridTotal
-                    this.totalFiltered = response.gridFiltered
+                    offset: this.currentPage * this.limit,
+                    limit:  this.limit,
+                    order:  this.order
 
-                    // initialize reverse state
+                }, (params || {}))
+
+                this.$http.get('/items', params).done(function(response) {
+
+                    this.columns        = response.gridColumns
+                    this.data           = response.gridData
+                    this.total          = response.gridTotal
+                    this.totalFiltered  = response.gridFiltered
+
+                    // initialize reverse ordering state
                     this.columns.forEach(function (col) {
                         this.reversed.$add(col.name, false)
                     }, this)
-
-                    UI.pagination(this.$$.pagination, {items: this.total, itemsOnPage: this.totalFiltered});
 
                 })
 
             },
 
+            changePage: function(page) {
+
+                this.currentPage = page
+                this.fetchData()
+
+            },
+
             sortBy: function (key) {
-                this.sortKey = key
+
+                this.order = []
                 this.reversed[key] = !this.reversed[key]
+
+                this.order.push(key)
+
+                if (this.reversed[key]) {
+                    this.order.push('_reversed')
+                }
+
+                this.fetchData()
+
             }
 
         }
 
-    };
+    }
 
 </script>
 
@@ -81,7 +106,7 @@
         </thead>
         <tbody>
 
-            <tr v-repeat="entry: data | orderBy sortKey reversed[sortKey]">
+            <tr v-repeat="entry: data">
 
                 <td v-repeat="col: columns">
 
@@ -94,6 +119,6 @@
         </tbody>
     </table>
 
-    <ul class="uk-pagination" v-el="pagination"></ul>
+    <ul v-if="total" v-el="pagination" class="uk-pagination" v-uk-pagination="{items:total, itemsOnPage: totalFiltered, currentPage:currentPage}"></ul>
 
 </template>
