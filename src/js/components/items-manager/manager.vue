@@ -34,26 +34,30 @@
 
         components: {
 
-            items: require('./items.vue'),
+            items: require('./items.vue')
 
         }
 
-    };
+    }
 
 </script>
 
 <template>
 
-    <nav class="uk-navbar">
-        <div class="uk-navbar-flip">
-            <div class="uk-navbar-content">
-                <form class="uk-form uk-margin-remove uk-display-inline-block">
-                    <input class="uk-search-field" type="search" placeholder="filter...">
-                </form>
-            </div>
-        </div>
-    </nav>
+    <div class="zx-items-manager">
 
-    <items></items>
+        <nav class="uk-navbar">
+            <div class="uk-navbar-flip">
+                <div class="uk-navbar-content">
+                    <form class="uk-form uk-margin-remove uk-display-inline-block">
+                        <input class="uk-search-field" type="search" placeholder="filter...">
+                    </form>
+                </div>
+            </div>
+        </nav>
+
+        <items></items>
+
+    </div>
 
 </template>

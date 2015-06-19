@@ -20,8 +20,8 @@ module.exports = [{
     }
 },{
     entry: {
-        './dist/js/components/manager-files': './src/js/components/manager-files',
-        './dist/js/components/manager-items': './src/js/components/manager-items',
+        './dist/js/components/files-manager': './src/js/components/files-manager',
+        './dist/js/components/items-manager': './src/js/components/items-manager',
         './dist/js/components/pagination': './src/js/components/pagination',
         './dist/js/components/calendar': './src/js/components/calendar',
         './dist/js/components/notify': './src/js/components/notify'

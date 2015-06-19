@@ -1,6 +1,6 @@
-var strings = {}
-
 exports.lang = {
+
+    strings: {},
 
     /**
      * Push language strings to the list

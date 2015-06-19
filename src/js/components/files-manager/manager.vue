@@ -48,18 +48,22 @@
 
 <template>
 
-    <nav class="uk-navbar">
-        <ul class="uk-navbar-nav">
+    <div class="zx-files-manager">
 
-            <li class="uk-parent uk-active" v-repeat="item: nav">
+        <nav class="uk-navbar">
+            <ul class="uk-navbar-nav">
 
-                <a href="#" v-on="click: this.changeView(item.view)"> {{ item.title }}</a>
+                <li class="uk-parent uk-active" v-repeat="item: nav">
 
-            </li>
+                    <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
 
-        </ul>
-    </nav>
+                </li>
 
-    <component is="{{ currentView }}"></component>
+            </ul>
+        </nav>
+
+        <component is="{{ currentView }}"></component>
+
+    </div>
 
 </template>

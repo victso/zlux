@@ -1,6 +1,5 @@
 <script>
 
-    var UI = require('uikit')
     var _ = require('../../util')
 
     module.exports = {
@@ -102,13 +101,17 @@
         <thead>
 
             <tr>
-                <th v-repeat="col: columns" v-on="click: sortBy(col.name)">
+                <th v-repeat="col: columns">
 
-                    {{ col.title | capitalize }}
+                    <span v-on="click: sortBy(col.name)">
 
-                    <i v-show="orderKey == col.name" class="uk-icon"
-                        v-class="reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'">
-                    </i>
+                        {{ col.title | capitalize }}
+
+                        <i v-show="orderKey == col.name"
+                            v-class="reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'">
+                        </i>
+
+                    </span>
 
                 </th>
             <tr>

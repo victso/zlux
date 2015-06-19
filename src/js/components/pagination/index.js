@@ -1,6 +1,3 @@
-var _  = require('../../util')
-var UI = require('uikit')
-
 var vueZlux = {
 
     install: function (Vue) {
