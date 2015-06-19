@@ -18,8 +18,24 @@
                 count: 0,
                 offset: 0,
                 columns: [],
-                order: ['_itemname'],
+                orderKey: '_itemname',
                 reversed: {}
+            }
+
+        },
+
+        computed: {
+
+            order: function() {
+
+                var order = [this.orderKey]
+
+                if (this.reversed[this.orderKey]) {
+                    order.push('_reversed')
+                }
+
+                return order
+
             }
 
         },
@@ -69,15 +85,7 @@
 
             sortBy: function (key) {
 
-                this.order = []
                 this.reversed[key] = !this.reversed[key]
-
-                this.order.push(key)
-
-                if (this.reversed[key]) {
-                    this.order.push('_reversed')
-                }
-
                 this.fetchData()
 
             }
@@ -98,7 +106,7 @@
 
                     {{ col.title | capitalize }}
 
-                    <i v-show="sortKey == col.name" class="uk-icon"
+                    <i v-show="orderKey == col.name" class="uk-icon"
                         v-class="reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'">
                     </i>
 

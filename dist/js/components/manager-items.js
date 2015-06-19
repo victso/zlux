@@ -152,7 +152,7 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n\n            <tr>\n                <th v-repeat=\"col: columns\" v-on=\"click: sortBy(col.name)\">\n\n                    {{ col.title | capitalize }}\n\n                    <i v-show=\"sortKey == col.name\" class=\"uk-icon\" v-class=\"reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                    </i>\n\n                </th>\n            </tr><tr>\n\n        </tr></thead>\n        <tbody>\n\n            <tr v-repeat=\"entry: items\">\n\n                <td v-repeat=\"col: columns\">\n\n                    {{ entry[col.name] }}\n\n                </td>\n\n            </tr>\n\n        </tbody>\n    </table>\n\n    <zx-pagination v-if=\"items.length > 1\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></zx-pagination>";
+	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n\n            <tr>\n                <th v-repeat=\"col: columns\" v-on=\"click: sortBy(col.name)\">\n\n                    {{ col.title | capitalize }}\n\n                    <i v-show=\"orderKey == col.name\" class=\"uk-icon\" v-class=\"reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                    </i>\n\n                </th>\n            </tr><tr>\n\n        </tr></thead>\n        <tbody>\n\n            <tr v-repeat=\"entry: items\">\n\n                <td v-repeat=\"col: columns\">\n\n                    {{ entry[col.name] }}\n\n                </td>\n\n            </tr>\n\n        </tbody>\n    </table>\n\n    <zx-pagination v-if=\"items.length > 1\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></zx-pagination>";
 	var UI = __webpack_require__(2)
 	    var _ = __webpack_require__(13)
 
@@ -171,8 +171,24 @@
 	                count: 0,
 	                offset: 0,
 	                columns: [],
-	                order: ['_itemname'],
+	                orderKey: '_itemname',
 	                reversed: {}
+	            }
+
+	        },
+
+	        computed: {
+
+	            order: function() {
+
+	                var order = [this.orderKey]
+
+	                if (this.reversed[this.orderKey]) {
+	                    order.push('_reversed')
+	                }
+
+	                return order
+
 	            }
 
 	        },
@@ -222,15 +238,7 @@
 
 	            sortBy: function (key) {
 
-	                this.order = []
 	                this.reversed[key] = !this.reversed[key]
-
-	                this.order.push(key)
-
-	                if (this.reversed[key]) {
-	                    this.order.push('_reversed')
-	                }
-
 	                this.fetchData()
 
 	            }
