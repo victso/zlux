@@ -25,7 +25,7 @@ module.exports = function (ZX) {
             url = config.routes_map[url]
         }
 
-        settings = _.extend(true, {url: config.route + '&' + url}, Http.settings, settings)
+        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings)
 
         // var request  = queue ? this.queue(queue, settings) : UI.$.ajax(settings)
 

@@ -7,11 +7,12 @@ UI.component('zx-manager-items', {
     boot: function() {
 
         if (!window.Vue) {
-            UI.$zlux.warn('Vue not loaded but required by Items Manager');
-            return;
+            UI.$zlux.warn('Vue not loaded but required by Items Manager')
+            return
         }
 
-        Vue.component('manager-items', require('./manager.vue'));
+        // save component for programatic usage
+        Vue.component('manager-items', require('./manager.vue'))
 
         // auto init
         UI.ready(function(context) {
@@ -20,14 +21,14 @@ UI.component('zx-manager-items', {
 
                 if ( ! this.__vue__) {
 
-                    new Vue.component('manager-items').$mount(this);
+                    new Vue(require('./manager.vue')).$mount(this)
 
                 }
 
-            });
+            })
 
-        });
+        })
 
     }
 
-});
+})

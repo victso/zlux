@@ -9,19 +9,33 @@
 		<link rel="stylesheet" href="../dist/css/zlux.css">
 
 		<script src="../vendor/jquery/dist/jquery.min.js"></script>
+		<script src="../vendor/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
 		<script src="../vendor/uikit/js/uikit.js"></script>
+		<script src="../vendor/uikit/js/components/pagination.min.js"></script>
 		<script src="../vendor/vue/dist/vue.js"></script>
-		<script src="../vendor/vue-resource/dist/vue-resource.js"></script>
-		<script src="../dist/js/zlux.js"></script>
+		<script src="../dist/js/zlux.min.js"></script>
+		<script src="../dist/js/components/pagination.min.js"></script>
+		<script src="../dist/js/components/manager-items.min.js"></script>
 
 		<script type="text/javascript">
 
-            Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-            Vue.http.options.emulateHTTP = true;
-            Vue.http.options.beforeSend = function (request, options) {
-                options.url = 'http://localhost:3000/items';
-            };
-			
+			var $zlux_config = {
+				'routes_map': {
+					'/items': 'controller=zlux&task=getItemsManagerData'
+				},
+				'debug': true
+			}
+
+            // mock DT request
+			$.mockjax(function(settings) {
+				if (settings.url.match(/&controller\=zlux\&task\=getItemsManagerData/)) {
+					return {
+						proxy: 'data/items-db.json'
+					}
+				}
+				return;
+			})
+
 		</script>
 
 	</head>
@@ -32,8 +46,6 @@
 			<div data-zx-manager-items></div>
 
 		</div>
-
-		<script src="../dist/js/components/manager-items.js"></script>
 
 	</body>
 </html>

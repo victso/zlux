@@ -11,21 +11,23 @@
         data: function() {
 
             return {
-                data: [],
-                limit: 20,
-                total: null,
-                totalFiltered: null,
+                items: [],
+                itemsPerPage: 10,
+                currentPage: 1,
+                total: 0,
+                count: 0,
+                offset: 0,
                 columns: [],
-                order: [],
+                order: ['_itemname'],
                 // filterKey: '',
-                reversed: {},
-                currentPage: 1
+                reversed: {}
             }
 
         },
 
         created: function() {
 
+            this.$set('currentPage', this.currentPage - 1)
             this.fetchData()
 
         },
@@ -36,18 +38,19 @@
 
                 params = _.extend({
 
-                    offset: this.currentPage * this.limit,
-                    limit:  this.limit,
+                    offset: this.currentPage * this.itemsPerPage,
+                    limit:  this.itemsPerPage,
                     order:  this.order
 
                 }, (params || {}))
 
                 this.$http.get('/items', params).done(function(response) {
 
-                    this.columns        = response.gridColumns
-                    this.data           = response.gridData
-                    this.total          = response.gridTotal
-                    this.totalFiltered  = response.gridFiltered
+                    this.columns = response.columns
+                    this.items   = response.items
+                    this.total   = response.total
+                    this.count   = response.count
+                    this.offset  = response.offset
 
                     // initialize reverse ordering state
                     this.columns.forEach(function (col) {
@@ -58,9 +61,9 @@
 
             },
 
-            changePage: function(page) {
+            changePage: function(index) {
 
-                this.currentPage = page
+                this.currentPage = index
                 this.fetchData()
 
             },
@@ -106,7 +109,7 @@
         </thead>
         <tbody>
 
-            <tr v-repeat="entry: data">
+            <tr v-repeat="entry: items">
 
                 <td v-repeat="col: columns">
 
@@ -119,6 +122,6 @@
         </tbody>
     </table>
 
-    <ul v-if="total" v-el="pagination" class="uk-pagination" v-uk-pagination="{items:total, itemsOnPage: totalFiltered, currentPage:currentPage}"></ul>
+    <zx-pagination v-if="items.length > 1" items="{{ total }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></zx-pagination>
 
 </template>

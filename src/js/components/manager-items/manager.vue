@@ -45,13 +45,13 @@
 <template>
 
     <nav class="uk-navbar">
-        <ul class="uk-navbar-nav">
-
-            <li class="uk-parent uk-active" v-repeat="item: nav">
-                <a href="#"> {{ item.title }}</a>
-            </li>
-
-        </ul>
+        <div class="uk-navbar-flip">
+            <div class="uk-navbar-content">
+                <form class="uk-form uk-margin-remove uk-display-inline-block">
+                    <input class="uk-search-field" type="search" placeholder="filter...">
+                </form>
+            </div>
+        </div>
     </nav>
 
     <items></items>

@@ -38,11 +38,14 @@ gulp.task('build-copy', function(cb) {
 });
 
 gulp.task('build-copy-assets', function(cb) {
-    return gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg'));
+    return merge(
+        gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg')),
+        gulp.src(['vendor/uikit/fonts/**']).pipe(gulp.dest(output+'/fonts'))
+    )
 });
 
 gulp.task('build-compile-js', function(cb) {
-    run('webpack --config build/webpack-dev-config.js && webpack --config build/webpack-dev-config.js --output-file [name].min.js -p').exec('', cb);
+    run('webpack --config build/webpack-config.js && webpack --config build/webpack-config.js --output-file [name].min.js -p').exec('', cb);
 });
 
 gulp.task('build-compile-less', function() {

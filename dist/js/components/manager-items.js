@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -44,20 +51,40 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _  = __webpack_require__(13)
-	var UI = __webpack_require__(2)
+	"use strict";
 
-	var vueZlux = {
+	var UI = __webpack_require__(2);
 
-	    install: function (Vue) {
+	UI.component('zx-manager-items', {
 
-	        Vue.component('zx-pagination', __webpack_require__(17))
+	    boot: function() {
+
+	        if (!window.Vue) {
+	            UI.$zlux.warn('Vue not loaded but required by Items Manager')
+	            return
+	        }
+
+	        // save component for programatic usage
+	        Vue.component('manager-items', __webpack_require__(11))
+
+	        // auto init
+	        UI.ready(function(context) {
+
+	            UI.$('[data-zx-manager-items]', context).each(function(){
+
+	                if ( ! this.__vue__) {
+
+	                    new Vue(__webpack_require__(11)).$mount(this)
+
+	                }
+
+	            })
+
+	        })
 
 	    }
 
-	}
-
-	if (window.Vue) Vue.use(vueZlux)
+	})
 
 /***/ },
 /* 1 */,
@@ -75,8 +102,147 @@
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */,
-/* 12 */,
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<nav class=\"uk-navbar\">\n        <div class=\"uk-navbar-flip\">\n            <div class=\"uk-navbar-content\">\n                <form class=\"uk-form uk-margin-remove uk-display-inline-block\">\n                    <input class=\"uk-search-field\" type=\"search\" placeholder=\"filter...\">\n                </form>\n            </div>\n        </div>\n    </nav>\n\n    <items></items>";
+	var UI = __webpack_require__(2);
+
+	    module.exports = {
+
+	        replace: true,
+
+	        data:  function() {
+
+	            return {
+
+	                nav: [
+	                    {title: 'Filter'}
+	                ]
+
+	            }
+
+	        },
+
+	        ready: function() {
+
+	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
+
+	                e.preventDefault();
+
+	            })
+
+	        },
+
+	        methods: {
+
+	        },
+
+	        components: {
+
+	            items: __webpack_require__(12),
+
+	        }
+
+	    };
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n\n            <tr>\n                <th v-repeat=\"col: columns\" v-on=\"click: sortBy(col.name)\">\n\n                    {{ col.title | capitalize }}\n\n                    <i v-show=\"sortKey == col.name\" class=\"uk-icon\" v-class=\"reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                    </i>\n\n                </th>\n            </tr><tr>\n\n        </tr></thead>\n        <tbody>\n\n            <tr v-repeat=\"entry: items\">\n\n                <td v-repeat=\"col: columns\">\n\n                    {{ entry[col.name] }}\n\n                </td>\n\n            </tr>\n\n        </tbody>\n    </table>\n\n    <zx-pagination v-if=\"items.length > 1\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></zx-pagination>";
+	var UI = __webpack_require__(2)
+	    var _ = __webpack_require__(13)
+
+	    module.exports = {
+
+	        inherit: true,
+	        replace: true,
+
+	        data: function() {
+
+	            return {
+	                items: [],
+	                itemsPerPage: 10,
+	                currentPage: 1,
+	                total: 0,
+	                count: 0,
+	                offset: 0,
+	                columns: [],
+	                order: ['_itemname'],
+	                // filterKey: '',
+	                reversed: {}
+	            }
+
+	        },
+
+	        created: function() {
+
+	            this.$set('currentPage', this.currentPage - 1)
+	            this.fetchData()
+
+	        },
+
+	        methods: {
+
+	            fetchData: function(params) {
+
+	                params = _.extend({
+
+	                    offset: this.currentPage * this.itemsPerPage,
+	                    limit:  this.itemsPerPage,
+	                    order:  this.order
+
+	                }, (params || {}))
+
+	                this.$http.get('/items', params).done(function(response) {
+
+	                    this.columns = response.columns
+	                    this.items   = response.items
+	                    this.total   = response.total
+	                    this.count   = response.count
+	                    this.offset  = response.offset
+
+	                    // initialize reverse ordering state
+	                    this.columns.forEach(function (col) {
+	                        this.reversed.$add(col.name, false)
+	                    }, this)
+
+	                })
+
+	            },
+
+	            changePage: function(index) {
+
+	                this.currentPage = index
+	                this.fetchData()
+
+	            },
+
+	            sortBy: function (key) {
+
+	                this.order = []
+	                this.reversed[key] = !this.reversed[key]
+
+	                this.order.push(key)
+
+	                if (this.reversed[key]) {
+	                    this.order.push('_reversed')
+	                }
+
+	                this.fetchData()
+
+	            }
+
+	        }
+
+	    }
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
 /* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -289,46 +455,6 @@
 	    silent: false
 
 	}
-
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "hello pagination";
-	var UI = __webpack_require__(2);
-
-	    module.exports = {
-
-	        replace: true,
-
-	        data:  function() {
-
-	            return {
-
-
-
-	            }
-
-	        },
-
-	        ready: function() {
-
-
-
-	        },
-
-	        methods: {
-
-	        },
-
-	        components: {
-
-
-	        }
-
-	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ }
 /******/ ]);
