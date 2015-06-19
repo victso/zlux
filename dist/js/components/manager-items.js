@@ -172,7 +172,6 @@
 	                offset: 0,
 	                columns: [],
 	                order: ['_itemname'],
-	                // filterKey: '',
 	                reversed: {}
 	            }
 

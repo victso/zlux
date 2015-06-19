@@ -38,6 +38,7 @@
 
             this.$watch('items', function() {
 
+                // if totalPages changes update currentPage
                 if ((this.currentPage + 1) > this.totalPages){
 
                     this.$set('currentPage', this.totalPages - 1)
@@ -61,8 +62,6 @@
             selectPage: function(index) {
 
                 this.$set('currentPage', index)
-
-                // console.log(this.items);
 
                 this.onSelectPage(index)
 
