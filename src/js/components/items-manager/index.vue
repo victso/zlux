@@ -1,12 +1,12 @@
 <script>
 
-    var UI = require('uikit');
+    var UI = require('uikit')
 
     module.exports = {
 
         replace: true,
 
-        props: ['on-select-item', 'on-load-page'],
+        props: ['on-select-item', 'on-load-page', 'filter'],
 
         data:  function() {
 
@@ -14,23 +14,34 @@
 
                 nav: [
                     {title: 'Filter'}
-                ]
+                ],
 
-            }
+                items: [],
+                itemsPerPage: 10,
+                currentPage: 1,
+                total: 0,
+                count: 0,
+                offset: 0,
+                columns: [],
+                orderKey: '_itemname',
+                reversed: {},
 
-        },
-
-        computed: {
-
-            items: function() {
-
-                return this.$.items.items
+                filter: {
+                    apps: '',
+                    types: '',
+                    categories: '',
+                    tags: '',
+                    authors: ''
+                }
 
             }
 
         },
 
         ready: function() {
+
+            // console.log(this.$data);
+            // this.$log()
 
             UI.$('a[href="#"]', this.$el).on('click', function(e) {
 

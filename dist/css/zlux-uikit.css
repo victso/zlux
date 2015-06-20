@@ -9077,6 +9077,9 @@ a.uk-datepicker-table-muted {
    Component: Manager
  ========================================================================== */
 .zx-items-manager table thead span {
+  cursor: default;
+}
+.zx-items-manager table thead span.zx-sortable {
   cursor: pointer;
 }
 /* ========================================================================

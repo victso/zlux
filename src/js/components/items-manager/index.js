@@ -13,7 +13,7 @@ UI.component('zx-items-manager', {
         }
 
         // save component for programatic usage
-        Vue.component('items-manager', require('./manager.vue'))
+        Vue.component('items-manager', require('./index.vue'))
 
     }
 

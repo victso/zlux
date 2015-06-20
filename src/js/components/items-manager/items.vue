@@ -1,27 +1,12 @@
 <script>
 
     var _ = require('../../util')
+    var UI = require('uikit')
 
     module.exports = {
 
         inherit: true,
         replace: true,
-
-        data: function() {
-
-            return {
-                items: [],
-                itemsPerPage: 10,
-                currentPage: 1,
-                total: 0,
-                count: 0,
-                offset: 0,
-                columns: [],
-                orderKey: '_itemname',
-                reversed: {}
-            }
-
-        },
 
         computed: {
 
@@ -50,6 +35,8 @@
 
             fetchData: function(params) {
 
+                var vm = this
+
                 params = _.extend({
 
                     offset: this.currentPage * this.itemsPerPage,
@@ -67,9 +54,9 @@
                     this.offset  = response.offset
 
                     // initialize reverse ordering state
-                    this.columns.forEach(function (col) {
-                        this.reversed.$add(col.name, false)
-                    }, this)
+                    UI.$.each(this.columns, function ($key, col) {
+                        vm.reversed.$add($key, false)
+                    })
 
                     // execute possible callback
                     if (_.isFunction(this.onLoadPage)) {
@@ -89,8 +76,10 @@
 
             sortBy: function (key) {
 
-                this.reversed[key] = !this.reversed[key]
-                this.fetchData()
+                if (key) {
+                    this.reversed[key] = !this.reversed[key]
+                    this.fetchData()
+                }
 
             }
 
@@ -114,12 +103,12 @@
             <tr>
                 <th v-repeat="col: columns">
 
-                    <span v-on="click: sortBy(col.name)">
+                    <span v-class="zx-sortable: col.orderKey" v-on="click: sortBy(col.orderKey)">
 
-                        {{ col.title | capitalize }}
+                        {{ col.name | capitalize }}
 
-                        <i v-show="orderKey == col.name"
-                            v-class="reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'">
+                        <i v-show="orderKey == col.orderKey"
+                            v-class="reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'">
                         </i>
 
                     </span>
@@ -130,7 +119,7 @@
 
         <tbody>
 
-            <tr v-component="item" v-repeat="items" track-by="id"></tr>
+            <tr v-component="item" v-repeat="items" track-by="id" on-select="{{ onSelectItem }}" columns="{{ columns }}"></tr>
 
         </tbody>
 

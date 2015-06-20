@@ -4,25 +4,37 @@
 
     module.exports = {
 
-        inherit: true,
         replace: true,
+
+        props: ['on-select', 'columns'],
 
         data: function() {
 
             return {
+                id      : '',
+                name    : '',
+                type    : '',
+                access  : '',
+                active  : -1,
+                created : '',
 
-                id: '',
-                active: false
-
+                application: {
+                    id   : '',
+                    name : ''
+                },
+                author: {
+                    id   : '',
+                    name : ''
+                }
             }
 
         },
 
-        computed: {
+        filters: {
 
-            name: function() {
+            property: function(key) {
 
-                return this.$data['_itemname']
+                return this.$parent.$data[key]
 
             }
 
@@ -32,8 +44,8 @@
 
             selectItem: function() {
 
-                if (_.isFunction(this.onSelectItem)) {
-                    this.onSelectItem(this)
+                if (_.isFunction(this.onSelect)) {
+                    this.onSelect(this)
                 }
 
             }
@@ -48,9 +60,9 @@
 
     <tr v-on="click: selectItem" v-class="uk-active: active">
 
-        <td v-repeat="columns">
+        <td v-repeat="col: columns">
 
-            {{ $parent.$data[name] }}
+            {{ $key | property }}
 
         </td>
 
