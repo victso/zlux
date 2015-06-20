@@ -56,7 +56,7 @@
 
 	    install: function (Vue) {
 
-	        Vue.component('zx-pagination', __webpack_require__(17))
+	        Vue.component('pagination', __webpack_require__(18))
 
 	    }
 
@@ -73,7 +73,7 @@
 
 /***/ },
 
-/***/ 17:
+/***/ 18:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
@@ -103,7 +103,9 @@
 
 	            totalPages: function() {
 
-	                return Math.ceil(this.items / this.itemsOnPage) ? Math.ceil(this.items / this.itemsOnPage) : 1
+	                return Math.ceil(this.items / this.itemsOnPage)
+	                    ? Math.ceil(this.items / this.itemsOnPage)
+	                    : 1
 
 	            }
 
@@ -149,9 +151,13 @@
 	                var pages = this.totalPages, halfDisplayed = this.displayedPages / 2
 
 	                return {
-	                    start: Math.ceil(this.currentPage > halfDisplayed ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0) : 0),
+	                    start: Math.ceil(this.currentPage > halfDisplayed
+	                        ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0)
+	                        : 0),
 
-	                    end: Math.ceil(this.currentPage > halfDisplayed ? Math.min(this.currentPage + halfDisplayed, pages) : Math.min(this.displayedPages, pages))
+	                    end: Math.ceil(this.currentPage > halfDisplayed
+	                        ? Math.min(this.currentPage + halfDisplayed, pages)
+	                        : Math.min(this.displayedPages, pages))
 
 	                }
 
@@ -215,7 +221,7 @@
 
 	        components: {
 
-	            'page': __webpack_require__(18)
+	            'page': __webpack_require__(19)
 
 	        }
 
@@ -225,7 +231,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 19:
 /***/ function(module, exports) {
 
 	var __vue_template__ = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent &amp;&amp; href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";

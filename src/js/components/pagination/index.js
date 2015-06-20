@@ -2,7 +2,7 @@ var vueZlux = {
 
     install: function (Vue) {
 
-        Vue.component('zx-pagination', require('./pagination.vue'))
+        Vue.component('pagination', require('./pagination.vue'))
 
     }
 

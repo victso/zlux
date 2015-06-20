@@ -305,12 +305,14 @@
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\">\n            <div class=\"uk-navbar-flip\">\n                <div class=\"uk-navbar-content\">\n                    <form class=\"uk-form uk-margin-remove uk-display-inline-block\">\n                        <input class=\"uk-search-field\" type=\"search\" placeholder=\"filter...\">\n                    </form>\n                </div>\n            </div>\n        </nav>\n\n        <items></items>\n\n    </div>";
+	var __vue_template__ = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\">\n            <div class=\"uk-navbar-flip\">\n                <div class=\"uk-navbar-content\">\n                    <form class=\"uk-form uk-margin-remove uk-display-inline-block\">\n                        <input class=\"uk-search-field\" type=\"search\" placeholder=\"filter...\">\n                    </form>\n                </div>\n            </div>\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n    </div>";
 	var UI = __webpack_require__(2);
 
 	    module.exports = {
 
 	        replace: true,
+
+	        props: ['on-select-item', 'on-load-page'],
 
 	        data:  function() {
 
@@ -324,6 +326,16 @@
 
 	        },
 
+	        computed: {
+
+	            items: function() {
+
+	                return this.$.items.items
+
+	            }
+
+	        },
+
 	        ready: function() {
 
 	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
@@ -331,10 +343,6 @@
 	                e.preventDefault();
 
 	            })
-
-	        },
-
-	        methods: {
 
 	        },
 
@@ -352,7 +360,7 @@
 /* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<table class=\"uk-table\">\n        <thead>\n\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-on=\"click: sortBy(col.name)\">\n\n                        {{ col.title | capitalize }}\n\n                        <i v-show=\"orderKey == col.name\" v-class=\"reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            </tr><tr>\n\n        </tr></thead>\n        <tbody>\n\n            <tr v-repeat=\"entry: items\">\n\n                <td v-repeat=\"col: columns\">\n\n                    {{ entry[col.name] }}\n\n                </td>\n\n            </tr>\n\n        </tbody>\n    </table>\n\n    <zx-pagination v-if=\"items.length > 1\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></zx-pagination>";
+	var __vue_template__ = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-on=\"click: sortBy(col.name)\">\n\n                        {{ col.title | capitalize }}\n\n                        <i v-show=\"orderKey == col.name\" v-class=\"reversed[col.name] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            </tr><tr>\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\"></tr>\n\n        </tbody>\n\n    </table>\n\n    <pagination v-if=\"items.length > 1\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>";
 	var _ = __webpack_require__(5)
 
 	    module.exports = {
@@ -424,6 +432,11 @@
 	                        this.reversed.$add(col.name, false)
 	                    }, this)
 
+	                    // execute possible callback
+	                    if (_.isFunction(this.onLoadPage)) {
+	                        this.onLoadPage()
+	                    }
+
 	                })
 
 	            },
@@ -439,6 +452,61 @@
 
 	                this.reversed[key] = !this.reversed[key]
 	                this.fetchData()
+
+	            }
+
+	        },
+
+	        components: {
+
+	            item: __webpack_require__(17)
+
+	        }
+
+	    }
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"columns\">\n\n            {{ $parent.$data[name] }}\n\n        </td>\n\n    </tr>";
+	var _ = __webpack_require__(5)
+
+	    module.exports = {
+
+	        inherit: true,
+	        replace: true,
+
+	        data: function() {
+
+	            return {
+
+	                id: '',
+	                active: false
+
+	            }
+
+	        },
+
+	        computed: {
+
+	            name: function() {
+
+	                return this.$data['_itemname']
+
+	            }
+
+	        },
+
+	        methods: {
+
+	            selectItem: function() {
+
+	                if (_.isFunction(this.onSelectItem)) {
+	                    this.onSelectItem(this)
+	                }
 
 	            }
 

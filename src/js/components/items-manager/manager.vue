@@ -6,6 +6,8 @@
 
         replace: true,
 
+        props: ['on-select-item', 'on-load-page'],
+
         data:  function() {
 
             return {
@@ -18,6 +20,16 @@
 
         },
 
+        computed: {
+
+            items: function() {
+
+                return this.$.items.items
+
+            }
+
+        },
+
         ready: function() {
 
             UI.$('a[href="#"]', this.$el).on('click', function(e) {
@@ -25,10 +37,6 @@
                 e.preventDefault();
 
             })
-
-        },
-
-        methods: {
 
         },
 
@@ -56,7 +64,7 @@
             </div>
         </nav>
 
-        <items></items>
+        <items v-ref="items"></items>
 
     </div>
 

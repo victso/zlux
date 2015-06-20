@@ -26,7 +26,9 @@
 
             totalPages: function() {
 
-                return Math.ceil(this.items / this.itemsOnPage) ? Math.ceil(this.items / this.itemsOnPage) : 1
+                return Math.ceil(this.items / this.itemsOnPage)
+                    ? Math.ceil(this.items / this.itemsOnPage)
+                    : 1
 
             }
 
@@ -72,9 +74,13 @@
                 var pages = this.totalPages, halfDisplayed = this.displayedPages / 2
 
                 return {
-                    start: Math.ceil(this.currentPage > halfDisplayed ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0) : 0),
+                    start: Math.ceil(this.currentPage > halfDisplayed
+                        ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0)
+                        : 0),
 
-                    end: Math.ceil(this.currentPage > halfDisplayed ? Math.min(this.currentPage + halfDisplayed, pages) : Math.min(this.displayedPages, pages))
+                    end: Math.ceil(this.currentPage > halfDisplayed
+                        ? Math.min(this.currentPage + halfDisplayed, pages)
+                        : Math.min(this.displayedPages, pages))
 
                 }
 

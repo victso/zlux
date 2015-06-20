@@ -71,6 +71,11 @@
                         this.reversed.$add(col.name, false)
                     }, this)
 
+                    // execute possible callback
+                    if (_.isFunction(this.onLoadPage)) {
+                        this.onLoadPage()
+                    }
+
                 })
 
             },
@@ -89,6 +94,12 @@
 
             }
 
+        },
+
+        components: {
+
+            item: require('./item.vue')
+
         }
 
     }
@@ -98,8 +109,8 @@
 <template>
 
     <table class="uk-table">
-        <thead>
 
+        <thead>
             <tr>
                 <th v-repeat="col: columns">
 
@@ -115,23 +126,16 @@
 
                 </th>
             <tr>
-
         </thead>
+
         <tbody>
 
-            <tr v-repeat="entry: items">
-
-                <td v-repeat="col: columns">
-
-                    {{ entry[col.name] }}
-
-                </td>
-
-            </tr>
+            <tr v-component="item" v-repeat="items" track-by="id"></tr>
 
         </tbody>
+
     </table>
 
-    <zx-pagination v-if="items.length > 1" items="{{ total }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></zx-pagination>
+    <pagination v-if="items.length > 1" items="{{ total }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></pagination>
 
 </template>

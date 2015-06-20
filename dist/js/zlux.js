@@ -72,9 +72,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	UI.ready(function() {
 
-	    // style workaround wrapping root elements with zlux
-	    UI.$('[data-uk-nestable]').on('nestable-start', function() {
-	        UI.$('.uk-nestable-list-dragged').wrap('<div class="zx" />')
+	    // style workaround, wrapp dragging elements with zx class
+	    UI.$('body').on('start.uk.nestable, start.uk.sortable', function() {
+	        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />')
 	    })
 
 	    // extend config
@@ -1103,6 +1103,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	            get: function () {
 	                return _.extend(http.bind(this), http)
 	            }
+
+	        })
+
+	        Vue.filter('trans', function(id) {
+
+	            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id
 
 	        })
 

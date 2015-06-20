@@ -13,6 +13,12 @@ var vueZlux = {
 
         })
 
+        Vue.filter('trans', function(id) {
+
+            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id
+
+        })
+
     }
 
 }
