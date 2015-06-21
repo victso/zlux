@@ -59,7 +59,18 @@
   transform: rotateY(180deg);
 }
 /* ========================================================================
-   Component: Manager
+   Component: Nav
+ ========================================================================== */
+.zx-items-manager nav form .uk-form-blank {
+  border-style: none !important;
+  box-shadow: none !important;
+}
+.zx-items-manager nav form .uk-icon-times {
+  pointer-events: inherit !important;
+  cursor: pointer;
+}
+/* ========================================================================
+   Component: Items
  ========================================================================== */
 .zx-items-manager table thead span {
   cursor: default;
