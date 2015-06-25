@@ -1,6 +1,12 @@
-var _  = require('./util')
 var UI = require('uikit')
+var _  = require('./util')
 var extend = _.extend
+
+if (!UI) {
+    throw new Error('UIkit library is missing');
+}
+
+var $ = UI.$
 
 var ZX = {
     version: '2.0.3',
@@ -10,7 +16,7 @@ var ZX = {
 UI.ready(function() {
 
     // style workaround, wrapp dragging elements with zx class
-    UI.$('body').on('start.uk.nestable, start.uk.sortable', function() {
+    $('body').on('start.uk.nestable, start.uk.sortable', function() {
         UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />')
     })
 
