@@ -1,7 +1,6 @@
 <script>
 
     var _ = require('../../util')
-    var UI = require('uikit')
 
     module.exports = {
 

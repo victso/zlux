@@ -45,7 +45,7 @@ gulp.task('build-copy-assets', function(cb) {
 });
 
 gulp.task('build-compile-js', function(cb) {
-    run('webpack --config build/webpack-config.js && webpack --config build/webpack-config.js --output-file [name].min.js -p').exec('', cb);
+    run('webpack && webpack --output-file [name].min.js -p').exec('', cb);
 });
 
 gulp.task('build-compile-less', function() {

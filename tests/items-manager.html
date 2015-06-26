@@ -11,11 +11,10 @@
 		<script src="../vendor/jquery/dist/jquery.min.js"></script>
 		<script src="../vendor/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
 		<script src="../vendor/uikit/js/uikit.js"></script>
-		<script src="../vendor/uikit/js/components/pagination.min.js"></script>
 		<script src="../vendor/vue/dist/vue.js"></script>
-		<script src="../dist/js/zlux.min.js"></script>
-		<script src="../dist/js/components/pagination.min.js"></script>
-		<script src="../dist/js/components/items-manager.min.js"></script>
+		<script src="../dist/js/zlux.js"></script>
+		<script src="../dist/js/components/pagination.js"></script>
+		<script src="../dist/js/components/items-manager.js"></script>
 
 		<script type="text/javascript">
 
@@ -39,11 +38,15 @@
 		</script>
 
 	</head>
-	<body class="tm-background zx">
+	<body class="zx">
 
 		<div class="uk-container uk-container-center">
 
-			<div data-zx-items-manager></div>
+			<div data-zx-items-manager inline-template>
+
+				<items-manager></items-manager>
+
+			</div>
 
 		</div>
 

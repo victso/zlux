@@ -30,9 +30,9 @@ module.exports = [{
         filename: './[name].js'
     },
     externals: {
-        'jquery': 'jQuery',
-        'vue'   : 'Vue',
         'uikit' : 'UIkit',
+        'jquery': 'UIkit.$',
+        'vue'   : 'Vue',
         'zlux'  : 'zlux',
         'moment': 'moment'
     },

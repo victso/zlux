@@ -1,0 +1,9 @@
+{
+    "root": "files/subfolder",
+    "resources": [{
+        "basename": "consectetur.png",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 1330
+    }]
+}

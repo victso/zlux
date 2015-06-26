@@ -13,7 +13,7 @@ UI.component('zx-files-manager', {
         }
 
         // save component for programatic usage
-        Vue.component('files-manager', require('./manager.vue'))
+        Vue.component('files-manager', require('./index.vue'))
 
     }
 

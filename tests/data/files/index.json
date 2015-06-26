@@ -1,0 +1,36 @@
+{
+    "root": "files",
+    "resources": [{
+        "basename": "subfolder/"
+    }, {
+        "basename": "consectetur.png",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 1330
+    }, {
+        "basename": "consequat.bmp",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 2984
+    }, {
+        "basename": "officia.bmp",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 2820
+    }, {
+        "basename": "laborum.bmp",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 1993
+    }, {
+        "basename": "laboris.bmp",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 290
+    }, {
+        "basename": "anim.png",
+        "content_type": "image/jpeg",
+        "resolution": "350x71px",
+        "size": 1076
+    }]
+}

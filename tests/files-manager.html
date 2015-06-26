@@ -1,39 +1,67 @@
 <!DOCTYPE html>
 <html lang="en-gb" dir="ltr">
-	<head>
-		<meta charset="utf-8"></meta>
-		<meta content="width=device-width, initial-scale=1" name="viewport"></meta>
-		<title>zlux Files Manager</title>
+    <head>
+        <meta charset="utf-8"></meta>
+        <meta content="width=device-width, initial-scale=1" name="viewport"></meta>
+        <title>zlux Files Manager</title>
 
-		<link rel="stylesheet" href="../dist/css/zlux-uikit.css">
-		<link rel="stylesheet" href="../dist/css/zlux.css">
+        <link rel="stylesheet" href="../dist/css/zlux-uikit.css">
+        <link rel="stylesheet" href="../dist/css/zlux.css">
 
-		<script src="../vendor/jquery/dist/jquery.min.js"></script>
-		<script src="../vendor/uikit/js/uikit.js"></script>
-		<script src="../vendor/vue/dist/vue.js"></script>
-		<script src="../vendor/vue-resource/dist/vue-resource.js"></script>
-		<script src="../dist/js/zlux.js"></script>
+        <script src="../vendor/jquery/dist/jquery.min.js"></script>
+        <script src="../vendor/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
+        <script src="../vendor/uikit/js/uikit.js"></script>
+        <script src="../vendor/vue/dist/vue.js"></script>
+        <script src="../dist/js/zlux.js"></script>
+        <script src="../dist/js/components/files-manager.js"></script>
 
-		<script type="text/javascript">
+        <script type="text/javascript">
 
-            Vue.http.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-            Vue.http.options.emulateHTTP = true;
-            Vue.http.options.beforeSend = function (request, options) {
-                options.url = 'http://localhost:3000/' + options.data.path;
-            };
+            Vue.config.debug = true
 
-		</script>
+            var $zlux_config = {
+                'routes_map': {
+                    '/files': 'controller=zlux&task=getFilesManagerData'
+                },
+                'debug': true
+            }
 
-	</head>
-	<body class="tm-background zx">
+            // mock DT request
+            $.mockjax(function(settings) {
 
-		<div class="uk-container uk-container-center">
+                var folder = settings.data.path ? settings.data.path : 'files'
 
-			<div data-zx-files-manager></div>
+                if (settings.url.match(/&controller\=zlux\&task\=getFilesManagerData/)) {
+                    return {
+                        proxy: 'data/' + folder + '/index.json'
+                    }
+                }
+                return
+            })
 
-		</div>
+            UIkit.ready(function() {
 
-		<script src="../dist/js/components/files-manager.js"></script>
+                new Vue({
+                    el: '[data-zx-files-manager]',
+                    ready: function() {
+                        this.$.manager.init()
+                    }
+                })
 
-	</body>
+            })
+
+        </script>
+
+    </head>
+    <body class="zx">
+
+        <div class="uk-container uk-container-center">
+
+            <div data-zx-files-manager>
+                <files-manager v-ref="manager"></files-manager>
+            </div>
+
+        </div>
+
+    </body>
 </html>
