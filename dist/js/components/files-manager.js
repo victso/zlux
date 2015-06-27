@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -300,28 +293,37 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<div class=\"zx-files-manager\">\n\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n\n    </div>";
-	var UI = __webpack_require__(2);
+	var _ = __webpack_require__(5)
+	    var $ = __webpack_require__(24)
 
 	    module.exports = {
 
-	        data:  {
+	        replace: true,
 
-	            currentView: 'files',
+	        data:  function() {
 
-	            nav: [
-	                {title: 'Files', view: 'files'},
-	                {title: 'Uploader', view: 'uploader'}
-	            ]
+	            return {
+	                root:        '',
+	                resources:   [],
+	                cache:       {},
+	                currentRoot: '',
+	                currentView: 'resources',
+
+	                nav: [
+	                    {title: 'Files', view: 'files'},
+	                    {title: 'Uploader', view: 'uploader'}
+	                ]
+	            }
 
 	        },
 
 	        ready: function() {
 
-	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
+	            $('a[href="#"]', this.$el).on('click', function(e) {
 
 	                e.preventDefault();
 
-	            });
+	            })
 
 	        },
 
@@ -329,84 +331,56 @@
 
 	            changeView: function(view) {
 
-	                this.currentView = view;
+	                this.currentView = view
 
-	            }
-
-	        },
-
-	        components: {
-
-	            files: __webpack_require__(10),
-	            uploader: __webpack_require__(14)
-
-	        }
-
-	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
-
-/***/ },
-/* 10 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "<div v-if=\"files.length\">\n\n        <breadcrumb path=\"{{ root }}\"></breadcrumb>\n\n        <file v-repeat=\"files\"></file><table class=\"uk-table\">\n            <thead>\n                <tr>\n                    <th>File</th>\n                    <th>Size</th>\n                </tr>\n            </thead>\n            <tbody>\n                \n            </tbody>\n        </table>\n\n    </div>";
-	module.exports = {
-
-	        inherit: true,
-
-	        data: function() {
-
-	            return {
-
-	                root: '',
-	                files: [],
-	                cache: {}
-
-	            }
-
-	        },
-
-	        created: function() {
-
-	            if (!this.$http) {
-	                console.warn('vue-resource plugin not loaded');
-	                return;
-	            }
-
-	            this.fetchData('root');
-
-	        },
-
-	        methods: {
+	            },
 
 	            goTo: function(path) {
 
-	                this.fetchData(path);
+	                this.root = path
+	                this.fetch()
 
 	            },
 
-	            fetchData: function(path) {
+	            fetch: function(params) {
 
-	                if (this.cache[path]) {
+	                // if (this.cache[this.currentPath]) {
 
-	                    this.root  = path;
-	                    this.files = this.cache[path];
-	                    return;
+	                //     this.root  = path;
+	                //     this.files = this.cache[path];
+	                //     return;
 
+	                // }
+
+	                params = _.extend({
+
+	                    path : this.root
+
+	                }, (params || {}))
+
+	                console.log(params);
+
+	                this.$http.get('/files', params).done(function(response) {
+
+	                    this.root      = response.root;
+	                    this.resources = response.resources;
+
+	                    this.cache[this.root] = response;
+
+	                    // execute callback
+	                    if (_.isFunction(this.onLoadPage)) {
+	                        this.onLoadPage()
+	                    }
+
+	                })
+
+	            },
+
+	            init: function() {
+
+	                if (!this.resources.length) {
+	                    this.fetch()
 	                }
-
-	                this.$http.get('/files', {path:path}, function(response) {
-
-	                    this.root  = response.root;
-	                    this.files = response.data;
-	                    this.cache[path] = response;
-
-	                }).error(function(e) {
-
-	                    console.log(e);
-
-	                });
 
 	            }
 
@@ -414,8 +388,8 @@
 
 	        components: {
 
-	            file: __webpack_require__(11),
-	            breadcrumb: __webpack_require__(13)
+	            resources : __webpack_require__(20),
+	            uploader  : __webpack_require__(23)
 
 	        }
 
@@ -424,83 +398,8 @@
 
 
 /***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "<tr>\n\n        <td v-set-type=\"{{ type }}\">\n\n            <a href=\"#\" v-on=\"click: $parent.goTo(path)\">{{ path | basename }}</a>\n\n        </td>\n\n        <td>\n\n            {{ size | parseSize }}\n\n        </td>\n\n    </tr>";
-	var helper = __webpack_require__(12);
-
-	    module.exports = {
-
-	        data: function() {
-
-	            return {
-
-	                type: '',
-	                path: '',
-	                size: null
-
-	            }
-
-	        },
-
-	        created: function() {
-
-	            // set object type
-	            this.type = this.path.match(/\/$/) ? 'folder' : 'file';
-
-	        },
-
-	        filters: {
-
-	            basename: function(path) {
-
-	                return helper.basename(path)
-
-	                    // remove extension
-	                    .replace(/(\.\w+$)/g, '')
-
-	                    // remove dash/underscore
-	                    .replace(/(-|_)/g, ' ')
-
-	            },
-
-	            parseSize: function(size) {
-
-	                if ( ! size) return size;
-
-	                return helper.filesize( helper.parseSize(size) );
-
-	            }
-
-	        },
-
-	        directives: {
-
-	            'set-type': {
-
-	                isLiteral: true,
-
-	                bind: function () {
-
-	                    if (this.expression == 'file') {
-
-	                        $(this.el).find('a').remove();
-	                        $(this.el).append(this.vm.$options.filters.basename(this.vm.path));
-
-	                    }
-
-	                }
-
-	            }
-
-	        }
-
-	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
-
-/***/ },
+/* 10 */,
+/* 11 */,
 /* 12 */
 /***/ function(module, exports) {
 
@@ -682,82 +581,158 @@
 	}
 
 /***/ },
-/* 13 */
-/***/ function(module, exports) {
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */,
+/* 19 */,
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\" v-ifactive=\"{{ path == $parent.path }}\">\n\n            <a href=\"#\" v-on=\"click: $parent.$parent.goTo(path)\">{{ name }}</a>\n\n        </li>\n\n    </ul>";
+	var __vue_template__ = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
 	module.exports = {
 
-	        paramAttributes: ['path'],
+	        replace: true,
+	        inherit: true,
+
+	        components: {
+
+	            resource   : __webpack_require__(21),
+	            breadcrumb : __webpack_require__(22)
+
+	        }
+
+	    }
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
+	var helper = __webpack_require__(12)
+	    var $ = __webpack_require__(24)
+
+	    module.exports = {
+
+	        props: ['root', 'on-select-page'],
 
 	        data: function() {
 
 	            return {
-
-	                path: ''
-
+	                basename: '',
+	                content_type: '',
+	                ext:  '',
+	                name: '',
+	                size: ''
 	            }
 
 	        },
 
 	        computed: {
 
-	            crumbs: function() {
+	            path: function() {
+	                return this.root + '/' + this.basename
+	            },
 
-	                var parts = this.path.replace(/^[\/]|[\/]$/gm, ''), crumbs = [];
-
-	                if (parts.length > 1) {
-
-	                    var path = '/';
-
-	                    parts.split('/').forEach(function(part) {
-
-	                        crumbs.push({
-	                            'name': part,
-	                            'path': path += part + '/'
-	                        });
-
-	                    });
-
-	                }
-
-	                crumbs.unshift({
-	                    'name': 'root',
-	                    'path': '/'
-	                });
-
-	                return crumbs;
-
+	            type: function() {
+	                return this.basename.match(/\/$/) ? 'folder' : 'file'
 	            }
+
 	        },
 
-	        directives: {
+	        filters: {
 
-	            'ifactive': {
+	            title: function(value) {
 
-	                isLiteral: true,
+	                return value
 
-	                update: function () {
+	                    // remove extension
+	                    .replace(/(\/|\.\w+$)/g, '')
 
-	                    if (this.expression === true) {
+	                    // remove dash/underscore
+	                    .replace(/(-|_)/g, ' ')
 
-	                        $(this.el).addClass('uk-active').find('a').remove();
-	                        $(this.el).append($('<span />').html(this.vm.name));
+	            },
 
-	                    }
+	            parseSize: function(size) {
 
-	                }
+	                if ( ! size) return size
+
+	                return helper.filesize( helper.parseSize(size) )
+
+	            }
+
+	        },
+
+	        methods: {
+
+	            selectPage: function(e) {
+
+	                e.preventDefault()
+	                this.onSelectPage(this.path)
 
 	            }
 
 	        }
 
-	    };
+	    }
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 
 /***/ },
-/* 14 */
+/* 22 */
+/***/ function(module, exports) {
+
+	var __vue_template__ = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\">\n\n            <a href=\"#\" v-if=\"path !== root\" v-on=\"click: $parent.$parent.goTo(path)\">\n                {{ name }}\n            </a>\n\n            <span v-if=\"path === root\" class=\"uk-active\">\n                {{ name }}\n            </span>\n\n        </li>\n\n    </ul>";
+	module.exports = {
+
+	        replace: true,
+	        props: ['root'],
+
+	        computed: {
+
+	            crumbs: function() {
+
+	                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = []
+
+	                if (parts.length > 1) {
+
+	                    var path = '/'
+
+	                    parts.forEach(function(part) {
+
+	                        crumbs.push({
+	                            'name': part,
+	                            'path': path += part + '/'
+	                        })
+
+	                    })
+
+	                } else {
+	                    this.root = '/'
+	                }
+
+	                crumbs.unshift({
+	                    'name': 'root',
+	                    'path': '/'
+	                })
+
+	                return crumbs
+
+	            }
+
+	        }
+
+	    }
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 23 */
 /***/ function(module, exports) {
 
 	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
@@ -768,6 +743,12 @@
 	    };
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
+
+/***/ },
+/* 24 */
+/***/ function(module, exports) {
+
+	module.exports = jQuery;
 
 /***/ }
 /******/ ]);

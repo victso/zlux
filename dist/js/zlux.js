@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("UIkit"));
@@ -61,9 +54,15 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _  = __webpack_require__(3)
 	var UI = __webpack_require__(2)
+	var _  = __webpack_require__(3)
 	var extend = _.extend
+
+	if (!UI) {
+	    throw new Error('UIkit library is missing');
+	}
+
+	var $ = UI.$
 
 	var ZX = {
 	    version: '2.0.3',
@@ -73,7 +72,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	UI.ready(function() {
 
 	    // style workaround, wrapp dragging elements with zx class
-	    UI.$('body').on('start.uk.nestable, start.uk.sortable', function() {
+	    $('body').on('start.uk.nestable, start.uk.sortable', function() {
 	        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />')
 	    })
 

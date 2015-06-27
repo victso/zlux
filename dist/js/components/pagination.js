@@ -56,7 +56,7 @@
 
 	    install: function (Vue) {
 
-	        Vue.component('pagination', __webpack_require__(18))
+	        Vue.component('pagination', __webpack_require__(19))
 
 	    }
 
@@ -73,7 +73,7 @@
 
 /***/ },
 
-/***/ 18:
+/***/ 19:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
@@ -221,7 +221,7 @@
 
 	        components: {
 
-	            'page': __webpack_require__(19)
+	            'page': __webpack_require__(20)
 
 	        }
 
@@ -231,7 +231,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 20:
 /***/ function(module, exports) {
 
 	var __vue_template__ = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent &amp;&amp; href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";

@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -71,6 +64,7 @@
 	    }
 
 	})
+
 
 /***/ },
 /* 1 */,
@@ -307,7 +301,6 @@
 
 	var __vue_template__ = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
 	var _ = __webpack_require__(5)
-	    var UI = __webpack_require__(2)
 
 	    module.exports = {
 
