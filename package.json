@@ -37,10 +37,8 @@
     "vue-loader": "^1.1.6",
     "webpack": "^1.9.9",
     "eslint": "^0.24.0",
-    "eslint-plugin-html": "^1.0.1",
-    "gulp-run": "^1.6.8"
-  },
-  "dependencies": {
+    "eslint-plugin-vue": "git+ssh://git@github.com:miljan-aleksic/eslint-plugin-vue",
+    "gulp-run": "^1.6.8",
     "strict-loader": "^0.1.2"
   }
 }

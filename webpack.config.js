@@ -3,8 +3,8 @@ module.exports = [{
         './dist/js/zlux': './src/js/zlux'
     },
     output: {
-        filename: './[name].js',
-        library: 'zlux',
+        filename     : './[name].js',
+        library      : 'zlux',
         libraryTarget: 'umd'
     },
     externals: {
@@ -14,21 +14,21 @@ module.exports = [{
     },
     module: {
         loaders: [{
-            test: /\.vue$/,
+            test  : /\.vue$/,
             loader: 'vue'
         },
         {
-            test: /\.js$/,
+            test  : /\.js$/,
             loader: 'strict'
         }]
     }
-},{
+}, {
     entry: {
         './dist/js/components/files-manager': './src/js/components/files-manager',
         './dist/js/components/items-manager': './src/js/components/items-manager',
-        './dist/js/components/pagination': './src/js/components/pagination',
-        './dist/js/components/calendar': './src/js/components/calendar',
-        './dist/js/components/notify': './src/js/components/notify'
+        './dist/js/components/pagination'   : './src/js/components/pagination',
+        './dist/js/components/calendar'     : './src/js/components/calendar',
+        './dist/js/components/notify'       : './src/js/components/notify'
     },
     output: {
         filename: './[name].js'
@@ -42,12 +42,12 @@ module.exports = [{
     },
     module: {
         loaders: [{
-            test: /\.vue$/,
+            test  : /\.vue$/,
             loader: 'vue'
         },
         {
-            test: /\.js$/,
+            test  : /\.js$/,
             loader: 'strict'
         }]
     }
-}]
+}];
