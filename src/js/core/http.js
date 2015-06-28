@@ -1,4 +1,4 @@
-module.exports = function (ZX) {
+module.exports = function () {
 
     var _ = require('../util');
     var UI = require('uikit');
@@ -14,15 +14,15 @@ module.exports = function (ZX) {
 
     function Http(url, settings) {
 
-        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]};
+        var self = this, deferred = UI.$.Deferred(), response = {success: true, errors: [], notices: []};
 
         settings = settings || {};
 
         // queue = settings.queue ? settings.queue : null,
         // delete settings.queue
 
-        if (config.routes_map[url]) {
-            url = config.routes_map[url];
+        if (config.routesMap[url]) {
+            url = config.routesMap[url];
         }
 
         settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
@@ -42,15 +42,20 @@ module.exports = function (ZX) {
         .fail(function(jqxhr, status, error) {
 
             parseReq(response, status, jqxhr);
+            _.log(error);
             _.log(response.errors);
 
         })
 
         .always(function() {
 
-            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response]);
+            if (response.success) {
+                deferred.resolveWith(self, [response]);
+            } else {
+                deferred.rejectWith(self, [response]);
+            }
 
-        })
+        });
 
         return deferred.promise();
 
@@ -58,7 +63,7 @@ module.exports = function (ZX) {
 
     function parseReq(response, status, jqxhr) {
 
-        if (status == 'error') {
+        if (status === 'error') {
 
             switch (jqxhr.status) {
                 case 0: // if request canceled no error is logged
@@ -74,7 +79,7 @@ module.exports = function (ZX) {
                     break;
 
                 default:
-                    response.errors.push('An ' + status + ' occurred: ' + error);
+                    response.errors.push('An ' + status + ' occurred.');
                     break;
             }
 
@@ -82,7 +87,7 @@ module.exports = function (ZX) {
 
         }
 
-        if (status == 'parsererror') {
+        if (status === 'parsererror') {
 
             response.errors.push('Response format error: JSON parse error');
             response.success = false;

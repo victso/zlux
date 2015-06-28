@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("UIkit"));
@@ -14,7 +7,7 @@
 		exports["zlux"] = factory(require("UIkit"));
 	else
 		root["zlux"] = factory(root["UIkit"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_2__) {
+})(this, function(__WEBPACK_EXTERNAL_MODULE_6__) {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -63,8 +56,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var UI = __webpack_require__(2);
-	var _ = __webpack_require__(3);
+	var UI = __webpack_require__(6);
+	var _ = __webpack_require__(2);
 	var extend = _.extend;
 
 	if (!UI) {
@@ -75,7 +68,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	var ZX = {
 	    version: '2.0.3',
-	    config : __webpack_require__(6)
+	    config : __webpack_require__(5)
 	};
 
 	UI.ready(function() {
@@ -111,8 +104,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var UI = __webpack_require__(2);
-	var ZX = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"zlux\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+	var _ = __webpack_require__(2);
+	var UI = __webpack_require__(6);
+	var ZX = _.zlux;
 
 	exports.modal = {
 
@@ -161,13 +155,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var modal = UI.$.UIkit.modal.dialog(([
 	           '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
-	           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
-	        ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options))
+	           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">' + ZX.lang.get('Ok') + '</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
+	       ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options));
 
-	        modal.element.find(".js-modal-confirm").on("click", function(){
+	        modal.element.find('.js-modal-confirm').on('click', function(){
 	           onconfirm();
 	           modal.hide();
-	       });
+	        });
 
 	        modal.show();
 
@@ -179,25 +173,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ },
 /* 2 */
-/***/ function(module, exports) {
-
-	module.exports = __WEBPACK_EXTERNAL_MODULE_2__;
-
-/***/ },
-/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(4);
+	var lang = __webpack_require__(3);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(5));
+	extend(exports, __webpack_require__(4));
 
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -291,12 +279,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(6);
+	var config = __webpack_require__(5);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -344,7 +332,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 6 */
+/* 5 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -411,13 +399,19 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
+
+/***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(3);
-	var UI = __webpack_require__(2);
+	var _ = __webpack_require__(2);
+	var UI = __webpack_require__(6);
 	var ZX = _.zlux;
 
 	exports.extensions = {};
@@ -660,7 +654,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _ = __webpack_require__(3);
+	var _ = __webpack_require__(2);
 
 	exports.lang = {
 
@@ -711,11 +705,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	module.exports = function (ZX) {
+	module.exports = function () {
 
-	    var _ = __webpack_require__(3);
-	    var UI = __webpack_require__(2);
-	    var config = __webpack_require__(6);
+	    var _ = __webpack_require__(2);
+	    var UI = __webpack_require__(6);
+	    var config = __webpack_require__(5);
 
 	    /**
 	     * Http request as jQuery ajax wrapper
@@ -727,15 +721,15 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function Http(url, settings) {
 
-	        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]};
+	        var self = this, deferred = UI.$.Deferred(), response = {success: true, errors: [], notices: []};
 
 	        settings = settings || {};
 
 	        // queue = settings.queue ? settings.queue : null,
 	        // delete settings.queue
 
-	        if (config.routes_map[url]) {
-	            url = config.routes_map[url];
+	        if (config.routesMap[url]) {
+	            url = config.routesMap[url];
 	        }
 
 	        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
@@ -755,15 +749,20 @@ return /******/ (function(modules) { // webpackBootstrap
 	        .fail(function(jqxhr, status, error) {
 
 	            parseReq(response, status, jqxhr);
+	            _.log(error);
 	            _.log(response.errors);
 
 	        })
 
 	        .always(function() {
 
-	            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response]);
+	            if (response.success) {
+	                deferred.resolveWith(self, [response]);
+	            } else {
+	                deferred.rejectWith(self, [response]);
+	            }
 
-	        })
+	        });
 
 	        return deferred.promise();
 
@@ -771,7 +770,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function parseReq(response, status, jqxhr) {
 
-	        if (status == 'error') {
+	        if (status === 'error') {
 
 	            switch (jqxhr.status) {
 	                case 0: // if request canceled no error is logged
@@ -787,7 +786,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    break;
 
 	                default:
-	                    response.errors.push('An ' + status + ' occurred: ' + error);
+	                    response.errors.push('An ' + status + ' occurred.');
 	                    break;
 	            }
 
@@ -795,7 +794,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        }
 
-	        if (status == 'parsererror') {
+	        if (status === 'parsererror') {
 
 	            response.errors.push('Response format error: JSON parse error');
 	            response.success = false;
@@ -1006,7 +1005,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var UI = __webpack_require__(2);
+	var UI = __webpack_require__(6);
 
 	module.exports = function(ZX) {
 
@@ -1062,7 +1061,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var UI = __webpack_require__(2)
+	var UI = __webpack_require__(6)
 
 	module.exports = function(ZX) {
 
@@ -1137,7 +1136,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	'use strict';
 
-	var _  = __webpack_require__(3);
+	var _  = __webpack_require__(2);
 	var http = __webpack_require__(9)();
 
 	var vueZlux = {

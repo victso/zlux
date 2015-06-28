@@ -1,7 +1,6 @@
 <script>
 
     var helper = require('../helper.js');
-    var $ = require("jquery");
 
     module.exports = {
 

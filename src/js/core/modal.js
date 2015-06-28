@@ -1,5 +1,6 @@
+var _ = require('../util');
 var UI = require('uikit');
-var ZX = require('zlux');
+var ZX = _.zlux;
 
 exports.modal = {
 
@@ -48,13 +49,13 @@ exports.modal = {
 
         var modal = UI.$.UIkit.modal.dialog(([
            '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
-           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
-        ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options))
+           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">' + ZX.lang.get('Ok') + '</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
+       ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options));
 
-        modal.element.find(".js-modal-confirm").on("click", function(){
+        modal.element.find('.js-modal-confirm').on('click', function(){
            onconfirm();
            modal.hide();
-       });
+        });
 
         modal.show();
 

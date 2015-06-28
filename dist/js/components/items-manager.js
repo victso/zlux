@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -53,8 +46,8 @@
 
 	'use strict';
 
-	var UI = __webpack_require__(2);
-	var _ = __webpack_require__(5);
+	var UI = __webpack_require__(13);
+	var _ = __webpack_require__(18);
 
 	UI.component('zx-items-manager', {
 
@@ -66,7 +59,7 @@
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('items-manager', __webpack_require__(16));
+	        Vue.component('items-manager', __webpack_require__(39));
 
 	    }
 
@@ -75,28 +68,41 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(6);
+	var lang = __webpack_require__(19);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(7));
+	extend(exports, __webpack_require__(20));
 
 
 /***/ },
-/* 6 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -190,12 +196,12 @@
 
 
 /***/ },
-/* 7 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(8);
+	var config = __webpack_require__(21);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -243,7 +249,7 @@
 
 
 /***/ },
-/* 8 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -310,18 +316,34 @@
 
 
 /***/ },
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */
+/* 22 */,
+/* 23 */,
+/* 24 */,
+/* 25 */,
+/* 26 */,
+/* 27 */,
+/* 28 */,
+/* 29 */,
+/* 30 */,
+/* 31 */,
+/* 32 */,
+/* 33 */,
+/* 34 */,
+/* 35 */,
+/* 36 */,
+/* 37 */,
+/* 38 */,
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
-	var _ = __webpack_require__(5);
+	module.exports = __webpack_require__(40)
+	module.exports.template = __webpack_require__(47)
+
+/***/ },
+/* 40 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(18);
 
 	    module.exports = {
 
@@ -474,19 +496,23 @@
 
 	        components: {
 
-	            items: __webpack_require__(17)
+	            items: __webpack_require__(41)
 
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 17 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.name | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\" v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            </tr><tr>\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\" on-select=\"{{ onSelectItem }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n\n    </table>";
+	module.exports = __webpack_require__(42)
+	module.exports.template = __webpack_require__(46)
+
+/***/ },
+/* 42 */
+/***/ function(module, exports, __webpack_require__) {
+
 	module.exports = {
 
 	        inherit: true,
@@ -494,20 +520,24 @@
 
 	        components: {
 
-	            item: __webpack_require__(18)
+	            item: __webpack_require__(43)
 
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 18 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"col: columns\">\n\n            {{ $key | property }}\n\n        </td>\n\n    </tr>";
-	var _ = __webpack_require__(5);
+	module.exports = __webpack_require__(44)
+	module.exports.template = __webpack_require__(45)
+
+/***/ },
+/* 44 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(18);
 
 	    module.exports = {
 
@@ -560,8 +590,24 @@
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
+/***/ },
+/* 45 */
+/***/ function(module, exports) {
+
+	module.exports = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"col: columns\">\n\n            {{ $key | property }}\n\n        </td>\n\n    </tr>";
+
+/***/ },
+/* 46 */
+/***/ function(module, exports) {
+
+	module.exports = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.name | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\"\n                            v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            <tr>\n        </thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\" on-select=\"{{ onSelectItem }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n\n    </table>";
+
+/***/ },
+/* 47 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
 
 /***/ }
 /******/ ]);

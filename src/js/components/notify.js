@@ -1,5 +1,6 @@
+var _ = require('../util');
 var UI = require('uikit');
-var ZX = require('zlux');
+var ZX = _.zlux;
 var $ = require('jquery');
 
 var notify = function(msg, options){
@@ -20,17 +21,18 @@ confirm = function(msg, options){
 
     return $.Deferred(function( defer )
     {
-        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
-                <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
-                <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
-            </div>',
+        ZX.notify(msg +
+            '<div class="uk-text-center uk-margin-top">' +
+                '<a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>' +
+                '<a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>' +
+            '</div>',
         options);
 
-        notify.element.on('click', '.zx-x-confirm', function(e, b){
+        notify.element.on('click', '.zx-x-confirm', function(){
             defer.resolve();
         });
 
-        notify.element.on('click', function(e, b){
+        notify.element.on('click', function(){
             defer.reject();
         });
 
@@ -42,6 +44,6 @@ closeAll = function(group, instantly){
     return this;
 };
 
-ZX.notify             = notify;
-ZX.notify.confirm     = confirm;
-ZX.notify.closeAll    = closeAll;
+ZX.notify = notify;
+ZX.notify.confirm = confirm;
+ZX.notify.closeAll = closeAll;

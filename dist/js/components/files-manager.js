@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -53,8 +46,8 @@
 
 	'use strict';
 
-	var UI = __webpack_require__(2);
-	var _ = __webpack_require__(5);
+	var UI = __webpack_require__(13);
+	var _ = __webpack_require__(18);
 
 	UI.component('zx-files-manager', {
 
@@ -66,7 +59,7 @@
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('files-manager', __webpack_require__(9));
+	        Vue.component('files-manager', __webpack_require__(22));
 
 	    }
 
@@ -75,28 +68,41 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */,
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 14 */,
+/* 15 */,
+/* 16 */,
+/* 17 */,
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(6);
+	var lang = __webpack_require__(19);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(7));
+	extend(exports, __webpack_require__(20));
 
 
 /***/ },
-/* 6 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -190,12 +196,12 @@
 
 
 /***/ },
-/* 7 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(8);
+	var config = __webpack_require__(21);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -243,7 +249,7 @@
 
 
 /***/ },
-/* 8 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -310,12 +316,18 @@
 
 
 /***/ },
-/* 9 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<div class=\"zx-files-manager\">\n\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n\n    </div>";
-	var _ = __webpack_require__(5);
-	    var $ = __webpack_require__(10);
+	module.exports = __webpack_require__(23)
+	module.exports.template = __webpack_require__(38)
+
+/***/ },
+/* 23 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(18);
+	    var $ = __webpack_require__(24);
 
 	    module.exports = {
 
@@ -407,26 +419,30 @@
 
 	        components: {
 
-	            resources: __webpack_require__(11),
-	            uploader : __webpack_require__(15)
+	            resources: __webpack_require__(25),
+	            uploader : __webpack_require__(35)
 
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 10 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit.$;
 
 /***/ },
-/* 11 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+	module.exports = __webpack_require__(26)
+	module.exports.template = __webpack_require__(34)
+
+/***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
 	module.exports = {
 
 	        replace: true,
@@ -434,22 +450,25 @@
 
 	        components: {
 
-	            resource  : __webpack_require__(12),
-	            breadcrumb: __webpack_require__(14)
+	            resource  : __webpack_require__(27),
+	            breadcrumb: __webpack_require__(31)
 
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 12 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
-	var helper = __webpack_require__(13);
-	    var $ = __webpack_require__(10);
+	module.exports = __webpack_require__(28)
+	module.exports.template = __webpack_require__(30)
+
+/***/ },
+/* 28 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(29);
 
 	    module.exports = {
 
@@ -517,11 +536,9 @@
 	        }
 
 	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 13 */
+/* 29 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -596,7 +613,7 @@
 	    var e, base, bits, ceil, neg, num, output, round, unix, spacer, suffixes;
 
 	    if (isNaN(arg)) {
-	        throw new Error('Invalid arguments')
+	        throw new Error('Invalid arguments');
 	    }
 
 	    bits = descriptor.bits === true;
@@ -697,10 +714,22 @@
 
 
 /***/ },
-/* 14 */
+/* 30 */
 /***/ function(module, exports) {
 
-	var __vue_template__ = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\">\n\n            <a href=\"#\" v-if=\"path !== root\" v-on=\"click: $parent.$parent.goTo(path)\">\n                {{ name }}\n            </a>\n\n            <span v-if=\"path === root\" class=\"uk-active\">\n                {{ name }}\n            </span>\n\n        </li>\n\n    </ul>";
+	module.exports = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
+
+/***/ },
+/* 31 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(32)
+	module.exports.template = __webpack_require__(33)
+
+/***/ },
+/* 32 */
+/***/ function(module, exports) {
+
 	module.exports = {
 
 	        replace: true,
@@ -741,19 +770,45 @@
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 15 */
+/* 33 */
 /***/ function(module, exports) {
 
-	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
+	module.exports = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\">\n\n            <a href=\"#\" v-if=\"path !== root\" v-on=\"click: $parent.$parent.goTo(path)\">\n                {{ name }}\n            </a>\n\n            <span v-if=\"path === root\" class=\"uk-active\">\n                {{ name }}\n            </span>\n\n        </li>\n\n    </ul>";
+
+/***/ },
+/* 34 */
+/***/ function(module, exports) {
+
+	module.exports = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(36)
+	module.exports.template = __webpack_require__(37)
+
+/***/ },
+/* 36 */
+/***/ function(module, exports) {
+
 	module.exports = {
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
+/***/ },
+/* 37 */
+/***/ function(module, exports) {
+
+	module.exports = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
+
+/***/ },
+/* 38 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n\n    </div>";
 
 /***/ }
 /******/ ]);

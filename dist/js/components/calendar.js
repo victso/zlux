@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -53,8 +46,8 @@
 
 	'use strict';
 
-	var Vue = __webpack_require__(1);
-	var UI = __webpack_require__(2);
+	var Vue = __webpack_require__(12);
+	var UI = __webpack_require__(13);
 
 	UI.component('zx-calendar', {
 
@@ -67,7 +60,7 @@
 
 	                if (!this.__vue__) {
 
-	                    new Vue(__webpack_require__(3)).$mount(this);
+	                    new Vue(__webpack_require__(14)).$mount(this);
 
 	                }
 
@@ -81,24 +74,41 @@
 
 
 /***/ },
-/* 1 */
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */,
+/* 12 */
 /***/ function(module, exports) {
 
 	module.exports = Vue;
 
 /***/ },
-/* 2 */
+/* 13 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 3 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<table class=\"uk-datepicker-table\">\n\n        <thead>\n    \n            <tr><th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-repeat=\"week: rows.days\">\n\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate &amp;&amp; day.day > maxDate,\n                        zx-calendar-inactive: minDate &amp;&amp; minDate > day.day\n\n                    \">\n\n                        {{ day.day.format(\"D\") }}\n\n                    </a>\n\n                </td>\n\n            </tr>\n\n\n        </tbody>\n\n    </table>";
-	var UI = __webpack_require__(2);
-	    var moment = __webpack_require__(4);
+	module.exports = __webpack_require__(15)
+	module.exports.template = __webpack_require__(17)
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var UI = __webpack_require__(13);
+	    var moment = __webpack_require__(16);
 
 	    module.exports = {
 
@@ -251,14 +261,18 @@
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
-/* 4 */
+/* 16 */
 /***/ function(module, exports) {
 
 	module.exports = moment;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = "<table class=\"uk-datepicker-table\">\n\n        <thead>\n    \n            <th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n\n        </thead>\n\n        <tbody>\n\n            <tr v-repeat=\"week: rows.days\">\n\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate && day.day > maxDate,\n                        zx-calendar-inactive: minDate && minDate > day.day\n\n                    \">\n\n                        {{ day.day.format(\"D\") }}\n\n                    </a>\n\n                </td>\n\n            </tr>\n\n\n        </tbody>\n\n    </table>";
 
 /***/ }
 /******/ ]);

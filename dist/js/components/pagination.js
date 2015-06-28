@@ -1,10 +1,3 @@
-/**
- * @package     zlux
- * @version     2.0.3
- * @author      ZOOlanders - http://zoolanders.com
- * @license     GNU General Public License v2 or later
- */
-
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -58,7 +51,7 @@
 
 	    install: function (Vue) {
 
-	        Vue.component('pagination', __webpack_require__(20));
+	        Vue.component('pagination', __webpack_require__(48));
 
 	    }
 
@@ -71,18 +64,25 @@
 
 /***/ },
 
-/***/ 2:
+/***/ 13:
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
 
-/***/ 20:
+/***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
-	var __vue_template__ = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
-	var UI = __webpack_require__(2);
+	module.exports = __webpack_require__(49)
+	module.exports.template = __webpack_require__(53)
+
+/***/ },
+
+/***/ 49:
+/***/ function(module, exports, __webpack_require__) {
+
+	var UI = __webpack_require__(13);
 
 	    module.exports = {
 
@@ -225,20 +225,25 @@
 
 	        components: {
 
-	            'page': __webpack_require__(21)
+	            'page': __webpack_require__(50)
 
 	        }
 
 	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
 
 /***/ },
 
-/***/ 21:
+/***/ 50:
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(51)
+	module.exports.template = __webpack_require__(52)
+
+/***/ },
+
+/***/ 51:
 /***/ function(module, exports) {
 
-	var __vue_template__ = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent &amp;&amp; href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
 	module.exports = {
 
 	        replace: true,
@@ -289,8 +294,20 @@
 	        }
 
 	    };
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
+/***/ },
+
+/***/ 52:
+/***/ function(module, exports) {
+
+	module.exports = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent && href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
+
+/***/ },
+
+/***/ 53:
+/***/ function(module, exports) {
+
+	module.exports = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
 
 /***/ }
 

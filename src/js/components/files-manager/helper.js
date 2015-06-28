@@ -68,7 +68,7 @@ exports.filesize = function(arg) {
     var e, base, bits, ceil, neg, num, output, round, unix, spacer, suffixes;
 
     if (isNaN(arg)) {
-        throw new Error('Invalid arguments')
+        throw new Error('Invalid arguments');
     }
 
     bits = descriptor.bits === true;
