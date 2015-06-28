@@ -1,4 +1,4 @@
-var UI = require('uikit')
+var UI = require('uikit');
 
 module.exports = function(ZX) {
 
@@ -11,13 +11,15 @@ module.exports = function(ZX) {
             animation = 'zx-animate-' + UI.$.trim(options[0]),
 
             // set callback
-            callback = options[1] ? options[1] : null
+            callback = options[1] ? options[1] : null;
 
             // animate
             $this.animate(animation).done(function(){
 
                 // execute any callback passing the element as scope
-                if (callback) callback.apply($this.element)
+                if (callback) {
+                    callback.apply($this.element);
+                }
 
             });
         },
@@ -31,16 +33,16 @@ module.exports = function(ZX) {
                 $this.element.addClass(animation)
 
                 // when done
-                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
+                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
 
                     // remove the class to allow further animation
-                    $this.element.removeClass(animation)
-                    defer.resolve()
+                    $this.element.removeClass(animation);
+                    defer.resolve();
 
                 });
 
-            }).promise()
+            }).promise();
         }
-    })
+    });
 
-}
+};

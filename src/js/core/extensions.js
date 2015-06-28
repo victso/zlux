@@ -1,6 +1,6 @@
-var _  = require('../util')
-var UI = require('uikit')
-var ZX = _.zlux
+var _ = require('../util');
+var UI = require('uikit');
+var ZX = _.zlux;
 
 exports.extensions = {};
 

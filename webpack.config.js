@@ -16,6 +16,10 @@ module.exports = [{
         loaders: [{
             test: /\.vue$/,
             loader: 'vue'
+        },
+        {
+            test: /\.js$/,
+            loader: 'strict'
         }]
     }
 },{
@@ -40,6 +44,10 @@ module.exports = [{
         loaders: [{
             test: /\.vue$/,
             loader: 'vue'
+        },
+        {
+            test: /\.js$/,
+            loader: 'strict'
         }]
     }
 }]

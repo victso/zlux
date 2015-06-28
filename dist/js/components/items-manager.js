@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -44,26 +51,26 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var UI = __webpack_require__(2)
-	var _ = __webpack_require__(5)
+	var UI = __webpack_require__(2);
+	var _ = __webpack_require__(5);
 
 	UI.component('zx-items-manager', {
 
 	    boot: function() {
 
 	        if (!window.Vue) {
-	            _.warn('Vue not loaded but required by Items Manager')
-	            return
+	            _.warn('Vue not loaded but required by Items Manager');
+	            return;
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('items-manager', __webpack_require__(15))
+	        Vue.component('items-manager', __webpack_require__(16));
 
 	    }
 
-	})
+	});
 
 
 /***/ },
@@ -79,17 +86,22 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var lang   = __webpack_require__(6)
-	var extend = lang.extend
+	'use strict';
 
-	extend(exports, lang)
-	extend(exports, __webpack_require__(7))
+	var lang = __webpack_require__(6);
+	var extend = lang.extend;
+
+	extend(exports, lang);
+	extend(exports, __webpack_require__(7));
+
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	var _ = this
+	'use strict';
+
+	var _ = this;
 
 	/**
 	 * Mix properties into target object.
@@ -100,32 +112,32 @@
 
 	exports.extend = function (target) {
 
-	    var array = [], args = array.slice.call(arguments, 1), deep
+	    var array = [], args = array.slice.call(arguments, 1), deep;
 
-	    if (typeof target == 'boolean') {
-	        deep = target
-	        target = args.shift()
+	    if (typeof target === 'boolean') {
+	        deep = target;
+	        target = args.shift();
 	    }
 
 	    args.forEach(function (arg) {
-	        extend(target, arg, deep)
-	    })
+	        extend(target, arg, deep); // eslint-disable-line
+	    });
 
-	    return target
-	}
+	    return target;
+	};
 
 	function extend (target, source, deep) {
 	    for (var key in source) {
 	        if (deep && (_.isPlainObject(source[key]) || _.isArray(source[key]))) {
 	            if (_.isPlainObject(source[key]) && !_.isPlainObject(target[key])) {
-	                target[key] = {}
+	                target[key] = {};
 	            }
 	            if (_.isArray(source[key]) && !_.isArray(target[key])) {
 	                target[key] = [];
 	            }
-	            extend(target[key], source[key], deep)
+	            extend(target[key], source[key], deep);
 	        } else if (source[key] !== undefined) {
-	            target[key] = source[key]
+	            target[key] = source[key];
 	        }
 	    }
 	}
@@ -138,8 +150,8 @@
 	 */
 
 	exports.typeOf = function(obj) {
-	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase()
-	}
+	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
+	};
 
 	/**
 	 * Check if Object is a function
@@ -149,8 +161,8 @@
 	 */
 
 	exports.isFunction = function (obj) {
-	    return obj && this.typeOf(obj) === 'function'
-	}
+	    return obj && this.typeOf(obj) === 'function';
+	};
 
 	/**
 	 * Array type check.
@@ -160,8 +172,8 @@
 	 */
 
 	exports.isArray = function (obj) {
-	    return Array.isArray(obj)
-	}
+	    return Array.isArray(obj);
+	};
 
 	/**
 	 * Strict object type check. Only returns true
@@ -171,16 +183,19 @@
 	 * @return {Boolean}
 	 */
 
-	var toString = Object.prototype.toString
+	var toString = Object.prototype.toString; // eslint-disable-line
 	exports.isPlainObject = function (obj) {
-	    return toString.call(obj) === '[object Object]'
-	}
+	    return toString.call(obj) === '[object Object]';
+	};
+
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var config = __webpack_require__(8)
+	'use strict';
+
+	var config = __webpack_require__(8);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -188,11 +203,11 @@
 	 * minified production build.
 	 */
 
-	enableDebug()
+	/* eslint-disable no-console */
 
 	function enableDebug () {
 
-	    var hasConsole = typeof console !== 'undefined'
+	    var hasConsole = typeof console !== 'undefined';
 
 	    /**
 	     * Log a message.
@@ -202,9 +217,9 @@
 
 	    exports.log = function(msg) {
 	        if (hasConsole && config.debug) {
-	            console.log('[ZLUX info]: ' + msg)
+	            console.log('[ZLUX info]: ' + msg);
 	        }
-	    }
+	    };
 
 	    /**
 	     * We've got a problem here.
@@ -214,20 +229,24 @@
 
 	    exports.warn = function(msg) {
 	        if (hasConsole && (!config.silent || config.debug)) {
-	            console.warn('[ZLUX warn]: ' + msg)
-	                /* istanbul ignore if */
+	            console.warn('[ZLUX warn]: ' + msg);
+
 	            if (config.debug) {
-	                /* jshint debug: true */
-	                debugger
+	                debugger; // eslint-disable-line
 	            }
 	        }
-	    }
+	    };
 
 	}
+
+	enableDebug();
+
 
 /***/ },
 /* 8 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	module.exports = {
 
@@ -253,7 +272,7 @@
 	     * @type {Object}
 	     */
 
-	    routes_map: {},
+	    routesMap: {},
 
 	    /**
 	     * The token number.
@@ -287,7 +306,8 @@
 
 	    silent: false
 
-	}
+	};
+
 
 /***/ },
 /* 9 */,
@@ -296,11 +316,12 @@
 /* 12 */,
 /* 13 */,
 /* 14 */,
-/* 15 */
+/* 15 */,
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
-	var _ = __webpack_require__(5)
+	var _ = __webpack_require__(5);
 
 	    module.exports = {
 
@@ -308,7 +329,7 @@
 
 	        props: ['on-select-item', 'on-load-page', 'filters'],
 
-	        data:  function() {
+	        data: function() {
 
 	            return {
 
@@ -316,26 +337,26 @@
 	                    search: ''
 	                },
 
-	                items           : [],
-	                columns         : [],
-	                itemsPerPage    : 10,
-	                currentPage     : 1,
-	                total           : 0,
-	                count           : 0,
-	                offset          : 0,
-	                orderKey        : '_itemname',
-	                reversed        : {},
+	                items       : [],
+	                columns     : [],
+	                itemsPerPage: 10,
+	                currentPage : 1,
+	                total       : 0,
+	                count       : 0,
+	                offset      : 0,
+	                orderKey    : '_itemname',
+	                reversed    : {},
 
 	                filters: {
-	                    name        : '',
-	                    apps        : [],
-	                    types       : [],
-	                    categories  : [],
-	                    tags        : [],
-	                    authors     : []
+	                    name      : '',
+	                    apps      : [],
+	                    types     : [],
+	                    categories: [],
+	                    tags      : [],
+	                    authors   : []
 	                }
 
-	            }
+	            };
 
 	        },
 
@@ -343,18 +364,18 @@
 
 	            this.$watch('nav.search', function(value, oldValue) {
 
-	                if (oldValue == '') {
+	                if (oldValue === '') {
 
 	                    // on first time search reset pagination
-	                    this.$set('currentPage', 0)
+	                    this.$set('currentPage', 0);
 
 	                }
 
-	                this.search()
+	                this.search();
 
-	            })
+	            });
 
-	            this.$set('currentPage', this.currentPage - 1)
+	            this.$set('currentPage', this.currentPage - 1);
 
 	        },
 
@@ -362,13 +383,13 @@
 
 	            order: function() {
 
-	                var order = [this.orderKey]
+	                var order = [this.orderKey];
 
 	                if (this.reversed[this.orderKey]) {
-	                    order.push('_reversed')
+	                    order.push('_reversed');
 	                }
 
-	                return order
+	                return order;
 
 	            },
 
@@ -376,7 +397,7 @@
 
 	                return _.extend({}, this.filters, {
 	                    name: this.nav.search
-	                })
+	                });
 
 	            }
 
@@ -388,27 +409,27 @@
 
 	                params = _.extend({
 
-	                    offset : this.currentPage * this.itemsPerPage,
-	                    limit  : this.itemsPerPage,
-	                    order  : this.order,
-	                    filter : this.filter
+	                    offset: this.currentPage * this.itemsPerPage,
+	                    limit : this.itemsPerPage,
+	                    order : this.order,
+	                    filter: this.filter
 
-	                }, (params || {}))
+	                }, (params || {}));
 
 	                this.$http.get('/items', params).done(function(response) {
 
-	                    this.columns = response.columns
-	                    this.items   = response.items
-	                    this.total   = response.total
-	                    this.count   = response.count
-	                    this.offset  = response.offset
+	                    this.columns = response.columns;
+	                    this.items = response.items;
+	                    this.total = response.total;
+	                    this.count = response.count;
+	                    this.offset = response.offset;
 
 	                    // execute callback
 	                    if (_.isFunction(this.onLoadPage)) {
-	                        this.onLoadPage()
+	                        this.onLoadPage();
 	                    }
 
-	                })
+	                });
 
 	            },
 
@@ -416,8 +437,8 @@
 
 	                if (key) {
 
-	                    this.reversed[key] = !this.reversed[key]
-	                    this.fetchData()
+	                    this.reversed[key] = !this.reversed[key];
+	                    this.fetchData();
 
 	                }
 
@@ -425,24 +446,27 @@
 
 	            search: function(e) {
 
-	                e && e.preventDefault()
-	                this.fetchData()
-	                this.searching = false
+	                if (e) {
+	                    e.preventDefault();
+	                }
+
+	                this.fetchData();
+	                this.searching = false;
 
 	            },
 
 	            clearSearch: function() {
 
-	                this.nav.$set('search', '')
-	                this.fetchData()
-	                this.searching = false
+	                this.nav.$set('search', '');
+	                this.fetchData();
+	                this.searching = false;
 
 	            },
 
 	            changePage: function(index) {
 
-	                this.currentPage = index
-	                this.fetchData()
+	                this.currentPage = index;
+	                this.fetchData();
 
 	            }
 
@@ -450,33 +474,11 @@
 
 	        components: {
 
-	            items: __webpack_require__(16)
+	            items: __webpack_require__(17)
 
 	        }
 
-	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
-
-/***/ },
-/* 16 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.name | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\" v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            </tr><tr>\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\" on-select=\"{{ onSelectItem }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n\n    </table>";
-	var UI = __webpack_require__(2)
-
-	    module.exports = {
-
-	        inherit: true,
-	        replace: true,
-
-	        components: {
-
-	            item: __webpack_require__(17)
-
-	        }
-
-	    }
+	    };
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 
@@ -484,8 +486,28 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var __vue_template__ = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.name | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\" v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            </tr><tr>\n        </tr></thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\" on-select=\"{{ onSelectItem }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n\n    </table>";
+	module.exports = {
+
+	        inherit: true,
+	        replace: true,
+
+	        components: {
+
+	            item: __webpack_require__(18)
+
+	        }
+
+	    };
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var __vue_template__ = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"col: columns\">\n\n            {{ $key | property }}\n\n        </td>\n\n    </tr>";
-	var _ = __webpack_require__(5)
+	var _ = __webpack_require__(5);
 
 	    module.exports = {
 
@@ -496,22 +518,22 @@
 	        data: function() {
 
 	            return {
-	                id      : '',
-	                name    : '',
-	                type    : '',
-	                access  : '',
-	                active  : -1,
-	                created : '',
+	                id     : '',
+	                name   : '',
+	                type   : '',
+	                access : '',
+	                active : -1,
+	                created: '',
 
 	                application: {
-	                    id   : '',
-	                    name : ''
+	                    id  : '',
+	                    name: ''
 	                },
 	                author: {
-	                    id   : '',
-	                    name : ''
+	                    id  : '',
+	                    name: ''
 	                }
-	            }
+	            };
 
 	        },
 
@@ -519,7 +541,7 @@
 
 	            property: function(key) {
 
-	                return this.$parent.$data[key]
+	                return this.$parent.$data[key];
 
 	            }
 
@@ -530,14 +552,14 @@
 	            selectItem: function() {
 
 	                if (_.isFunction(this.onSelect)) {
-	                    this.onSelect(this)
+	                    this.onSelect(this);
 	                }
 
 	            }
 
 	        }
 
-	    }
+	    };
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 

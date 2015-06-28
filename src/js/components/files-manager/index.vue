@@ -1,18 +1,18 @@
 <script>
 
-    var _ = require('../../util')
-    var $ = require('jquery')
+    var _ = require('../../util');
+    var $ = require('jquery');
 
     module.exports = {
 
         replace: true,
 
-        data:  function() {
+        data: function() {
 
             return {
-                root:        '',
-                resources:   [],
-                cache:       {},
+                root       : '',
+                resources  : [],
+                cache      : {},
                 currentRoot: '',
                 currentView: 'resources',
 
@@ -20,7 +20,7 @@
                     {title: 'Files', view: 'files'},
                     {title: 'Uploader', view: 'uploader'}
                 ]
-            }
+            };
 
         },
 
@@ -30,7 +30,7 @@
 
                 e.preventDefault();
 
-            })
+            });
 
         },
 
@@ -38,14 +38,14 @@
 
             changeView: function(view) {
 
-                this.currentView = view
+                this.currentView = view;
 
             },
 
             goTo: function(path) {
 
-                this.root = path
-                this.fetch()
+                this.root = path;
+                this.fetch();
 
             },
 
@@ -61,32 +61,30 @@
 
                 params = _.extend({
 
-                    path : this.root
+                    path: this.root
 
-                }, (params || {}))
-
-                console.log(params);
+                }, (params || {}));
 
                 this.$http.get('/files', params).done(function(response) {
 
-                    this.root      = response.root;
+                    this.root = response.root;
                     this.resources = response.resources;
 
                     this.cache[this.root] = response;
 
                     // execute callback
                     if (_.isFunction(this.onLoadPage)) {
-                        this.onLoadPage()
+                        this.onLoadPage();
                     }
 
-                })
+                });
 
             },
 
             init: function() {
 
                 if (!this.resources.length) {
-                    this.fetch()
+                    this.fetch();
                 }
 
             }
@@ -95,8 +93,8 @@
 
         components: {
 
-            resources : require('./components/resources.vue'),
-            uploader  : require('./components/uploader.vue')
+            resources: require('./components/resources.vue'),
+            uploader : require('./components/uploader.vue')
 
         }
 

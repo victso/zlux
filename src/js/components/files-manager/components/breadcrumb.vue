@@ -3,43 +3,43 @@
     module.exports = {
 
         replace: true,
-        props: ['root'],
+        props  : ['root'],
 
         computed: {
 
             crumbs: function() {
 
-                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = []
+                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = [];
 
                 if (parts.length > 1) {
 
-                    var path = '/'
+                    var path = '/';
 
                     parts.forEach(function(part) {
 
                         crumbs.push({
                             'name': part,
                             'path': path += part + '/'
-                        })
+                        });
 
-                    })
+                    });
 
                 } else {
-                    this.root = '/'
+                    this.root = '/';
                 }
 
                 crumbs.unshift({
                     'name': 'root',
                     'path': '/'
-                })
+                });
 
-                return crumbs
+                return crumbs;
 
             }
 
         }
 
-    }
+    };
 
 </script>
 

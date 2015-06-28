@@ -51,10 +51,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	var Vue = __webpack_require__(1);
-	var UI  = __webpack_require__(2);
+	var UI = __webpack_require__(2);
 
 	UI.component('zx-calendar', {
 
@@ -65,7 +65,7 @@
 
 	            UI.$('[data-zx-calendar]', context).each(function(){
 
-	                if ( ! this.__vue__) {
+	                if (!this.__vue__) {
 
 	                    new Vue(__webpack_require__(3)).$mount(this);
 
@@ -74,7 +74,7 @@
 	            });
 
 	        });
-	        
+
 	    }
 
 	});

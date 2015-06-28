@@ -1,7 +1,5 @@
 <script>
 
-    var UI = require('uikit')
-
     module.exports = {
 
         inherit: true,
@@ -13,7 +11,7 @@
 
         }
 
-    }
+    };
 
 </script>
 

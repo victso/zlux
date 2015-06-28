@@ -52,17 +52,22 @@
 /***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	var vueZlux = {
 
 	    install: function (Vue) {
 
-	        Vue.component('pagination', __webpack_require__(19))
+	        Vue.component('pagination', __webpack_require__(20));
 
 	    }
 
+	};
+
+	if (window.Vue) {
+	    Vue.use(vueZlux);
 	}
 
-	if (window.Vue) Vue.use(vueZlux)
 
 /***/ },
 
@@ -73,7 +78,7 @@
 
 /***/ },
 
-/***/ 19:
+/***/ 20:
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
@@ -85,17 +90,17 @@
 
 	        props: ['items', 'items-on-page', 'on-select-page'],
 
-	        data:  function() {
+	        data: function() {
 
 	            return {
-	                items          : 1,
-	                itemsOnPage    : 1,
-	                currentPage    : 1,
-	                displayedPages : 3,
-	                edges          : 3,
-	                lblPrev        : 'uk-icon-angle-double-left',
-	                lblNext        : 'uk-icon-angle-double-right'
-	            }
+	                items         : 1,
+	                itemsOnPage   : 1,
+	                currentPage   : 1,
+	                displayedPages: 3,
+	                edges         : 3,
+	                lblPrev       : 'uk-icon-angle-double-left',
+	                lblNext       : 'uk-icon-angle-double-right'
+	            };
 
 	        },
 
@@ -105,7 +110,7 @@
 
 	                return Math.ceil(this.items / this.itemsOnPage)
 	                    ? Math.ceil(this.items / this.itemsOnPage)
-	                    : 1
+	                    : 1;
 
 	            }
 
@@ -113,18 +118,18 @@
 
 	        created: function() {
 
-	            this.$set('currentPage', this.currentPage - 1)
+	            this.$set('currentPage', this.currentPage - 1);
 
 	            this.$watch('items', function() {
 
 	                // if totalPages changes update currentPage
 	                if ((this.currentPage + 1) > this.totalPages){
 
-	                    this.$set('currentPage', this.totalPages - 1)
+	                    this.$set('currentPage', this.totalPages - 1);
 
 	                }
 
-	            })
+	            });
 
 	        },
 
@@ -132,7 +137,7 @@
 
 	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
 	                e.preventDefault();
-	            })
+	            });
 
 	        },
 
@@ -140,15 +145,14 @@
 
 	            selectPage: function(index) {
 
-	                this.$set('currentPage', index)
-
-	                this.onSelectPage(index)
+	                this.$set('currentPage', index);
+	                this.onSelectPage(index);
 
 	            },
 
 	            getInterval: function() {
 
-	                var pages = this.totalPages, halfDisplayed = this.displayedPages / 2
+	                var pages = this.totalPages, halfDisplayed = this.displayedPages / 2;
 
 	                return {
 	                    start: Math.ceil(this.currentPage > halfDisplayed
@@ -159,61 +163,61 @@
 	                        ? Math.min(this.currentPage + halfDisplayed, pages)
 	                        : Math.min(this.displayedPages, pages))
 
-	                }
+	                };
 
 	            },
 
 	            getPages: function() {
 
-	                var pages = [], totalPages = this.totalPages, interval = this.getInterval(), i
+	                var pages = [], totalPages = this.totalPages, interval = this.getInterval(), i;
 
 	                // Generate Prev link
 	                if (this.lblPrev) {
-	                    pages.push({index: this.currentPage - 1, icon: this.lblPrev})
+	                    pages.push({index: this.currentPage - 1, icon: this.lblPrev});
 	                }
 
 	                if (interval.start > 0 && this.edges > 0) {
 
-	                    var end = Math.min(this.edges, interval.start)
+	                    var end = Math.min(this.edges, interval.start);
 
 	                    for (i = 0; i < end; i++) {
-	                        pages.push({index: i})
+	                        pages.push({index: i});
 	                    }
 
 	                    if (this.edges < interval.start && (interval.start - this.edges != 1)) {
-	                        pages.push({text: '...'})
+	                        pages.push({text: '...'});
 	                    } else if (interval.start - this.edges == 1) {
-	                        pages.push({index: this.edges})
+	                        pages.push({index: this.edges});
 	                    }
 
 	                }
 
 	                for (i = interval.start; i < interval.end; i++) {
-	                    pages.push({index: i})
+	                    pages.push({index: i});
 	                }
 
 	                if (interval.end < totalPages && this.edges > 0) {
 
 	                    if (totalPages - this.edges > interval.end && (totalPages - this.edges - interval.end != 1)) {
-	                        pages.push({text: '...'})
+	                        pages.push({text: '...'});
 	                    } else if (totalPages - this.edges - interval.end == 1) {
-	                        pages.push({index: interval.end++})
+	                        pages.push({index: interval.end++});
 	                    }
 
 	                    var begin = Math.max(totalPages - this.edges, interval.end);
 
 	                    for (i = begin; i < totalPages; i++) {
-	                        pages.push({index: i})
+	                        pages.push({index: i});
 	                    }
 
 	                }
 
 	                // Generate Next link (unless option is set for at front)
 	                if (this.lblNext) {
-	                    pages.push({index: this.currentPage + 1, icon: this.lblNext})
+	                    pages.push({index: this.currentPage + 1, icon: this.lblNext});
 	                }
 
-	                return pages
+	                return pages;
 
 	            }
 
@@ -221,7 +225,7 @@
 
 	        components: {
 
-	            'page': __webpack_require__(20)
+	            'page': __webpack_require__(21)
 
 	        }
 
@@ -231,7 +235,7 @@
 
 /***/ },
 
-/***/ 20:
+/***/ 21:
 /***/ function(module, exports) {
 
 	var __vue_template__ = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent &amp;&amp; href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
@@ -239,15 +243,15 @@
 
 	        replace: true,
 	        inherit: true,
-	        props: ['on-select-page'],
+	        props  : ['on-select-page'],
 
 	        data: function() {
 
 	            return {
 	                index: null,
-	                text: '',
-	                icon: ''
-	            }
+	                text : '',
+	                icon : ''
+	            };
 
 	        },
 
@@ -255,36 +259,36 @@
 
 	            isCurrent: function() {
 
-	                return this.index == this.currentPage
+	                return this.index === this.currentPage;
 
 	            },
 
 	            page: function() {
 
-	                return this.index + 1
+	                return this.index + 1;
 
 	            },
 
 	            content: function() {
 
-	                return this.icon ? '' : (this.text || this.page)
+	                return this.icon ? '' : (this.text || this.page);
 
 	            },
 
 	            href: function() {
 
-	                return this.index !== null ? '#page-' + this.page : ''
+	                return this.index !== null ? '#page-' + this.page : '';
 	            }
 
 	        },
 
 	        created: function() {
 
-	            this.$set('index', this.index < 0 ? 0 : (this.index < this.totalPages ? this.index : this.totalPages - 1))
+	            this.$set('index', this.index < 0 ? 0 : (this.index < this.totalPages ? this.index : this.totalPages - 1));
 
 	        }
 
-	    }
+	    };
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 

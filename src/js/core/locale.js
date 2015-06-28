@@ -1,3 +1,5 @@
+var _ = require('../util');
+
 exports.lang = {
 
     strings: {},
@@ -8,7 +10,7 @@ exports.lang = {
      */
 
     push: function (strings) {
-        UI.$.extend(this.strings, strings)
+        UI.$.extend(this.strings, strings);
     },
 
     /**
@@ -18,7 +20,7 @@ exports.lang = {
      */
 
     get: function (string) {
-        return this.strings[string] || string
+        return this.strings[string] || string;
     },
 
     /**
@@ -28,14 +30,14 @@ exports.lang = {
      */
 
     sprintf: function (str) {
-        var args = [].slice.call(arguments, 1)
+        var args = [].slice.call(arguments, 1);
 
-        str = this.get(str)
+        str = this.get(str);
 
         return str.replace(/%[a-z]/g, function () {
-            var value = args.shift()
-            return _.typeOf(value) !== 'undefined' ? value : ''
-        })
+            var value = args.shift();
+            return _.typeOf(value) !== 'undefined' ? value : '';
+        });
     }
 
-}
+};

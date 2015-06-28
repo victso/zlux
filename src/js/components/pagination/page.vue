@@ -4,15 +4,15 @@
 
         replace: true,
         inherit: true,
-        props: ['on-select-page'],
+        props  : ['on-select-page'],
 
         data: function() {
 
             return {
                 index: null,
-                text: '',
-                icon: ''
-            }
+                text : '',
+                icon : ''
+            };
 
         },
 
@@ -20,36 +20,36 @@
 
             isCurrent: function() {
 
-                return this.index == this.currentPage
+                return this.index === this.currentPage;
 
             },
 
             page: function() {
 
-                return this.index + 1
+                return this.index + 1;
 
             },
 
             content: function() {
 
-                return this.icon ? '' : (this.text || this.page)
+                return this.icon ? '' : (this.text || this.page);
 
             },
 
             href: function() {
 
-                return this.index !== null ? '#page-' + this.page : ''
+                return this.index !== null ? '#page-' + this.page : '';
             }
 
         },
 
         created: function() {
 
-            this.$set('index', this.index < 0 ? 0 : (this.index < this.totalPages ? this.index : this.totalPages - 1))
+            this.$set('index', this.index < 0 ? 0 : (this.index < this.totalPages ? this.index : this.totalPages - 1));
 
         }
 
-    }
+    };
 
 </script>
 

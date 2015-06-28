@@ -47,15 +47,20 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(2)
+	'use strict';
+
+	var UI = __webpack_require__(2);
+	var ZX = __webpack_require__(19);
+	var $ = __webpack_require__(10);
 
 	var notify = function(msg, options){
 	    // display message
-	    var notify = UI.$.UIkit.notify(msg, options);
+	    var notify = UI.notify(msg, options);
 
 	    // add zlux class for the holding content styling
 	    notify.element.parent().addClass('zx');
@@ -65,13 +70,13 @@
 
 	confirm = function(msg, options){
 
-	    options = UI.$.extend(options, {
+	    options = $.extend(options, {
 	        timeout: false // confirmation must wait user interaction
 	    });
 
-	    return UI.$.Deferred(function( defer )
+	    return $.Deferred(function( defer )
 	    {
-	        var notify = UI.$zlux.notify(msg + '<div class="uk-text-center uk-margin-top">\
+	        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
 	                <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
 	                <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
 	            </div>',
@@ -89,21 +94,36 @@
 	},
 
 	closeAll = function(group, instantly){
-	    UI.$.UIkit.notify.closeAll(group, instantly);
+	    UI.notify.closeAll(group, instantly);
 	    return this;
 	};
 
-	UI.$zlux.notify             = notify;
-	UI.$zlux.notify.confirm     = confirm;
-	UI.$zlux.notify.closeAll    = closeAll;
+	ZX.notify             = notify;
+	ZX.notify.confirm     = confirm;
+	ZX.notify.closeAll    = closeAll;
 
 
 /***/ },
-/* 1 */,
-/* 2 */
+
+/***/ 2:
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
+/***/ },
+
+/***/ 10:
+/***/ function(module, exports) {
+
+	module.exports = UIkit.$;
+
+/***/ },
+
+/***/ 19:
+/***/ function(module, exports) {
+
+	module.exports = zlux;
+
 /***/ }
-/******/ ]);
+
+/******/ });

@@ -1,6 +1,6 @@
 <script>
 
-    var _ = require('../../util')
+    var _ = require('../../util');
 
     module.exports = {
 
@@ -11,22 +11,22 @@
         data: function() {
 
             return {
-                id      : '',
-                name    : '',
-                type    : '',
-                access  : '',
-                active  : -1,
-                created : '',
+                id     : '',
+                name   : '',
+                type   : '',
+                access : '',
+                active : -1,
+                created: '',
 
                 application: {
-                    id   : '',
-                    name : ''
+                    id  : '',
+                    name: ''
                 },
                 author: {
-                    id   : '',
-                    name : ''
+                    id  : '',
+                    name: ''
                 }
-            }
+            };
 
         },
 
@@ -34,7 +34,7 @@
 
             property: function(key) {
 
-                return this.$parent.$data[key]
+                return this.$parent.$data[key];
 
             }
 
@@ -45,14 +45,14 @@
             selectItem: function() {
 
                 if (_.isFunction(this.onSelect)) {
-                    this.onSelect(this)
+                    this.onSelect(this);
                 }
 
             }
 
         }
 
-    }
+    };
 
 </script>
 

@@ -7,12 +7,12 @@
 
         components: {
 
-            resource   : require('./resource.vue'),
-            breadcrumb : require('./breadcrumb.vue')
+            resource  : require('./resource.vue'),
+            breadcrumb: require('./breadcrumb.vue')
 
         }
 
-    }
+    };
 
 </script>
 

@@ -1,8 +1,8 @@
 module.exports = function (ZX) {
 
-    var _  = require('../util')
-    var UI = require('uikit')
-    var config = require('../config')
+    var _ = require('../util');
+    var UI = require('uikit');
+    var config = require('../config');
 
     /**
      * Http request as jQuery ajax wrapper
@@ -14,18 +14,18 @@ module.exports = function (ZX) {
 
     function Http(url, settings) {
 
-        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]}
+        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]};
 
-        settings = settings || {}
+        settings = settings || {};
 
         // queue = settings.queue ? settings.queue : null,
         // delete settings.queue
 
         if (config.routes_map[url]) {
-            url = config.routes_map[url]
+            url = config.routes_map[url];
         }
 
-        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings)
+        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
 
         // var request  = queue ? this.queue(queue, settings) : UI.$.ajax(settings)
 
@@ -34,25 +34,25 @@ module.exports = function (ZX) {
         .done(function(data, status, jqxhr) {
 
             if (settings.dataType === 'json') {
-                parseReq(_.extend(response, data), status, jqxhr)
+                parseReq(_.extend(response, data), status, jqxhr);
             }
 
         })
 
         .fail(function(jqxhr, status, error) {
 
-            parseReq(response, status, jqxhr)
-            _.log(response.errors)
+            parseReq(response, status, jqxhr);
+            _.log(response.errors);
 
         })
 
         .always(function() {
 
-            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response])
+            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response]);
 
         })
 
-        return deferred.promise()
+        return deferred.promise();
 
     }
 
@@ -64,44 +64,44 @@ module.exports = function (ZX) {
                 case 0: // if request canceled no error is logged
                     break;
                 case 403:
-                    response.errors.push('The session has expired.')
+                    response.errors.push('The session has expired.');
                     break;
                 case 404:
-                    response.errors.push('The requested URL is not accesible.')
+                    response.errors.push('The requested URL is not accesible.');
                     break;
                 case 500:
-                    response.errors.push('A server-side error has occurred.')
+                    response.errors.push('A server-side error has occurred.');
                     break;
 
                 default:
-                    response.errors.push('An ' + status + ' occurred: ' + error)
+                    response.errors.push('An ' + status + ' occurred: ' + error);
                     break;
             }
 
-            response.success = false
+            response.success = false;
 
         }
 
         if (status == 'parsererror') {
 
-            response.errors.push('Response format error: JSON parse error')
-            response.success = false
+            response.errors.push('Response format error: JSON parse error');
+            response.success = false;
 
         }
 
         // status state check
         if (response.success === undefined) {
 
-            response.errors.push('Response format error: status not specified')
-            response.success = false
+            response.errors.push('Response format error: status not specified');
+            response.success = false;
 
         }
 
     }
 
     Http.settings = {
-        type: 'get',
-        dataType: 'json',
+        type       : 'get',
+        dataType   : 'json',
         contentType: 'application/json; charset=UTF-8'
     };
 
@@ -109,11 +109,11 @@ module.exports = function (ZX) {
 
         Http[method] = function (url, data, settings) {
 
-            return this(url, _.extend({type: method, data: data}, settings))
+            return this(url, _.extend({type: method, data: data}, settings));
 
-        }
+        };
 
-    })
+    });
 
     // /**
     //  * Ajax request and notify the answer
@@ -282,6 +282,6 @@ module.exports = function (ZX) {
     //     }
     // }
 
-    return Http
+    return Http;
 
-}
+};

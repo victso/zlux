@@ -1,5 +1,5 @@
-var _  = require('../util')
-var http = require('./http')()
+var _  = require('../util');
+var http = require('./http')();
 
 var vueZlux = {
 
@@ -8,19 +8,21 @@ var vueZlux = {
         Object.defineProperty(Vue.prototype, '$http', {
 
             get: function () {
-                return _.extend(http.bind(this), http)
+                return _.extend(http.bind(this), http);
             }
 
-        })
+        });
 
         Vue.filter('trans', function(id) {
 
-            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id
+            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id;
 
-        })
+        });
 
     }
 
-}
+};
 
-if (window.Vue) Vue.use(vueZlux)
+if (window.Vue) {
+    Vue.use(vueZlux);
+}

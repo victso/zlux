@@ -1,0 +1,24 @@
+{
+    "env": {
+        "browser": 1
+    },
+
+    "globals": {
+        "require": 1,
+        "$": 1,
+        "Vue": 1,
+        "exports": 1,
+        "module": 1
+    },
+
+    "rules": {
+        "quotes": [2, "single"],
+        "strict": [2, "never"],
+        "no-multi-spaces": 2,
+        "key-spacing": [2, { "align": "colon" }]
+    },
+
+    "plugins": [
+        "vue"
+    ]
+}

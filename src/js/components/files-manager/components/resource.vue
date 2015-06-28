@@ -1,7 +1,7 @@
 <script>
 
-    var helper = require('../helper.js')
-    var $ = require('jquery')
+    var helper = require('../helper.js');
+    var $ = require("jquery");
 
     module.exports = {
 
@@ -10,11 +10,11 @@
         data: function() {
 
             return {
-                basename: '',
+                basename    : '',
                 content_type: '',
-                ext:  '',
-                name: '',
-                size: ''
+                ext         : '',
+                name        : '',
+                size        : ''
             }
 
         },
@@ -22,11 +22,11 @@
         computed: {
 
             path: function() {
-                return this.root + '/' + this.basename
+                return this.root + '/' + this.basename;
             },
 
             type: function() {
-                return this.basename.match(/\/$/) ? 'folder' : 'file'
+                return this.basename.match(/\/$/) ? 'folder' : 'file';
             }
 
         },
@@ -41,15 +41,17 @@
                     .replace(/(\/|\.\w+$)/g, '')
 
                     // remove dash/underscore
-                    .replace(/(-|_)/g, ' ')
+                    .replace(/(-|_)/g, ' ');
 
             },
 
             parseSize: function(size) {
 
-                if ( ! size) return size
+                if ( ! size) {
+                    return size;
+                }
 
-                return helper.filesize( helper.parseSize(size) )
+                return helper.filesize( helper.parseSize(size) );
 
             }
 
@@ -59,8 +61,8 @@
 
             selectPage: function(e) {
 
-                e.preventDefault()
-                this.onSelectPage(this.path)
+                e.preventDefault();
+                this.onSelectPage(this.path);
 
             }
 

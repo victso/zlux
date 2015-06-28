@@ -22,7 +22,7 @@ module.exports = {
      * @type {Object}
      */
 
-    routes_map: {},
+    routesMap: {},
 
     /**
      * The token number.
@@ -56,4 +56,4 @@ module.exports = {
 
     silent: false
 
-}
+};

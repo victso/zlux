@@ -1,7 +1,5 @@
-"use strict";
-
 var Vue = require('vue');
-var UI  = require('uikit');
+var UI = require('uikit');
 
 UI.component('zx-calendar', {
 
@@ -12,7 +10,7 @@ UI.component('zx-calendar', {
 
             UI.$('[data-zx-calendar]', context).each(function(){
 
-                if ( ! this.__vue__) {
+                if (!this.__vue__) {
 
                     new Vue(require('./calendar.vue')).$mount(this);
 
@@ -21,7 +19,7 @@ UI.component('zx-calendar', {
             });
 
         });
-        
+
     }
 
 });

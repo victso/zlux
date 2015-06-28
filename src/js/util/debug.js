@@ -1,4 +1,4 @@
-var config = require('../config')
+var config = require('../config');
 
 /**
  * Enable debug utilities. The enableDebug() function and
@@ -6,11 +6,11 @@ var config = require('../config')
  * minified production build.
  */
 
-enableDebug()
+/* eslint-disable no-console */
 
 function enableDebug () {
 
-    var hasConsole = typeof console !== 'undefined'
+    var hasConsole = typeof console !== 'undefined';
 
     /**
      * Log a message.
@@ -20,9 +20,9 @@ function enableDebug () {
 
     exports.log = function(msg) {
         if (hasConsole && config.debug) {
-            console.log('[ZLUX info]: ' + msg)
+            console.log('[ZLUX info]: ' + msg);
         }
-    }
+    };
 
     /**
      * We've got a problem here.
@@ -32,13 +32,14 @@ function enableDebug () {
 
     exports.warn = function(msg) {
         if (hasConsole && (!config.silent || config.debug)) {
-            console.warn('[ZLUX warn]: ' + msg)
-                /* istanbul ignore if */
+            console.warn('[ZLUX warn]: ' + msg);
+
             if (config.debug) {
-                /* jshint debug: true */
-                debugger
+                debugger; // eslint-disable-line
             }
         }
-    }
+    };
 
 }
+
+enableDebug();

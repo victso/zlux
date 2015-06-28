@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("UIkit"));
@@ -54,114 +61,121 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(2)
-	var _  = __webpack_require__(3)
-	var extend = _.extend
+	'use strict';
+
+	var UI = __webpack_require__(2);
+	var _ = __webpack_require__(3);
+	var extend = _.extend;
 
 	if (!UI) {
 	    throw new Error('UIkit library is missing');
 	}
 
-	var $ = UI.$
+	var $ = UI.$;
 
 	var ZX = {
 	    version: '2.0.3',
-	    config: __webpack_require__(6)
-	}
+	    config : __webpack_require__(6)
+	};
 
 	UI.ready(function() {
 
 	    // style workaround, wrapp dragging elements with zx class
 	    $('body').on('start.uk.nestable, start.uk.sortable', function() {
-	        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />')
-	    })
+	        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />');
+	    });
 
 	    // extend config
-	    ZX.config = extend(ZX.config, window.$zlux_config)
+	    ZX.config = extend(ZX.config, window.$zlux_config);
 
-	})
+	});
 
-	extend(ZX, __webpack_require__(7))
-	extend(ZX, __webpack_require__(8))
-	extend(ZX, __webpack_require__(1))
+	extend(ZX, __webpack_require__(7));
+	extend(ZX, __webpack_require__(8));
+	extend(ZX, __webpack_require__(1));
 
-	ZX.http = __webpack_require__(9)(ZX)
+	ZX.http = __webpack_require__(9)(ZX);
 
-	__webpack_require__(10)(ZX)
-	__webpack_require__(11)(ZX)
-	__webpack_require__(12)
+	__webpack_require__(10)(ZX);
+	__webpack_require__(11)(ZX);
+	__webpack_require__(12);
 
 	UI.$.fn.zx = ZX.fn;
 
-	window.zlux = UI.$zlux = _.zlux = ZX
+	window.zlux = UI.$zlux = _.zlux = ZX;
+
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(2)
+	'use strict';
+
+	var UI = __webpack_require__(2);
+	var ZX = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"zlux\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	exports.modal = {
 
 	    dialog: function(content, options){
 
-	        var modal = UI.$.UIkit.modal.dialog(content, options)
+	        var modal = UI.$.UIkit.modal.dialog(content, options);
 
 	        // extend modal with
 	        UI.$.extend(modal, {
 
 	            // update content
 	            content: function(html) {
-	                var container = this.dialog
+	                var container = this.dialog;
 
 	                if(!html) {
-	                    return container.html()
+	                    return container.html();
 	                }
 
-	                container.html(html)
+	                container.html(html);
 
-	                return this
+	                return this;
 	            }
-	        })
+	        });
 
 	        // add zlux class for the holding content styling
-	        modal.element.addClass('zx')
+	        modal.element.addClass('zx');
 
-	        return modal
+	        return modal;
 	    },
 
 	    alert: function(content, options){
 
 	        var modal = UI.$.UIkit.modal.dialog(([
-	            '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-	            '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">'+ZX.lang.get('Ok')+'</button></div>'
-	        ]).join(''), UI.$.extend({bgclose:false, keyboard:false}, options))
+	            '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
+	            '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">' + ZX.lang.get('Ok') + '</button></div>'
+	        ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options));
 
-	        modal.show()
+	        modal.show();
 
-	        return modal
+	        return modal;
 	    },
 
 	    confirm: function(content, onconfirm, options){
 
-	        onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){}
+	        onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
 
 	        var modal = UI.$.UIkit.modal.dialog(([
-	           '<div class="uk-margin uk-modal-content">'+String(content)+'</div>',
-	           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">'+ZX.lang.get('Cancel')+'</button></div>'
-	        ]).join(''), UI.$.extend({bgclose:false, keyboard:false}, options))
+	           '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
+	           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">'+ZX.lang.get('Ok')+'</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
+	        ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options))
 
 	        modal.element.find(".js-modal-confirm").on("click", function(){
-	           onconfirm()
-	           modal.hide()
-	        })
+	           onconfirm();
+	           modal.hide();
+	       });
 
-	        modal.show()
+	        modal.show();
 
 	        return modal;
 	    }
 
-	}
+	};
+
 
 /***/ },
 /* 2 */
@@ -173,17 +187,22 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var lang   = __webpack_require__(4)
-	var extend = lang.extend
+	'use strict';
 
-	extend(exports, lang)
-	extend(exports, __webpack_require__(5))
+	var lang = __webpack_require__(4);
+	var extend = lang.extend;
+
+	extend(exports, lang);
+	extend(exports, __webpack_require__(5));
+
 
 /***/ },
 /* 4 */
 /***/ function(module, exports) {
 
-	var _ = this
+	'use strict';
+
+	var _ = this;
 
 	/**
 	 * Mix properties into target object.
@@ -194,32 +213,32 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	exports.extend = function (target) {
 
-	    var array = [], args = array.slice.call(arguments, 1), deep
+	    var array = [], args = array.slice.call(arguments, 1), deep;
 
-	    if (typeof target == 'boolean') {
-	        deep = target
-	        target = args.shift()
+	    if (typeof target === 'boolean') {
+	        deep = target;
+	        target = args.shift();
 	    }
 
 	    args.forEach(function (arg) {
-	        extend(target, arg, deep)
-	    })
+	        extend(target, arg, deep); // eslint-disable-line
+	    });
 
-	    return target
-	}
+	    return target;
+	};
 
 	function extend (target, source, deep) {
 	    for (var key in source) {
 	        if (deep && (_.isPlainObject(source[key]) || _.isArray(source[key]))) {
 	            if (_.isPlainObject(source[key]) && !_.isPlainObject(target[key])) {
-	                target[key] = {}
+	                target[key] = {};
 	            }
 	            if (_.isArray(source[key]) && !_.isArray(target[key])) {
 	                target[key] = [];
 	            }
-	            extend(target[key], source[key], deep)
+	            extend(target[key], source[key], deep);
 	        } else if (source[key] !== undefined) {
-	            target[key] = source[key]
+	            target[key] = source[key];
 	        }
 	    }
 	}
@@ -232,8 +251,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.typeOf = function(obj) {
-	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase()
-	}
+	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
+	};
 
 	/**
 	 * Check if Object is a function
@@ -243,8 +262,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.isFunction = function (obj) {
-	    return obj && this.typeOf(obj) === 'function'
-	}
+	    return obj && this.typeOf(obj) === 'function';
+	};
 
 	/**
 	 * Array type check.
@@ -254,8 +273,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	 */
 
 	exports.isArray = function (obj) {
-	    return Array.isArray(obj)
-	}
+	    return Array.isArray(obj);
+	};
 
 	/**
 	 * Strict object type check. Only returns true
@@ -265,16 +284,19 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * @return {Boolean}
 	 */
 
-	var toString = Object.prototype.toString
+	var toString = Object.prototype.toString; // eslint-disable-line
 	exports.isPlainObject = function (obj) {
-	    return toString.call(obj) === '[object Object]'
-	}
+	    return toString.call(obj) === '[object Object]';
+	};
+
 
 /***/ },
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var config = __webpack_require__(6)
+	'use strict';
+
+	var config = __webpack_require__(6);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -282,11 +304,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	 * minified production build.
 	 */
 
-	enableDebug()
+	/* eslint-disable no-console */
 
 	function enableDebug () {
 
-	    var hasConsole = typeof console !== 'undefined'
+	    var hasConsole = typeof console !== 'undefined';
 
 	    /**
 	     * Log a message.
@@ -296,9 +318,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    exports.log = function(msg) {
 	        if (hasConsole && config.debug) {
-	            console.log('[ZLUX info]: ' + msg)
+	            console.log('[ZLUX info]: ' + msg);
 	        }
-	    }
+	    };
 
 	    /**
 	     * We've got a problem here.
@@ -308,20 +330,24 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    exports.warn = function(msg) {
 	        if (hasConsole && (!config.silent || config.debug)) {
-	            console.warn('[ZLUX warn]: ' + msg)
-	                /* istanbul ignore if */
+	            console.warn('[ZLUX warn]: ' + msg);
+
 	            if (config.debug) {
-	                /* jshint debug: true */
-	                debugger
+	                debugger; // eslint-disable-line
 	            }
 	        }
-	    }
+	    };
 
 	}
+
+	enableDebug();
+
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	module.exports = {
 
@@ -347,7 +373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @type {Object}
 	     */
 
-	    routes_map: {},
+	    routesMap: {},
 
 	    /**
 	     * The token number.
@@ -381,15 +407,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    silent: false
 
-	}
+	};
+
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _  = __webpack_require__(3)
-	var UI = __webpack_require__(2)
-	var ZX = _.zlux
+	'use strict';
+
+	var _ = __webpack_require__(3);
+	var UI = __webpack_require__(2);
+	var ZX = _.zlux;
 
 	exports.extensions = {};
 
@@ -624,9 +653,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 	}
 
+
 /***/ },
 /* 8 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(3);
 
 	exports.lang = {
 
@@ -638,7 +672,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    push: function (strings) {
-	        UI.$.extend(this.strings, strings)
+	        UI.$.extend(this.strings, strings);
 	    },
 
 	    /**
@@ -648,7 +682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    get: function (string) {
-	        return this.strings[string] || string
+	        return this.strings[string] || string;
 	    },
 
 	    /**
@@ -658,27 +692,30 @@ return /******/ (function(modules) { // webpackBootstrap
 	     */
 
 	    sprintf: function (str) {
-	        var args = [].slice.call(arguments, 1)
+	        var args = [].slice.call(arguments, 1);
 
-	        str = this.get(str)
+	        str = this.get(str);
 
 	        return str.replace(/%[a-z]/g, function () {
-	            var value = args.shift()
-	            return _.typeOf(value) !== 'undefined' ? value : ''
-	        })
+	            var value = args.shift();
+	            return _.typeOf(value) !== 'undefined' ? value : '';
+	        });
 	    }
 
-	}
+	};
+
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
+	'use strict';
+
 	module.exports = function (ZX) {
 
-	    var _  = __webpack_require__(3)
-	    var UI = __webpack_require__(2)
-	    var config = __webpack_require__(6)
+	    var _ = __webpack_require__(3);
+	    var UI = __webpack_require__(2);
+	    var config = __webpack_require__(6);
 
 	    /**
 	     * Http request as jQuery ajax wrapper
@@ -690,18 +727,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function Http(url, settings) {
 
-	        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]}
+	        var self = this, deferred = UI.$.Deferred(), response = {success:true, errors:[], notices:[]};
 
-	        settings = settings || {}
+	        settings = settings || {};
 
 	        // queue = settings.queue ? settings.queue : null,
 	        // delete settings.queue
 
 	        if (config.routes_map[url]) {
-	            url = config.routes_map[url]
+	            url = config.routes_map[url];
 	        }
 
-	        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings)
+	        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
 
 	        // var request  = queue ? this.queue(queue, settings) : UI.$.ajax(settings)
 
@@ -710,25 +747,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        .done(function(data, status, jqxhr) {
 
 	            if (settings.dataType === 'json') {
-	                parseReq(_.extend(response, data), status, jqxhr)
+	                parseReq(_.extend(response, data), status, jqxhr);
 	            }
 
 	        })
 
 	        .fail(function(jqxhr, status, error) {
 
-	            parseReq(response, status, jqxhr)
-	            _.log(response.errors)
+	            parseReq(response, status, jqxhr);
+	            _.log(response.errors);
 
 	        })
 
 	        .always(function() {
 
-	            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response])
+	            response.success ? deferred.resolveWith(self, [response]) : deferred.rejectWith(self, [response]);
 
 	        })
 
-	        return deferred.promise()
+	        return deferred.promise();
 
 	    }
 
@@ -740,44 +777,44 @@ return /******/ (function(modules) { // webpackBootstrap
 	                case 0: // if request canceled no error is logged
 	                    break;
 	                case 403:
-	                    response.errors.push('The session has expired.')
+	                    response.errors.push('The session has expired.');
 	                    break;
 	                case 404:
-	                    response.errors.push('The requested URL is not accesible.')
+	                    response.errors.push('The requested URL is not accesible.');
 	                    break;
 	                case 500:
-	                    response.errors.push('A server-side error has occurred.')
+	                    response.errors.push('A server-side error has occurred.');
 	                    break;
 
 	                default:
-	                    response.errors.push('An ' + status + ' occurred: ' + error)
+	                    response.errors.push('An ' + status + ' occurred: ' + error);
 	                    break;
 	            }
 
-	            response.success = false
+	            response.success = false;
 
 	        }
 
 	        if (status == 'parsererror') {
 
-	            response.errors.push('Response format error: JSON parse error')
-	            response.success = false
+	            response.errors.push('Response format error: JSON parse error');
+	            response.success = false;
 
 	        }
 
 	        // status state check
 	        if (response.success === undefined) {
 
-	            response.errors.push('Response format error: status not specified')
-	            response.success = false
+	            response.errors.push('Response format error: status not specified');
+	            response.success = false;
 
 	        }
 
 	    }
 
 	    Http.settings = {
-	        type: 'get',
-	        dataType: 'json',
+	        type       : 'get',
+	        dataType   : 'json',
 	        contentType: 'application/json; charset=UTF-8'
 	    };
 
@@ -785,11 +822,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        Http[method] = function (url, data, settings) {
 
-	            return this(url, _.extend({type: method, data: data}, settings))
+	            return this(url, _.extend({type: method, data: data}, settings));
 
-	        }
+	        };
 
-	    })
+	    });
 
 	    // /**
 	    //  * Ajax request and notify the answer
@@ -958,15 +995,18 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //     }
 	    // }
 
-	    return Http
+	    return Http;
 
-	}
+	};
+
 
 /***/ },
 /* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(2)
+	'use strict';
+
+	var UI = __webpack_require__(2);
 
 	module.exports = function(ZX) {
 
@@ -979,13 +1019,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	            animation = 'zx-animate-' + UI.$.trim(options[0]),
 
 	            // set callback
-	            callback = options[1] ? options[1] : null
+	            callback = options[1] ? options[1] : null;
 
 	            // animate
 	            $this.animate(animation).done(function(){
 
 	                // execute any callback passing the element as scope
-	                if (callback) callback.apply($this.element)
+	                if (callback) {
+	                    callback.apply($this.element);
+	                }
 
 	            });
 	        },
@@ -999,23 +1041,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	                $this.element.addClass(animation)
 
 	                // when done
-	                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function(e) {
+	                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
 
 	                    // remove the class to allow further animation
-	                    $this.element.removeClass(animation)
-	                    defer.resolve()
+	                    $this.element.removeClass(animation);
+	                    defer.resolve();
 
 	                });
 
-	            }).promise()
+	            }).promise();
 	        }
-	    })
+	    });
 
-	}
+	};
+
 
 /***/ },
 /* 11 */
 /***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
 
 	var UI = __webpack_require__(2)
 
@@ -1090,8 +1135,10 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _  = __webpack_require__(3)
-	var http = __webpack_require__(9)()
+	'use strict';
+
+	var _  = __webpack_require__(3);
+	var http = __webpack_require__(9)();
 
 	var vueZlux = {
 
@@ -1100,22 +1147,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	        Object.defineProperty(Vue.prototype, '$http', {
 
 	            get: function () {
-	                return _.extend(http.bind(this), http)
+	                return _.extend(http.bind(this), http);
 	            }
 
-	        })
+	        });
 
 	        Vue.filter('trans', function(id) {
 
-	            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id
+	            return _.zlux.config.locales[id] ? _.zlux.config.locales[id] : id;
 
-	        })
+	        });
 
 	    }
 
+	};
+
+	if (window.Vue) {
+	    Vue.use(vueZlux);
 	}
 
-	if (window.Vue) Vue.use(vueZlux)
 
 /***/ }
 /******/ ])

@@ -11,17 +11,19 @@ exports.basename = function(path, suffix) {
 
     b = b.replace(/^.*[\/\\]/g, '');
 
-    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) == suffix) {
+    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) === suffix) {
         b = b.substr(0, b.length - suffix.length);
     }
 
     return b;
-}
+};
 
 // parses the specified size string into a byte value
 exports.parseSize = function(size){
 
-    if (typeof(size) !== 'string' || size === '') return size;
+    if (typeof (size) !== 'string' || size === '') {
+        return size;
+    }
 
     var muls = {
             t: 1099511627776,
@@ -34,13 +36,13 @@ exports.parseSize = function(size){
     size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
     mul = size[2];
     size = +size[1];
-    
+
     if (muls.hasOwnProperty(mul)) {
         size *= muls[mul];
     }
 
     return size;
-}
+};
 
 /**
   * https://github.com/avoidwork/filesize.js - v3.1.2
@@ -54,8 +56,8 @@ exports.filesize = function(arg) {
 
     var bit = /b$/;
     var si = {
-        bits: ["B", "kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
-        bytes: ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+        bits : ['B', 'kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'],
+        bytes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
     };
 
     var descriptor = arguments[1] === undefined ? {} : arguments[1];
@@ -63,29 +65,19 @@ exports.filesize = function(arg) {
     var result = [];
     var skip = false;
     var val = 0;
-    var e = undefined,
-        base = undefined,
-        bits = undefined,
-        ceil = undefined,
-        neg = undefined,
-        num = undefined,
-        output = undefined,
-        round = undefined,
-        unix = undefined,
-        spacer = undefined,
-        suffixes = undefined;
+    var e, base, bits, ceil, neg, num, output, round, unix, spacer, suffixes;
 
     if (isNaN(arg)) {
-        throw new Error("Invalid arguments");
+        throw new Error('Invalid arguments')
     }
 
     bits = descriptor.bits === true;
     unix = descriptor.unix === true;
     base = descriptor.base !== undefined ? descriptor.base : 2;
     round = descriptor.round !== undefined ? descriptor.round : unix ? 1 : 2;
-    spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? "" : " ";
+    spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? '' : ' ';
     suffixes = descriptor.suffixes !== undefined ? descriptor.suffixes : {};
-    output = descriptor.output !== undefined ? descriptor.output : "string";
+    output = descriptor.output !== undefined ? descriptor.output : 'string';
     e = descriptor.exponent !== undefined ? descriptor.exponent : -1;
     num = Number(arg);
     neg = num < 0;
@@ -101,9 +93,9 @@ exports.filesize = function(arg) {
         result[0] = 0;
 
         if (unix) {
-            result[1] = "";
+            result[1] = '';
         } else {
-            result[1] = "B";
+            result[1] = 'B';
         }
     } else {
         // Determining the exponent
@@ -133,7 +125,7 @@ exports.filesize = function(arg) {
         }
 
         result[0] = Number(val.toFixed(e > 0 ? round : 0));
-        result[1] = si[bits ? "bits" : "bytes"][e];
+        result[1] = si[bits ? 'bits' : 'bytes'][e];
 
         if (!skip && unix) {
             if (bits && bit.test(result[1])) {
@@ -142,11 +134,11 @@ exports.filesize = function(arg) {
 
             result[1] = result[1].charAt(0);
 
-            if (result[1] === "B") {
+            if (result[1] === 'B') {
                 result[0] = Math.floor(result[0]);
-                result[1] = "";
-            } else if (!bits && result[1] === "k") {
-                result[1] = "K";
+                result[1] = '';
+            } else if (!bits && result[1] === 'k') {
+                result[1] = 'K';
             }
         }
     }
@@ -160,17 +152,17 @@ exports.filesize = function(arg) {
     result[1] = suffixes[result[1]] || result[1];
 
     // Returning Array, Object, or String (default)
-    if (output === "array") {
+    if (output === 'array') {
         return result;
     }
 
-    if (output === "exponent") {
+    if (output === 'exponent') {
         return e;
     }
 
-    if (output === "object") {
+    if (output === 'object') {
         return { value: result[0], suffix: result[1] };
     }
 
     return result.join(spacer);
-}
+};

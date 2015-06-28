@@ -35,9 +35,12 @@
     "require-dir": "^0.3.0",
     "run-sequence": "^0.3.7",
     "vue-loader": "^1.1.6",
-    "webpack": "^1.9.9"
+    "webpack": "^1.9.9",
+    "eslint": "^0.24.0",
+    "eslint-plugin-html": "^1.0.1",
+    "gulp-run": "^1.6.8"
   },
   "dependencies": {
-    "gulp-run": "^1.6.8"
+    "strict-loader": "^0.1.2"
   }
 }

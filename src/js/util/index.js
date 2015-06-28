@@ -1,5 +1,5 @@
-var lang   = require('./lang')
-var extend = lang.extend
+var lang = require('./lang');
+var extend = lang.extend;
 
-extend(exports, lang)
-extend(exports, require('./debug'))
+extend(exports, lang);
+extend(exports, require('./debug'));

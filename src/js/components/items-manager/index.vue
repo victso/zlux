@@ -1,6 +1,6 @@
 <script>
 
-    var _ = require('../../util')
+    var _ = require('../../util');
 
     module.exports = {
 
@@ -8,7 +8,7 @@
 
         props: ['on-select-item', 'on-load-page', 'filters'],
 
-        data:  function() {
+        data: function() {
 
             return {
 
@@ -16,26 +16,26 @@
                     search: ''
                 },
 
-                items           : [],
-                columns         : [],
-                itemsPerPage    : 10,
-                currentPage     : 1,
-                total           : 0,
-                count           : 0,
-                offset          : 0,
-                orderKey        : '_itemname',
-                reversed        : {},
+                items       : [],
+                columns     : [],
+                itemsPerPage: 10,
+                currentPage : 1,
+                total       : 0,
+                count       : 0,
+                offset      : 0,
+                orderKey    : '_itemname',
+                reversed    : {},
 
                 filters: {
-                    name        : '',
-                    apps        : [],
-                    types       : [],
-                    categories  : [],
-                    tags        : [],
-                    authors     : []
+                    name      : '',
+                    apps      : [],
+                    types     : [],
+                    categories: [],
+                    tags      : [],
+                    authors   : []
                 }
 
-            }
+            };
 
         },
 
@@ -43,18 +43,18 @@
 
             this.$watch('nav.search', function(value, oldValue) {
 
-                if (oldValue == '') {
+                if (oldValue === '') {
 
                     // on first time search reset pagination
-                    this.$set('currentPage', 0)
+                    this.$set('currentPage', 0);
 
                 }
 
-                this.search()
+                this.search();
 
-            })
+            });
 
-            this.$set('currentPage', this.currentPage - 1)
+            this.$set('currentPage', this.currentPage - 1);
 
         },
 
@@ -62,13 +62,13 @@
 
             order: function() {
 
-                var order = [this.orderKey]
+                var order = [this.orderKey];
 
                 if (this.reversed[this.orderKey]) {
-                    order.push('_reversed')
+                    order.push('_reversed');
                 }
 
-                return order
+                return order;
 
             },
 
@@ -76,7 +76,7 @@
 
                 return _.extend({}, this.filters, {
                     name: this.nav.search
-                })
+                });
 
             }
 
@@ -88,27 +88,27 @@
 
                 params = _.extend({
 
-                    offset : this.currentPage * this.itemsPerPage,
-                    limit  : this.itemsPerPage,
-                    order  : this.order,
-                    filter : this.filter
+                    offset: this.currentPage * this.itemsPerPage,
+                    limit : this.itemsPerPage,
+                    order : this.order,
+                    filter: this.filter
 
-                }, (params || {}))
+                }, (params || {}));
 
                 this.$http.get('/items', params).done(function(response) {
 
-                    this.columns = response.columns
-                    this.items   = response.items
-                    this.total   = response.total
-                    this.count   = response.count
-                    this.offset  = response.offset
+                    this.columns = response.columns;
+                    this.items = response.items;
+                    this.total = response.total;
+                    this.count = response.count;
+                    this.offset = response.offset;
 
                     // execute callback
                     if (_.isFunction(this.onLoadPage)) {
-                        this.onLoadPage()
+                        this.onLoadPage();
                     }
 
-                })
+                });
 
             },
 
@@ -116,8 +116,8 @@
 
                 if (key) {
 
-                    this.reversed[key] = !this.reversed[key]
-                    this.fetchData()
+                    this.reversed[key] = !this.reversed[key];
+                    this.fetchData();
 
                 }
 
@@ -125,24 +125,27 @@
 
             search: function(e) {
 
-                e && e.preventDefault()
-                this.fetchData()
-                this.searching = false
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.fetchData();
+                this.searching = false;
 
             },
 
             clearSearch: function() {
 
-                this.nav.$set('search', '')
-                this.fetchData()
-                this.searching = false
+                this.nav.$set('search', '');
+                this.fetchData();
+                this.searching = false;
 
             },
 
             changePage: function(index) {
 
-                this.currentPage = index
-                this.fetchData()
+                this.currentPage = index;
+                this.fetchData();
 
             }
 
@@ -154,7 +157,7 @@
 
         }
 
-    }
+    };
 
 </script>
 

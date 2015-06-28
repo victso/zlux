@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -44,26 +51,27 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
-	var UI = __webpack_require__(2)
-	var _ = __webpack_require__(5)
+	var UI = __webpack_require__(2);
+	var _ = __webpack_require__(5);
 
 	UI.component('zx-files-manager', {
 
 	    boot: function() {
 
 	        if (!window.Vue) {
-	            _.warn('Vue not loaded but required by Files Manager')
-	            return
+	            _.warn('Vue not loaded but required by Files Manager');
+	            return;
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('files-manager', __webpack_require__(9))
+	        Vue.component('files-manager', __webpack_require__(9));
 
 	    }
 
-	})
+	});
+
 
 /***/ },
 /* 1 */,
@@ -78,17 +86,22 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var lang   = __webpack_require__(6)
-	var extend = lang.extend
+	'use strict';
 
-	extend(exports, lang)
-	extend(exports, __webpack_require__(7))
+	var lang = __webpack_require__(6);
+	var extend = lang.extend;
+
+	extend(exports, lang);
+	extend(exports, __webpack_require__(7));
+
 
 /***/ },
 /* 6 */
 /***/ function(module, exports) {
 
-	var _ = this
+	'use strict';
+
+	var _ = this;
 
 	/**
 	 * Mix properties into target object.
@@ -99,32 +112,32 @@
 
 	exports.extend = function (target) {
 
-	    var array = [], args = array.slice.call(arguments, 1), deep
+	    var array = [], args = array.slice.call(arguments, 1), deep;
 
-	    if (typeof target == 'boolean') {
-	        deep = target
-	        target = args.shift()
+	    if (typeof target === 'boolean') {
+	        deep = target;
+	        target = args.shift();
 	    }
 
 	    args.forEach(function (arg) {
-	        extend(target, arg, deep)
-	    })
+	        extend(target, arg, deep); // eslint-disable-line
+	    });
 
-	    return target
-	}
+	    return target;
+	};
 
 	function extend (target, source, deep) {
 	    for (var key in source) {
 	        if (deep && (_.isPlainObject(source[key]) || _.isArray(source[key]))) {
 	            if (_.isPlainObject(source[key]) && !_.isPlainObject(target[key])) {
-	                target[key] = {}
+	                target[key] = {};
 	            }
 	            if (_.isArray(source[key]) && !_.isArray(target[key])) {
 	                target[key] = [];
 	            }
-	            extend(target[key], source[key], deep)
+	            extend(target[key], source[key], deep);
 	        } else if (source[key] !== undefined) {
-	            target[key] = source[key]
+	            target[key] = source[key];
 	        }
 	    }
 	}
@@ -137,8 +150,8 @@
 	 */
 
 	exports.typeOf = function(obj) {
-	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase()
-	}
+	    return ({}).toString.call(obj).match(/\s([a-z|A-Z]+)/)[1].toLowerCase();
+	};
 
 	/**
 	 * Check if Object is a function
@@ -148,8 +161,8 @@
 	 */
 
 	exports.isFunction = function (obj) {
-	    return obj && this.typeOf(obj) === 'function'
-	}
+	    return obj && this.typeOf(obj) === 'function';
+	};
 
 	/**
 	 * Array type check.
@@ -159,8 +172,8 @@
 	 */
 
 	exports.isArray = function (obj) {
-	    return Array.isArray(obj)
-	}
+	    return Array.isArray(obj);
+	};
 
 	/**
 	 * Strict object type check. Only returns true
@@ -170,16 +183,19 @@
 	 * @return {Boolean}
 	 */
 
-	var toString = Object.prototype.toString
+	var toString = Object.prototype.toString; // eslint-disable-line
 	exports.isPlainObject = function (obj) {
-	    return toString.call(obj) === '[object Object]'
-	}
+	    return toString.call(obj) === '[object Object]';
+	};
+
 
 /***/ },
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var config = __webpack_require__(8)
+	'use strict';
+
+	var config = __webpack_require__(8);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -187,11 +203,11 @@
 	 * minified production build.
 	 */
 
-	enableDebug()
+	/* eslint-disable no-console */
 
 	function enableDebug () {
 
-	    var hasConsole = typeof console !== 'undefined'
+	    var hasConsole = typeof console !== 'undefined';
 
 	    /**
 	     * Log a message.
@@ -201,9 +217,9 @@
 
 	    exports.log = function(msg) {
 	        if (hasConsole && config.debug) {
-	            console.log('[ZLUX info]: ' + msg)
+	            console.log('[ZLUX info]: ' + msg);
 	        }
-	    }
+	    };
 
 	    /**
 	     * We've got a problem here.
@@ -213,20 +229,24 @@
 
 	    exports.warn = function(msg) {
 	        if (hasConsole && (!config.silent || config.debug)) {
-	            console.warn('[ZLUX warn]: ' + msg)
-	                /* istanbul ignore if */
+	            console.warn('[ZLUX warn]: ' + msg);
+
 	            if (config.debug) {
-	                /* jshint debug: true */
-	                debugger
+	                debugger; // eslint-disable-line
 	            }
 	        }
-	    }
+	    };
 
 	}
+
+	enableDebug();
+
 
 /***/ },
 /* 8 */
 /***/ function(module, exports) {
+
+	'use strict';
 
 	module.exports = {
 
@@ -252,7 +272,7 @@
 	     * @type {Object}
 	     */
 
-	    routes_map: {},
+	    routesMap: {},
 
 	    /**
 	     * The token number.
@@ -286,26 +306,27 @@
 
 	    silent: false
 
-	}
+	};
+
 
 /***/ },
 /* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __vue_template__ = "<div class=\"zx-files-manager\">\n\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n\n    </div>";
-	var _ = __webpack_require__(5)
-	    var $ = __webpack_require__(24)
+	var _ = __webpack_require__(5);
+	    var $ = __webpack_require__(10);
 
 	    module.exports = {
 
 	        replace: true,
 
-	        data:  function() {
+	        data: function() {
 
 	            return {
-	                root:        '',
-	                resources:   [],
-	                cache:       {},
+	                root       : '',
+	                resources  : [],
+	                cache      : {},
 	                currentRoot: '',
 	                currentView: 'resources',
 
@@ -313,7 +334,7 @@
 	                    {title: 'Files', view: 'files'},
 	                    {title: 'Uploader', view: 'uploader'}
 	                ]
-	            }
+	            };
 
 	        },
 
@@ -323,7 +344,7 @@
 
 	                e.preventDefault();
 
-	            })
+	            });
 
 	        },
 
@@ -331,14 +352,14 @@
 
 	            changeView: function(view) {
 
-	                this.currentView = view
+	                this.currentView = view;
 
 	            },
 
 	            goTo: function(path) {
 
-	                this.root = path
-	                this.fetch()
+	                this.root = path;
+	                this.fetch();
 
 	            },
 
@@ -354,32 +375,30 @@
 
 	                params = _.extend({
 
-	                    path : this.root
+	                    path: this.root
 
-	                }, (params || {}))
-
-	                console.log(params);
+	                }, (params || {}));
 
 	                this.$http.get('/files', params).done(function(response) {
 
-	                    this.root      = response.root;
+	                    this.root = response.root;
 	                    this.resources = response.resources;
 
 	                    this.cache[this.root] = response;
 
 	                    // execute callback
 	                    if (_.isFunction(this.onLoadPage)) {
-	                        this.onLoadPage()
+	                        this.onLoadPage();
 	                    }
 
-	                })
+	                });
 
 	            },
 
 	            init: function() {
 
 	                if (!this.resources.length) {
-	                    this.fetch()
+	                    this.fetch();
 	                }
 
 	            }
@@ -388,8 +407,8 @@
 
 	        components: {
 
-	            resources : __webpack_require__(20),
-	            uploader  : __webpack_require__(23)
+	            resources: __webpack_require__(11),
+	            uploader : __webpack_require__(15)
 
 	        }
 
@@ -398,12 +417,116 @@
 
 
 /***/ },
-/* 10 */,
-/* 11 */,
-/* 12 */
+/* 10 */
 /***/ function(module, exports) {
 
-	
+	module.exports = UIkit.$;
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+	module.exports = {
+
+	        replace: true,
+	        inherit: true,
+
+	        components: {
+
+	            resource  : __webpack_require__(12),
+	            breadcrumb: __webpack_require__(14)
+
+	        }
+
+	    };
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __vue_template__ = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
+	var helper = __webpack_require__(13);
+	    var $ = __webpack_require__(10);
+
+	    module.exports = {
+
+	        props: ['root', 'on-select-page'],
+
+	        data: function() {
+
+	            return {
+	                basename    : '',
+	                content_type: '',
+	                ext         : '',
+	                name        : '',
+	                size        : ''
+	            }
+
+	        },
+
+	        computed: {
+
+	            path: function() {
+	                return this.root + '/' + this.basename;
+	            },
+
+	            type: function() {
+	                return this.basename.match(/\/$/) ? 'folder' : 'file';
+	            }
+
+	        },
+
+	        filters: {
+
+	            title: function(value) {
+
+	                return value
+
+	                    // remove extension
+	                    .replace(/(\/|\.\w+$)/g, '')
+
+	                    // remove dash/underscore
+	                    .replace(/(-|_)/g, ' ');
+
+	            },
+
+	            parseSize: function(size) {
+
+	                if ( ! size) {
+	                    return size;
+	                }
+
+	                return helper.filesize( helper.parseSize(size) );
+
+	            }
+
+	        },
+
+	        methods: {
+
+	            selectPage: function(e) {
+
+	                e.preventDefault();
+	                this.onSelectPage(this.path);
+
+	            }
+
+	        }
+
+	    }
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
+
+/***/ },
+/* 13 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+
 	// http://phpjs.org/functions/basename
 	exports.basename = function(path, suffix) {
 
@@ -416,17 +539,19 @@
 
 	    b = b.replace(/^.*[\/\\]/g, '');
 
-	    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) == suffix) {
+	    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) === suffix) {
 	        b = b.substr(0, b.length - suffix.length);
 	    }
 
 	    return b;
-	}
+	};
 
 	// parses the specified size string into a byte value
 	exports.parseSize = function(size){
 
-	    if (typeof(size) !== 'string' || size === '') return size;
+	    if (typeof (size) !== 'string' || size === '') {
+	        return size;
+	    }
 
 	    var muls = {
 	            t: 1099511627776,
@@ -439,13 +564,13 @@
 	    size = /^([0-9]+)([mgk]?)$/.exec(size.toLowerCase().replace(/[^0-9mkg]/g, ''));
 	    mul = size[2];
 	    size = +size[1];
-	    
+
 	    if (muls.hasOwnProperty(mul)) {
 	        size *= muls[mul];
 	    }
 
 	    return size;
-	}
+	};
 
 	/**
 	  * https://github.com/avoidwork/filesize.js - v3.1.2
@@ -459,8 +584,8 @@
 
 	    var bit = /b$/;
 	    var si = {
-	        bits: ["B", "kb", "Mb", "Gb", "Tb", "Pb", "Eb", "Zb", "Yb"],
-	        bytes: ["B", "kB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+	        bits : ['B', 'kb', 'Mb', 'Gb', 'Tb', 'Pb', 'Eb', 'Zb', 'Yb'],
+	        bytes: ['B', 'kB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 	    };
 
 	    var descriptor = arguments[1] === undefined ? {} : arguments[1];
@@ -468,29 +593,19 @@
 	    var result = [];
 	    var skip = false;
 	    var val = 0;
-	    var e = undefined,
-	        base = undefined,
-	        bits = undefined,
-	        ceil = undefined,
-	        neg = undefined,
-	        num = undefined,
-	        output = undefined,
-	        round = undefined,
-	        unix = undefined,
-	        spacer = undefined,
-	        suffixes = undefined;
+	    var e, base, bits, ceil, neg, num, output, round, unix, spacer, suffixes;
 
 	    if (isNaN(arg)) {
-	        throw new Error("Invalid arguments");
+	        throw new Error('Invalid arguments')
 	    }
 
 	    bits = descriptor.bits === true;
 	    unix = descriptor.unix === true;
 	    base = descriptor.base !== undefined ? descriptor.base : 2;
 	    round = descriptor.round !== undefined ? descriptor.round : unix ? 1 : 2;
-	    spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? "" : " ";
+	    spacer = descriptor.spacer !== undefined ? descriptor.spacer : unix ? '' : ' ';
 	    suffixes = descriptor.suffixes !== undefined ? descriptor.suffixes : {};
-	    output = descriptor.output !== undefined ? descriptor.output : "string";
+	    output = descriptor.output !== undefined ? descriptor.output : 'string';
 	    e = descriptor.exponent !== undefined ? descriptor.exponent : -1;
 	    num = Number(arg);
 	    neg = num < 0;
@@ -506,9 +621,9 @@
 	        result[0] = 0;
 
 	        if (unix) {
-	            result[1] = "";
+	            result[1] = '';
 	        } else {
-	            result[1] = "B";
+	            result[1] = 'B';
 	        }
 	    } else {
 	        // Determining the exponent
@@ -538,7 +653,7 @@
 	        }
 
 	        result[0] = Number(val.toFixed(e > 0 ? round : 0));
-	        result[1] = si[bits ? "bits" : "bytes"][e];
+	        result[1] = si[bits ? 'bits' : 'bytes'][e];
 
 	        if (!skip && unix) {
 	            if (bits && bit.test(result[1])) {
@@ -547,11 +662,11 @@
 
 	            result[1] = result[1].charAt(0);
 
-	            if (result[1] === "B") {
+	            if (result[1] === 'B') {
 	                result[0] = Math.floor(result[0]);
-	                result[1] = "";
-	            } else if (!bits && result[1] === "k") {
-	                result[1] = "K";
+	                result[1] = '';
+	            } else if (!bits && result[1] === 'k') {
+	                result[1] = 'K';
 	            }
 	        }
 	    }
@@ -565,190 +680,80 @@
 	    result[1] = suffixes[result[1]] || result[1];
 
 	    // Returning Array, Object, or String (default)
-	    if (output === "array") {
+	    if (output === 'array') {
 	        return result;
 	    }
 
-	    if (output === "exponent") {
+	    if (output === 'exponent') {
 	        return e;
 	    }
 
-	    if (output === "object") {
+	    if (output === 'object') {
 	        return { value: result[0], suffix: result[1] };
 	    }
 
 	    return result.join(spacer);
-	}
-
-/***/ },
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
-	module.exports = {
-
-	        replace: true,
-	        inherit: true,
-
-	        components: {
-
-	            resource   : __webpack_require__(21),
-	            breadcrumb : __webpack_require__(22)
-
-	        }
-
-	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+	};
 
 
 /***/ },
-/* 21 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var __vue_template__ = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
-	var helper = __webpack_require__(12)
-	    var $ = __webpack_require__(24)
-
-	    module.exports = {
-
-	        props: ['root', 'on-select-page'],
-
-	        data: function() {
-
-	            return {
-	                basename: '',
-	                content_type: '',
-	                ext:  '',
-	                name: '',
-	                size: ''
-	            }
-
-	        },
-
-	        computed: {
-
-	            path: function() {
-	                return this.root + '/' + this.basename
-	            },
-
-	            type: function() {
-	                return this.basename.match(/\/$/) ? 'folder' : 'file'
-	            }
-
-	        },
-
-	        filters: {
-
-	            title: function(value) {
-
-	                return value
-
-	                    // remove extension
-	                    .replace(/(\/|\.\w+$)/g, '')
-
-	                    // remove dash/underscore
-	                    .replace(/(-|_)/g, ' ')
-
-	            },
-
-	            parseSize: function(size) {
-
-	                if ( ! size) return size
-
-	                return helper.filesize( helper.parseSize(size) )
-
-	            }
-
-	        },
-
-	        methods: {
-
-	            selectPage: function(e) {
-
-	                e.preventDefault()
-	                this.onSelectPage(this.path)
-
-	            }
-
-	        }
-
-	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
-
-/***/ },
-/* 22 */
+/* 14 */
 /***/ function(module, exports) {
 
 	var __vue_template__ = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\">\n\n            <a href=\"#\" v-if=\"path !== root\" v-on=\"click: $parent.$parent.goTo(path)\">\n                {{ name }}\n            </a>\n\n            <span v-if=\"path === root\" class=\"uk-active\">\n                {{ name }}\n            </span>\n\n        </li>\n\n    </ul>";
 	module.exports = {
 
 	        replace: true,
-	        props: ['root'],
+	        props  : ['root'],
 
 	        computed: {
 
 	            crumbs: function() {
 
-	                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = []
+	                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = [];
 
 	                if (parts.length > 1) {
 
-	                    var path = '/'
+	                    var path = '/';
 
 	                    parts.forEach(function(part) {
 
 	                        crumbs.push({
 	                            'name': part,
 	                            'path': path += part + '/'
-	                        })
+	                        });
 
-	                    })
+	                    });
 
 	                } else {
-	                    this.root = '/'
+	                    this.root = '/';
 	                }
 
 	                crumbs.unshift({
 	                    'name': 'root',
 	                    'path': '/'
-	                })
+	                });
 
-	                return crumbs
+	                return crumbs;
 
 	            }
 
 	        }
-
-	    }
-	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
-
-
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
-
-	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
-	module.exports = {
-
-	        
 
 	    };
 	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
 
 
 /***/ },
-/* 24 */
+/* 15 */
 /***/ function(module, exports) {
 
-	module.exports = jQuery;
+	var __vue_template__ = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
+	module.exports = {
+
+	    };
+	;(typeof module.exports === "function"? module.exports.options: module.exports).template = __vue_template__;
+
 
 /***/ }
 /******/ ]);

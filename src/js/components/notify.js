@@ -1,8 +1,10 @@
-var UI = require('uikit')
+var UI = require('uikit');
+var ZX = require('zlux');
+var $ = require('jquery');
 
 var notify = function(msg, options){
     // display message
-    var notify = UI.$.UIkit.notify(msg, options);
+    var notify = UI.notify(msg, options);
 
     // add zlux class for the holding content styling
     notify.element.parent().addClass('zx');
@@ -12,13 +14,13 @@ var notify = function(msg, options){
 
 confirm = function(msg, options){
 
-    options = UI.$.extend(options, {
+    options = $.extend(options, {
         timeout: false // confirmation must wait user interaction
     });
 
-    return UI.$.Deferred(function( defer )
+    return $.Deferred(function( defer )
     {
-        var notify = UI.$zlux.notify(msg + '<div class="uk-text-center uk-margin-top">\
+        var notify = ZX.notify(msg + '<div class="uk-text-center uk-margin-top">\
                 <a class="zx-x-confirm uk-margin-right"><i class="uk-icon-check uk-icon-small"></i></a>\
                 <a class="zx-x-cancel uk-margin-left"><i class="uk-icon-times uk-icon-small"></i></a>\
             </div>',
@@ -36,10 +38,10 @@ confirm = function(msg, options){
 },
 
 closeAll = function(group, instantly){
-    UI.$.UIkit.notify.closeAll(group, instantly);
+    UI.notify.closeAll(group, instantly);
     return this;
 };
 
-UI.$zlux.notify             = notify;
-UI.$zlux.notify.confirm     = confirm;
-UI.$zlux.notify.closeAll    = closeAll;
+ZX.notify             = notify;
+ZX.notify.confirm     = confirm;
+ZX.notify.closeAll    = closeAll;
