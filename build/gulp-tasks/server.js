@@ -1,14 +1,12 @@
-var gulp   = require('gulp');
-var bsync  = require('browser-sync');
-// var runSeq = require('run-sequence');
-var cp     = require('child_process');
+var gulp = require('gulp');
+var bsync = require('browser-sync');
 
 /**
  * Run build, starts the server with BrowserSync and watch for changes
  */
 gulp.task('serve', ['server-init'], function() {
 
-	return gulp.watch([
+    return gulp.watch([
         'tests/**/*',
         'dist/**/*'
     ], ['server-rebuild']);
@@ -17,25 +15,25 @@ gulp.task('serve', ['server-init'], function() {
 
 gulp.task('server-init', function(cb) {
 
-	bsync({
-		server: {
-        	baseDir: './',
-    	},
-    	startPath: 'tests',
-    	port: 9999,
-    	notify: false
+    bsync({
+        server: {
+            baseDir: './'
+        },
+        startPath: 'tests',
+        port     : 9999,
+        notify   : false
     });
 
-	cb();
+    cb();
 
 });
 
 gulp.task('server-rebuild', function(cb) {
 
-	bsync.notify('Compiling');
+    bsync.notify('Compiling');
 
-	bsync.reload();
-	bsync.notify('Compiled');
-	cb();
-	
+    bsync.reload();
+    bsync.notify('Compiled');
+    cb();
+
 });
