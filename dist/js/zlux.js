@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 (function webpackUniversalModuleDefinition(root, factory) {
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory(require("UIkit"));

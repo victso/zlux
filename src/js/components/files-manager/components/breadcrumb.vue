@@ -3,37 +3,42 @@
     module.exports = {
 
         replace: true,
-        props  : ['root'],
+        props: ['location', 'go-to'],
 
         computed: {
 
+            parts: function() {
+
+                return this.location.replace(/^[\/]|[\/]$/gm, '').split('/');
+
+            },
+
             crumbs: function() {
 
-                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = [];
+                var crumbs = [], path = '/';
 
-                if (parts.length > 1) {
+                this.parts.forEach(function(part) {
 
-                    var path = '/';
+                    if (part === '') {
+                        return true;
+                    }
 
-                    parts.forEach(function(part) {
-
-                        crumbs.push({
-                            'name': part,
-                            'path': path += part + '/'
-                        });
-
+                    crumbs.push({
+                        'name': part,
+                        'path': path += part + '/'
                     });
 
-                } else {
-                    this.root = '/';
-                }
-
-                crumbs.unshift({
-                    'name': 'root',
-                    'path': '/'
                 });
 
+                crumbs.pop();
+
                 return crumbs;
+
+            },
+
+            active: function() {
+
+                return this.parts.pop();
 
             }
 
@@ -47,17 +52,9 @@
 
     <ul class="uk-breadcrumb">
 
-        <li v-repeat="crumbs">
-
-            <a href="#" v-if="path !== root" v-on="click: $parent.$parent.goTo(path)">
-                {{ name }}
-            </a>
-
-            <span v-if="path === root" class="uk-active">
-                {{ name }}
-            </span>
-
-        </li>
+        <li><a href="#" v-on="click: goTo('/')">{{ 'root' | trans }}</a></li>
+        <li v-repeat="crumbs"><a href="#" v-on="click: goTo(path)">{{ name }}</a></li>
+        <li v-if="active" class="uk-active"><span>{{ active }}</span></li>
 
     </ul>
 

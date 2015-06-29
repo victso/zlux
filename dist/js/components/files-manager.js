@@ -1,3 +1,10 @@
+/**
+ * @package     zlux
+ * @version     2.0.3
+ * @author      ZOOlanders - http://zoolanders.com
+ * @license     GNU General Public License v2 or later
+ */
+
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -332,14 +339,15 @@
 	    module.exports = {
 
 	        replace: true,
+	        props: ['root'],
 
 	        data: function() {
 
 	            return {
-	                root       : '',
-	                resources  : [],
-	                cache      : {},
-	                currentRoot: '',
+	                root: '',
+	                location: '',
+	                cache: {},
+	                resources: [],
 	                currentView: 'resources',
 
 	                nav: [
@@ -370,8 +378,11 @@
 
 	            goTo: function(path) {
 
-	                this.root = path;
-	                this.fetch();
+	                if (path === '/') {
+	                    path = this.root;
+	                }
+
+	                this.fetch({path: path});
 
 	            },
 
@@ -387,16 +398,16 @@
 
 	                params = _.extend({
 
-	                    path: this.root
+	                    path: this.location ? this.root + '/' + this.location : this.root
 
 	                }, (params || {}));
 
 	                this.$http.get('/files', params).done(function(response) {
 
-	                    this.root = response.root;
-	                    this.resources = response.resources;
+	                    this.$set('location', response.location);
+	                    this.$set('resources', response.resources);
 
-	                    this.cache[this.root] = response;
+	                    this.cache[this.location] = response;
 
 	                    // execute callback
 	                    if (_.isFunction(this.onLoadPage)) {
@@ -733,37 +744,42 @@
 	module.exports = {
 
 	        replace: true,
-	        props  : ['root'],
+	        props: ['location', 'go-to'],
 
 	        computed: {
 
+	            parts: function() {
+
+	                return this.location.replace(/^[\/]|[\/]$/gm, '').split('/');
+
+	            },
+
 	            crumbs: function() {
 
-	                var parts = this.root.replace(/^[\/]|[\/]$/gm, '').split('/'), crumbs = [];
+	                var crumbs = [], path = '/';
 
-	                if (parts.length > 1) {
+	                this.parts.forEach(function(part) {
 
-	                    var path = '/';
+	                    if (part === '') {
+	                        return true;
+	                    }
 
-	                    parts.forEach(function(part) {
-
-	                        crumbs.push({
-	                            'name': part,
-	                            'path': path += part + '/'
-	                        });
-
+	                    crumbs.push({
+	                        'name': part,
+	                        'path': path += part + '/'
 	                    });
 
-	                } else {
-	                    this.root = '/';
-	                }
-
-	                crumbs.unshift({
-	                    'name': 'root',
-	                    'path': '/'
 	                });
 
+	                crumbs.pop();
+
 	                return crumbs;
+
+	            },
+
+	            active: function() {
+
+	                return this.parts.pop();
 
 	            }
 
@@ -775,13 +791,13 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-breadcrumb\">\n\n        <li v-repeat=\"crumbs\">\n\n            <a href=\"#\" v-if=\"path !== root\" v-on=\"click: $parent.$parent.goTo(path)\">\n                {{ name }}\n            </a>\n\n            <span v-if=\"path === root\" class=\"uk-active\">\n                {{ name }}\n            </span>\n\n        </li>\n\n    </ul>";
+	module.exports = "<ul class=\"uk-breadcrumb\">\n\n        <li><a href=\"#\" v-on=\"click: goTo('/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"#\" v-on=\"click: goTo(path)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active }}</span></li>\n\n    </ul>";
 
 /***/ },
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<breadcrumb root=\"{{ root }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{* root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{ root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
 
 /***/ },
 /* 35 */

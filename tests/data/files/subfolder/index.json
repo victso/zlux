@@ -1,5 +1,5 @@
 {
-    "root": "files/subfolder",
+    "location": "subfolder",
     "resources": [{
         "basename": "consectetur.png",
         "content_type": "image/jpeg",

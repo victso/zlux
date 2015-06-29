@@ -18,9 +18,9 @@
 
 <template>
 
-    <breadcrumb root="{{ root }}"></breadcrumb>
+    <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
 
-    <table class="uk-table">
+    <table class="uk-table" v-if="resources.length">
         <thead>
             <tr>
                 <th>File</th>
@@ -28,8 +28,10 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-component="resource" v-repeat="resources" root="{{* root }}" on-select-page="{{ goTo }}"></tr>
+            <tr v-component="resource" v-repeat="resources" root="{{ root }}" on-select-page="{{ goTo }}"></tr>
         </tbody>
     </table>
+
+    <div v-if="!resources.length">Somethign is wrong</div>
 
 </template>

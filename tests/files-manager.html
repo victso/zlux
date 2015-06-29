@@ -29,11 +29,9 @@
             // mock DT request
             $.mockjax(function(settings) {
 
-                var folder = settings.data.path ? settings.data.path : 'files'
-
                 if (settings.url.match(/&controller\=zlux\&task\=getFilesManagerData/)) {
                     return {
-                        proxy: 'data/' + folder + '/index.json'
+                        proxy: 'data/' + settings.data.path + '/index.json'
                     }
                 }
                 return
@@ -58,7 +56,7 @@
         <div class="uk-container uk-container-center">
 
             <div data-zx-files-manager>
-                <files-manager v-ref="manager"></files-manager>
+                <files-manager v-ref="manager" root="files"></files-manager>
             </div>
 
         </div>

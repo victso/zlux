@@ -6,14 +6,15 @@
     module.exports = {
 
         replace: true,
+        props: ['root'],
 
         data: function() {
 
             return {
-                root       : '',
-                resources  : [],
-                cache      : {},
-                currentRoot: '',
+                root: '',
+                location: '',
+                cache: {},
+                resources: [],
                 currentView: 'resources',
 
                 nav: [
@@ -44,8 +45,11 @@
 
             goTo: function(path) {
 
-                this.root = path;
-                this.fetch();
+                if (path === '/') {
+                    path = this.root;
+                }
+
+                this.fetch({path: path});
 
             },
 
@@ -61,16 +65,16 @@
 
                 params = _.extend({
 
-                    path: this.root
+                    path: this.location ? this.root + '/' + this.location : this.root
 
                 }, (params || {}));
 
                 this.$http.get('/files', params).done(function(response) {
 
-                    this.root = response.root;
-                    this.resources = response.resources;
+                    this.$set('location', response.location);
+                    this.$set('resources', response.resources);
 
-                    this.cache[this.root] = response;
+                    this.cache[this.location] = response;
 
                     // execute callback
                     if (_.isFunction(this.onLoadPage)) {
