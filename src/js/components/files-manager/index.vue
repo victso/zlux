@@ -3,29 +3,23 @@
     <div class="zx-files-manager">
 
         <template v-if="!notice">
+        <nav class="uk-navbar">
+            <ul class="uk-navbar-nav">
 
-            <nav class="uk-navbar">
-                <ul class="uk-navbar-nav">
+                <li class="uk-parent uk-active" v-repeat="item: nav">
+                    <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
+                </li>
 
-                    <li class="uk-parent uk-active" v-repeat="item: nav">
+            </ul>
+        </nav>
 
-                        <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
-
-                    </li>
-
-                </ul>
-            </nav>
-
-            <component is="{{ currentView }}"></component>
-
+        <component is="{{ currentView }}"></component>
         </template>
 
         <div v-if="notice" class="uk-text-center">
 
-            <div>{{ notice }}</div>
-
-            <!-- <i class="uk-icon-refresh uk-icon-small"></i> -->
-            <a href="" v-on="click: retry">Retry</a>
+            <i v-if="fetching" class="uk-icon-spinner uk-icon-spin"></i>
+            <div v-if="!fetching">{{ notice }} <br ><a href="" v-on="click: retry">Retry</a></div>
 
         </div>
 
@@ -53,6 +47,7 @@
                 notices: [],
                 resources: [],
                 currentView: 'resources',
+                fetching: false,
 
                 nav: [
                     {title: 'Files', view: 'files'},
@@ -129,6 +124,8 @@
 
                 }, (params || {}));
 
+                this.$set('fetching', true);
+
                 this.$http.get('/files', params).done(function(response) {
 
                     this.$set('location', response.location);
@@ -146,6 +143,8 @@
                     this.$set('notices', response.notices);
                     this.$set('errors', response.errors);
 
+                }).always(function() {
+                    this.$set('fetching', false);
                 });
 
             },

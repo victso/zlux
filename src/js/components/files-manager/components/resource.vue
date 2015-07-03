@@ -1,10 +1,21 @@
+<template>
+
+        <td>
+            <a v-if="type == 'folder'" href="#" v-on="click: selectPage">{{ basename | title }}</a>
+            <template v-if="type == 'file'">{{ basename | title }}</template>
+        </td>
+
+        <td>{{ size | parseSize }}</td>
+
+</template>
+
 <script>
 
     var helper = require('../helper.js');
 
     module.exports = {
 
-        props: ['root', 'on-select-page'],
+        props: ['$data', 'root', 'on-select-page'],
 
         data: function() {
 
@@ -21,7 +32,7 @@
         computed: {
 
             path: function() {
-                return this.root + '/' + this.basename;
+                return  '/' + this.basename;
             },
 
             type: function() {
@@ -70,25 +81,3 @@
     }
 
 </script>
-
-<template>
-
-    <td v-if="type == 'folder'">
-
-        <a href="#" v-on="click: selectPage">{{ basename | title }}</a>
-
-    </td>
-
-    <td v-if="type == 'file'">
-
-        {{ basename | title }}
-
-    </td>
-
-    <td>
-
-        {{ size | parseSize }}
-
-    </td>
-
-</template>

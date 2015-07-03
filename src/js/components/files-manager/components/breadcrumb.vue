@@ -1,8 +1,19 @@
+<template>
+
+    <ul class="uk-breadcrumb">
+
+        <li><a href="#" v-on="click: goTo('/')">{{ 'root' | trans }}</a></li>
+        <li v-repeat="crumbs"><a href="#" v-on="click: goTo(path)">{{ name }}</a></li>
+        <li v-if="active" class="uk-active"><span>{{ active }}</span></li>
+
+    </ul>
+
+</template>
+
 <script>
 
     module.exports = {
 
-        replace: true,
         props: ['location', 'go-to'],
 
         computed: {
@@ -47,15 +58,3 @@
     };
 
 </script>
-
-<template>
-
-    <ul class="uk-breadcrumb">
-
-        <li><a href="#" v-on="click: goTo('/')">{{ 'root' | trans }}</a></li>
-        <li v-repeat="crumbs"><a href="#" v-on="click: goTo(path)">{{ name }}</a></li>
-        <li v-if="active" class="uk-active"><span>{{ active }}</span></li>
-
-    </ul>
-
-</template>

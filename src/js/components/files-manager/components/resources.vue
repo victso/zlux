@@ -1,21 +1,3 @@
-<script>
-
-    module.exports = {
-
-        replace: true,
-        inherit: true,
-
-        components: {
-
-            resource  : require('./resource.vue'),
-            breadcrumb: require('./breadcrumb.vue')
-
-        }
-
-    };
-
-</script>
-
 <template>
 
     <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
@@ -28,8 +10,27 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-component="resource" v-repeat="resources" root="{{ root }}" on-select-page="{{ goTo }}"></tr>
+            <tr v-repeat="resource: resources">
+                <td v-component="resource" $data="{{ resource }}" root="{{ root }}" on-select-page="{{ goTo }}"></td>
+            </tr>
         </tbody>
     </table>
 
 </template>
+
+<script>
+
+    module.exports = {
+
+        inherit: true,
+
+        components: {
+
+            resource: require('./resource.vue'),
+            breadcrumb: require('./breadcrumb.vue')
+
+        }
+
+    };
+
+</script>

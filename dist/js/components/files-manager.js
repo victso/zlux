@@ -351,6 +351,7 @@
 	                notices: [],
 	                resources: [],
 	                currentView: 'resources',
+	                fetching: false,
 
 	                nav: [
 	                    {title: 'Files', view: 'files'},
@@ -427,6 +428,8 @@
 
 	                }, (params || {}));
 
+	                this.$set('fetching', true);
+
 	                this.$http.get('/files', params).done(function(response) {
 
 	                    this.$set('location', response.location);
@@ -444,6 +447,8 @@
 	                    this.$set('notices', response.notices);
 	                    this.$set('errors', response.errors);
 
+	                }).always(function() {
+	                    this.$set('fetching', false);
 	                });
 
 	            },
@@ -486,12 +491,11 @@
 
 	module.exports = {
 
-	        replace: true,
 	        inherit: true,
 
 	        components: {
 
-	            resource  : __webpack_require__(27),
+	            resource: __webpack_require__(27),
 	            breadcrumb: __webpack_require__(31)
 
 	        }
@@ -513,7 +517,7 @@
 
 	    module.exports = {
 
-	        props: ['root', 'on-select-page'],
+	        props: ['$data', 'root', 'on-select-page'],
 
 	        data: function() {
 
@@ -530,7 +534,7 @@
 	        computed: {
 
 	            path: function() {
-	                return this.root + '/' + this.basename;
+	                return  '/' + this.basename;
 	            },
 
 	            type: function() {
@@ -758,7 +762,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<td v-if=\"type == 'folder'\">\n\n        <a href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n\n    </td>\n\n    <td v-if=\"type == 'file'\">\n\n        {{ basename | title }}\n\n    </td>\n\n    <td>\n\n        {{ size | parseSize }}\n\n    </td>";
+	module.exports = "<td>\n            <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n            <template v-if=\"type == 'file'\">{{ basename | title }}</template>\n        </td>\n\n        <td>{{ size | parseSize }}</td>";
 
 /***/ },
 /* 31 */
@@ -773,7 +777,6 @@
 
 	module.exports = {
 
-	        replace: true,
 	        props: ['location', 'go-to'],
 
 	        computed: {
@@ -827,7 +830,7 @@
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" root=\"{{ root }}\" on-select-page=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"resource: resources\">\n                <td v-component=\"resource\" $data=\"{{ resource }}\" root=\"{{ root }}\" on-select-page=\"{{ goTo }}\"></td>\n            </tr>\n        </tbody>\n    </table>";
 
 /***/ },
 /* 35 */
@@ -854,7 +857,7 @@
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"zx-files-manager\">\n\n        <template v-if=\"!notice\">\n\n            <nav class=\"uk-navbar\">\n                <ul class=\"uk-navbar-nav\">\n\n                    <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                        <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                    </li>\n\n                </ul>\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n\n            <div>{{ notice }}</div>\n\n            <!-- <i class=\"uk-icon-refresh uk-icon-small\"></i> -->\n            <a href=\"\" v-on=\"click: retry\">Retry</a>\n\n        </div>\n\n    </div>";
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <template v-if=\"!notice\">\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n\n            <i v-if=\"fetching\" class=\"uk-icon-spinner uk-icon-spin\"></i>\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">Retry</a></div>\n\n        </div>\n\n    </div>";
 
 /***/ }
 /******/ ]);
