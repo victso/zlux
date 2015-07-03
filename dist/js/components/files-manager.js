@@ -347,6 +347,8 @@
 	                root: '',
 	                location: '',
 	                cache: {},
+	                errors: [],
+	                notices: [],
 	                resources: [],
 	                currentView: 'resources',
 
@@ -355,6 +357,22 @@
 	                    {title: 'Uploader', view: 'uploader'}
 	                ]
 	            };
+
+	        },
+
+	        computed: {
+
+	            error: function() {
+
+	                return this.errors.length ? this.errors.join('\n') : false;
+
+	            },
+
+	            notice: function() {
+
+	                return this.notices.length ? this.notices.join('\n') : false;
+
+	            }
 
 	        },
 
@@ -369,6 +387,13 @@
 	        },
 
 	        methods: {
+
+	            retry: function(e) {
+
+	                e.preventDefault();
+	                this.fetch();
+
+	            },
 
 	            changeView: function(view) {
 
@@ -413,6 +438,11 @@
 	                    if (_.isFunction(this.onLoadPage)) {
 	                        this.onLoadPage();
 	                    }
+
+	                }).fail(function(response) {
+
+	                    this.$set('notices', response.notices);
+	                    this.$set('errors', response.errors);
 
 	                });
 
@@ -824,7 +854,7 @@
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"zx-files-manager\">\n\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n\n    </div>";
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <template v-if=\"!notice\">\n\n            <nav class=\"uk-navbar\">\n                <ul class=\"uk-navbar-nav\">\n\n                    <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n\n                        <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n\n                    </li>\n\n                </ul>\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n\n            <div>{{ notice }}</div>\n\n            <!-- <i class=\"uk-icon-refresh uk-icon-small\"></i> -->\n            <a href=\"\" v-on=\"click: retry\">Retry</a>\n\n        </div>\n\n    </div>";
 
 /***/ }
 /******/ ]);

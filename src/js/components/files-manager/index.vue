@@ -1,3 +1,38 @@
+<template>
+
+    <div class="zx-files-manager">
+
+        <template v-if="!notice">
+
+            <nav class="uk-navbar">
+                <ul class="uk-navbar-nav">
+
+                    <li class="uk-parent uk-active" v-repeat="item: nav">
+
+                        <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
+
+                    </li>
+
+                </ul>
+            </nav>
+
+            <component is="{{ currentView }}"></component>
+
+        </template>
+
+        <div v-if="notice" class="uk-text-center">
+
+            <div>{{ notice }}</div>
+
+            <!-- <i class="uk-icon-refresh uk-icon-small"></i> -->
+            <a href="" v-on="click: retry">Retry</a>
+
+        </div>
+
+    </div>
+
+</template>
+
 <script>
 
     var _ = require('../../util');
@@ -14,6 +49,8 @@
                 root: '',
                 location: '',
                 cache: {},
+                errors: [],
+                notices: [],
                 resources: [],
                 currentView: 'resources',
 
@@ -22,6 +59,22 @@
                     {title: 'Uploader', view: 'uploader'}
                 ]
             };
+
+        },
+
+        computed: {
+
+            error: function() {
+
+                return this.errors.length ? this.errors.join('\n') : false;
+
+            },
+
+            notice: function() {
+
+                return this.notices.length ? this.notices.join('\n') : false;
+
+            }
 
         },
 
@@ -36,6 +89,13 @@
         },
 
         methods: {
+
+            retry: function(e) {
+
+                e.preventDefault();
+                this.fetch();
+
+            },
 
             changeView: function(view) {
 
@@ -81,6 +141,11 @@
                         this.onLoadPage();
                     }
 
+                }).fail(function(response) {
+
+                    this.$set('notices', response.notices);
+                    this.$set('errors', response.errors);
+
                 });
 
             },
@@ -105,25 +170,3 @@
     };
 
 </script>
-
-<template>
-
-    <div class="zx-files-manager">
-
-        <nav class="uk-navbar">
-            <ul class="uk-navbar-nav">
-
-                <li class="uk-parent uk-active" v-repeat="item: nav">
-
-                    <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
-
-                </li>
-
-            </ul>
-        </nav>
-
-        <component is="{{ currentView }}"></component>
-
-    </div>
-
-</template>

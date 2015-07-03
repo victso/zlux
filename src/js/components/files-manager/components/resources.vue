@@ -20,7 +20,7 @@
 
     <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
 
-    <table class="uk-table" v-if="resources.length">
+    <table class="uk-table">
         <thead>
             <tr>
                 <th>File</th>
@@ -31,7 +31,5 @@
             <tr v-component="resource" v-repeat="resources" root="{{ root }}" on-select-page="{{ goTo }}"></tr>
         </tbody>
     </table>
-
-    <div v-if="!resources.length">Somethign is wrong</div>
 
 </template>
