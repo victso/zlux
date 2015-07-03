@@ -5,7 +5,7 @@
         "uikit": ">= 2.20.0",
         "jquery-mockjax": "~2.0.0",
         "moment": "~2.9.0",
-        "vue": "= 0.12.1"
+        "vue": "= 0.12.5"
     },
     "private": true
 }
