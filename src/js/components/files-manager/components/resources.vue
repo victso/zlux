@@ -10,9 +10,7 @@
             </tr>
         </thead>
         <tbody>
-            <tr v-repeat="resource: resources">
-                <td v-component="resource" $data="{{ resource }}" root="{{ root }}" on-select-page="{{ goTo }}"></td>
-            </tr>
+            <tr v-component="resource" v-repeat="resources" location="{{ location }}" go-to="{{ goTo }}"></tr>
         </tbody>
     </table>
 

@@ -1,11 +1,15 @@
 <template>
 
+    <tr>
+
         <td>
-            <a v-if="type == 'folder'" href="#" v-on="click: selectPage">{{ basename | title }}</a>
+            <a v-if="type == 'folder'" href="#" v-on="click: goToFolder">{{ basename | title }}</a>
             <template v-if="type == 'file'">{{ basename | title }}</template>
         </td>
 
         <td>{{ size | parseSize }}</td>
+
+    </tr>
 
 </template>
 
@@ -15,25 +19,21 @@
 
     module.exports = {
 
-        props: ['$data', 'root', 'on-select-page'],
+        props: ['location', 'go-to'],
 
         data: function() {
 
             return {
-                basename    : '',
+                basename: '',
                 content_type: '',
-                ext         : '',
-                name        : '',
-                size        : ''
+                ext:  '',
+                name: '',
+                size: ''
             }
 
         },
 
         computed: {
-
-            path: function() {
-                return  '/' + this.basename;
-            },
 
             type: function() {
                 return this.basename.match(/\/$/) ? 'folder' : 'file';
@@ -46,12 +46,8 @@
             title: function(value) {
 
                 return value
-
-                    // remove extension
-                    .replace(/(\/|\.\w+$)/g, '')
-
-                    // remove dash/underscore
-                    .replace(/(-|_)/g, ' ');
+                    .replace(/(\/|\.\w+$)/g, '') // remove extension
+                    .replace(/(-|_)/g, ' ');     // replace dash/underscore
 
             },
 
@@ -69,11 +65,9 @@
 
         methods: {
 
-            selectPage: function(e) {
-
+            goToFolder: function(e) {
                 e.preventDefault();
-                this.onSelectPage(this.path);
-
+                this.goTo(this.location + '/' + this.basename);
             }
 
         }

@@ -338,14 +338,18 @@
 
 	    module.exports = {
 
-	        replace: true,
-	        props: ['root'],
+	        props: {
+	            'routeMap': {
+	                type: String,
+	                required: true,
+	                default: ''
+	            }
+	        },
 
 	        data: function() {
 
 	            return {
-	                root: '',
-	                location: '',
+	                location: '/',
 	                cache: {},
 	                errors: [],
 	                notices: [],
@@ -377,60 +381,33 @@
 
 	        },
 
-	        ready: function() {
-
-	            $('a[href="#"]', this.$el).on('click', function(e) {
-
-	                e.preventDefault();
-
-	            });
-
-	        },
-
 	        methods: {
 
 	            retry: function(e) {
-
 	                e.preventDefault();
 	                this.fetch();
-
 	            },
 
 	            changeView: function(view) {
-
 	                this.currentView = view;
-
 	            },
 
-	            goTo: function(path) {
+	            goTo: function(location) {
+	                this.fetch(this.cleanPath(location));
+	            },
 
-	                if (path === '/') {
-	                    path = this.root;
+	            fetch: function(location) {
+	                location = location || this.location;
+
+	                if (this.cache[location]) {
+	                    this.$set('location', location);
+	                    this.$set('resources', this.cache[location].resources);
+	                    return;
 	                }
-
-	                this.fetch({path: path});
-
-	            },
-
-	            fetch: function(params) {
-
-	                // if (this.cache[this.currentPath]) {
-
-	                //     this.root  = path;
-	                //     this.files = this.cache[path];
-	                //     return;
-
-	                // }
-
-	                params = _.extend({
-
-	                    path: this.location ? this.root + '/' + this.location : this.root
-
-	                }, (params || {}));
 
 	                this.$set('fetching', true);
 
-	                this.$http.get('/files', params).done(function(response) {
+	                this.$http.get(this.routeMap, {location: location}).done(function(response) {
 
 	                    this.$set('location', response.location);
 	                    this.$set('resources', response.resources);
@@ -453,12 +430,10 @@
 
 	            },
 
-	            init: function() {
-
-	                if (!this.resources.length) {
-	                    this.fetch();
-	                }
-
+	            cleanPath: function(path) {
+	                return path === '/' ? path : path
+	                    .replace(/\/\/+/g, '/')    // replace double or more slashes
+	                    .replace(/^\/|\/$/g, '');   // remove / from ends
 	            }
 
 	        },
@@ -517,25 +492,21 @@
 
 	    module.exports = {
 
-	        props: ['$data', 'root', 'on-select-page'],
+	        props: ['location', 'go-to'],
 
 	        data: function() {
 
 	            return {
-	                basename    : '',
+	                basename: '',
 	                content_type: '',
-	                ext         : '',
-	                name        : '',
-	                size        : ''
+	                ext:  '',
+	                name: '',
+	                size: ''
 	            }
 
 	        },
 
 	        computed: {
-
-	            path: function() {
-	                return  '/' + this.basename;
-	            },
 
 	            type: function() {
 	                return this.basename.match(/\/$/) ? 'folder' : 'file';
@@ -548,12 +519,8 @@
 	            title: function(value) {
 
 	                return value
-
-	                    // remove extension
-	                    .replace(/(\/|\.\w+$)/g, '')
-
-	                    // remove dash/underscore
-	                    .replace(/(-|_)/g, ' ');
+	                    .replace(/(\/|\.\w+$)/g, '') // remove extension
+	                    .replace(/(-|_)/g, ' ');     // replace dash/underscore
 
 	            },
 
@@ -571,11 +538,9 @@
 
 	        methods: {
 
-	            selectPage: function(e) {
-
+	            goToFolder: function(e) {
 	                e.preventDefault();
-	                this.onSelectPage(this.path);
-
+	                this.goTo(this.location + '/' + this.basename);
 	            }
 
 	        }
@@ -762,7 +727,7 @@
 /* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<td>\n            <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: selectPage\">{{ basename | title }}</a>\n            <template v-if=\"type == 'file'\">{{ basename | title }}</template>\n        </td>\n\n        <td>{{ size | parseSize }}</td>";
+	module.exports = "<tr>\n\n        <td>\n            <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: goToFolder\">{{ basename | title }}</a>\n            <template v-if=\"type == 'file'\">{{ basename | title }}</template>\n        </td>\n\n        <td>{{ size | parseSize }}</td>\n\n    </tr>";
 
 /***/ },
 /* 31 */
@@ -779,40 +744,37 @@
 
 	        props: ['location', 'go-to'],
 
+	        data: function () {
+
+	            return {
+	                active: null
+	            };
+
+	        },
+
 	        computed: {
-
-	            parts: function() {
-
-	                return this.location.replace(/^[\/]|[\/]$/gm, '').split('/');
-
-	            },
 
 	            crumbs: function() {
 
-	                var crumbs = [], path = '/';
+	                var crumbs = [], location = '';
 
-	                this.parts.forEach(function(part) {
+	                this.location.replace(/^[\/]|[\/]$/gm, '').split('/').forEach(function(crumb) {
 
-	                    if (part === '') {
+	                    if (crumb === '') {
 	                        return true;
 	                    }
 
 	                    crumbs.push({
-	                        'name': part,
-	                        'path': path += part + '/'
+	                        'name': crumb,
+	                        'location': location += '/' + crumb
 	                    });
 
 	                });
 
-	                crumbs.pop();
+	                // set active
+	                this.$set('active', crumbs.pop());
 
 	                return crumbs;
-
-	            },
-
-	            active: function() {
-
-	                return this.parts.pop();
 
 	            }
 
@@ -824,13 +786,13 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-breadcrumb\">\n\n        <li><a href=\"#\" v-on=\"click: goTo('/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"#\" v-on=\"click: goTo(path)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active }}</span></li>\n\n    </ul>";
+	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li><a href=\"#\" v-on=\"click: goTo('/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"#\" v-on=\"click: goTo(location)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
 
 /***/ },
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"resource: resources\">\n                <td v-component=\"resource\" $data=\"{{ resource }}\" root=\"{{ root }}\" on-select-page=\"{{ goTo }}\"></td>\n            </tr>\n        </tbody>\n    </table>";
+	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
 
 /***/ },
 /* 35 */
@@ -857,7 +819,7 @@
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"zx-files-manager\">\n\n        <template v-if=\"!notice\">\n        <nav class=\"uk-navbar\">\n            <ul class=\"uk-navbar-nav\">\n\n                <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n                    <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n                </li>\n\n            </ul>\n        </nav>\n\n        <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n\n            <i v-if=\"fetching\" class=\"uk-icon-spinner uk-icon-spin\"></i>\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">Retry</a></div>\n\n        </div>\n\n    </div>";
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice\">\n            <nav class=\"uk-navbar\">\n                <ul class=\"uk-navbar-nav\">\n\n                    <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n                        <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n                    </li>\n\n                </ul>\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">Retry</a></div>\n        </div>\n\n    </div>";
 
 /***/ }
 /******/ ]);

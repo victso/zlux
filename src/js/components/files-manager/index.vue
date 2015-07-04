@@ -1,30 +1,29 @@
 <template>
-
     <div class="zx-files-manager">
 
+        <div v-if="fetching && !resources.length" class="uk-text-center">
+            <i class="uk-icon-spinner uk-icon-spin uk-icon-small"></i>
+        </div>
+
         <template v-if="!notice">
-        <nav class="uk-navbar">
-            <ul class="uk-navbar-nav">
+            <nav class="uk-navbar">
+                <ul class="uk-navbar-nav">
 
-                <li class="uk-parent uk-active" v-repeat="item: nav">
-                    <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
-                </li>
+                    <li class="uk-parent uk-active" v-repeat="item: nav">
+                        <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
+                    </li>
 
-            </ul>
-        </nav>
+                </ul>
+            </nav>
 
-        <component is="{{ currentView }}"></component>
+            <component is="{{ currentView }}"></component>
         </template>
 
         <div v-if="notice" class="uk-text-center">
-
-            <i v-if="fetching" class="uk-icon-spinner uk-icon-spin"></i>
             <div v-if="!fetching">{{ notice }} <br ><a href="" v-on="click: retry">Retry</a></div>
-
         </div>
 
     </div>
-
 </template>
 
 <script>
@@ -34,14 +33,18 @@
 
     module.exports = {
 
-        replace: true,
-        props: ['root'],
+        props: {
+            'routeMap': {
+                type: String,
+                required: true,
+                default: ''
+            }
+        },
 
         data: function() {
 
             return {
-                root: '',
-                location: '',
+                location: '/',
                 cache: {},
                 errors: [],
                 notices: [],
@@ -73,60 +76,33 @@
 
         },
 
-        ready: function() {
-
-            $('a[href="#"]', this.$el).on('click', function(e) {
-
-                e.preventDefault();
-
-            });
-
-        },
-
         methods: {
 
             retry: function(e) {
-
                 e.preventDefault();
                 this.fetch();
-
             },
 
             changeView: function(view) {
-
                 this.currentView = view;
-
             },
 
-            goTo: function(path) {
+            goTo: function(location) {
+                this.fetch(this.cleanPath(location));
+            },
 
-                if (path === '/') {
-                    path = this.root;
+            fetch: function(location) {
+                location = location || this.location;
+
+                if (this.cache[location]) {
+                    this.$set('location', location);
+                    this.$set('resources', this.cache[location].resources);
+                    return;
                 }
-
-                this.fetch({path: path});
-
-            },
-
-            fetch: function(params) {
-
-                // if (this.cache[this.currentPath]) {
-
-                //     this.root  = path;
-                //     this.files = this.cache[path];
-                //     return;
-
-                // }
-
-                params = _.extend({
-
-                    path: this.location ? this.root + '/' + this.location : this.root
-
-                }, (params || {}));
 
                 this.$set('fetching', true);
 
-                this.$http.get('/files', params).done(function(response) {
+                this.$http.get(this.routeMap, {location: location}).done(function(response) {
 
                     this.$set('location', response.location);
                     this.$set('resources', response.resources);
@@ -149,12 +125,10 @@
 
             },
 
-            init: function() {
-
-                if (!this.resources.length) {
-                    this.fetch();
-                }
-
+            cleanPath: function(path) {
+                return path === '/' ? path : path
+                    .replace(/\/\/+/g, '/')    // replace double or more slashes
+                    .replace(/^\/|\/$/g, '');   // remove / from ends
             }
 
         },

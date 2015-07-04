@@ -1,11 +1,9 @@
 <template>
 
     <ul class="uk-breadcrumb">
-
         <li><a href="#" v-on="click: goTo('/')">{{ 'root' | trans }}</a></li>
-        <li v-repeat="crumbs"><a href="#" v-on="click: goTo(path)">{{ name }}</a></li>
-        <li v-if="active" class="uk-active"><span>{{ active }}</span></li>
-
+        <li v-repeat="crumbs"><a href="#" v-on="click: goTo(location)">{{ name }}</a></li>
+        <li v-if="active" class="uk-active"><span>{{ active.name }}</span></li>
     </ul>
 
 </template>
@@ -16,40 +14,37 @@
 
         props: ['location', 'go-to'],
 
+        data: function () {
+
+            return {
+                active: null
+            };
+
+        },
+
         computed: {
-
-            parts: function() {
-
-                return this.location.replace(/^[\/]|[\/]$/gm, '').split('/');
-
-            },
 
             crumbs: function() {
 
-                var crumbs = [], path = '/';
+                var crumbs = [], location = '';
 
-                this.parts.forEach(function(part) {
+                this.location.replace(/^[\/]|[\/]$/gm, '').split('/').forEach(function(crumb) {
 
-                    if (part === '') {
+                    if (crumb === '') {
                         return true;
                     }
 
                     crumbs.push({
-                        'name': part,
-                        'path': path += part + '/'
+                        'name': crumb,
+                        'location': location += '/' + crumb
                     });
 
                 });
 
-                crumbs.pop();
+                // set active
+                this.$set('active', crumbs.pop());
 
                 return crumbs;
-
-            },
-
-            active: function() {
-
-                return this.parts.pop();
 
             }
 
