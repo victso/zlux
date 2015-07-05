@@ -71,10 +71,10 @@
 
 /***/ },
 
-/***/ 13:
+/***/ 24:
 /***/ function(module, exports) {
 
-	module.exports = UIkit;
+	module.exports = UIkit.$;
 
 /***/ },
 
@@ -89,24 +89,37 @@
 /***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(13);
+	var $ = __webpack_require__(24);
 
 	    module.exports = {
 
-	        replace: true,
-
-	        props: ['items', 'items-on-page', 'on-select-page'],
+	        props: {
+	            'currentPage': {
+	                type: Number,
+	                default: 1
+	            },
+	            'items': {
+	                type: Number,
+	                required: true
+	            },
+	            'itemsOnPage': {
+	                type: Number,
+	                required: true
+	            },
+	            'onSelectPage': {
+	                type: Function
+	            }
+	        },
 
 	        data: function() {
 
 	            return {
-	                items         : 1,
-	                itemsOnPage   : 1,
-	                currentPage   : 1,
+	                items: 1,
+	                itemsOnPage: 1,
 	                displayedPages: 3,
-	                edges         : 3,
-	                lblPrev       : 'uk-icon-angle-double-left',
-	                lblNext       : 'uk-icon-angle-double-right'
+	                edges: 3,
+	                lblPrev: 'uk-icon-angle-double-left',
+	                lblNext: 'uk-icon-angle-double-right'
 	            };
 
 	        },
@@ -119,42 +132,21 @@
 	                    ? Math.ceil(this.items / this.itemsOnPage)
 	                    : 1;
 
+	            },
+
+	            currentIndex: function() {
+	                return this.currentPage - 1;
 	            }
-
-	        },
-
-	        created: function() {
-
-	            this.$set('currentPage', this.currentPage - 1);
-
-	            this.$watch('items', function() {
-
-	                // if totalPages changes update currentPage
-	                if ((this.currentPage + 1) > this.totalPages){
-
-	                    this.$set('currentPage', this.totalPages - 1);
-
-	                }
-
-	            });
-
-	        },
-
-	        compiled: function() {
-
-	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
-	                e.preventDefault();
-	            });
 
 	        },
 
 	        methods: {
 
-	            selectPage: function(index) {
-
-	                this.$set('currentPage', index);
-	                this.onSelectPage(index);
-
+	            selectPage: function(page) {
+	                // execute callback
+	                if (this.onSelectPage) {
+	                    this.onSelectPage(page);
+	                }
 	            },
 
 	            getInterval: function() {
@@ -162,12 +154,12 @@
 	                var pages = this.totalPages, halfDisplayed = this.displayedPages / 2;
 
 	                return {
-	                    start: Math.ceil(this.currentPage > halfDisplayed
-	                        ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0)
+	                    start: Math.ceil(this.currentIndex > halfDisplayed
+	                        ? Math.max(Math.min(this.currentIndex - halfDisplayed, (pages - this.displayedPages)), 0)
 	                        : 0),
 
-	                    end: Math.ceil(this.currentPage > halfDisplayed
-	                        ? Math.min(this.currentPage + halfDisplayed, pages)
+	                    end: Math.ceil(this.currentIndex > halfDisplayed
+	                        ? Math.min(this.currentIndex + halfDisplayed, pages)
 	                        : Math.min(this.displayedPages, pages))
 
 	                };
@@ -180,7 +172,7 @@
 
 	                // Generate Prev link
 	                if (this.lblPrev) {
-	                    pages.push({index: this.currentPage - 1, icon: this.lblPrev});
+	                    pages.push({index: this.currentIndex - 1, icon: this.lblPrev});
 	                }
 
 	                if (interval.start > 0 && this.edges > 0) {
@@ -221,7 +213,7 @@
 
 	                // Generate Next link (unless option is set for at front)
 	                if (this.lblNext) {
-	                    pages.push({index: this.currentPage + 1, icon: this.lblNext});
+	                    pages.push({index: this.currentIndex + 1, icon: this.lblNext});
 	                }
 
 	                return pages;
@@ -231,9 +223,7 @@
 	        },
 
 	        components: {
-
 	            'page': __webpack_require__(50)
-
 	        }
 
 	    }
@@ -253,16 +243,14 @@
 
 	module.exports = {
 
-	        replace: true,
 	        inherit: true,
-	        props  : ['on-select-page'],
 
 	        data: function() {
 
 	            return {
 	                index: null,
-	                text : '',
-	                icon : ''
+	                text:  '',
+	                icon:  ''
 	            };
 
 	        },
@@ -270,33 +258,33 @@
 	        computed: {
 
 	            isCurrent: function() {
-
-	                return this.index === this.currentPage;
-
+	                return this.index === this.currentIndex;
 	            },
 
 	            page: function() {
-
 	                return this.index + 1;
-
 	            },
 
 	            content: function() {
-
 	                return this.icon ? '' : (this.text || this.page);
-
 	            },
 
 	            href: function() {
-
 	                return this.index !== null ? '#page-' + this.page : '';
 	            }
 
 	        },
 
 	        created: function() {
-
 	            this.$set('index', this.index < 0 ? 0 : (this.index < this.totalPages ? this.index : this.totalPages - 1));
+	        },
+
+	        methods: {
+
+	            select: function(e) {
+	                e.preventDefault();
+	                this.selectPage(this.page);
+	            }
 
 	        }
 
@@ -307,14 +295,14 @@
 /***/ 52:
 /***/ function(module, exports) {
 
-	module.exports = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"{{ href }}\" v-if=\"!isCurrent && href\" v-on=\"click: onSelectPage(index)\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
+	module.exports = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"#\" v-if=\"!isCurrent && index !== null\" v-on=\"click: select\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
 
 /***/ },
 
 /***/ 53:
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\" on-select-page=\"{{ selectPage }}\"></page>\n    </ul>";
+	module.exports = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\"></page>\n    </ul>";
 
 /***/ }
 

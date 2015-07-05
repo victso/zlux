@@ -14,6 +14,8 @@
         </tbody>
     </table>
 
+    <pagination v-if="total > itemsPerPage" items="{{ total }}" current-page="{{@ currentPage }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></pagination>
+
 </template>
 
 <script>
@@ -26,6 +28,14 @@
 
             resource: require('./resource.vue'),
             breadcrumb: require('./breadcrumb.vue')
+
+        },
+
+        methods: {
+
+            changePage: function(page) {
+                this.fetch(null, page);
+            }
 
         }
 

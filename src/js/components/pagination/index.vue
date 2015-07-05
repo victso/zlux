@@ -1,23 +1,44 @@
+<template>
+
+    <ul class="uk-pagination">
+        <page v-repeat="getPages()"></page>
+    </ul>
+
+</template>
+
 <script>
 
-    var UI = require('uikit');
+    var $ = require('jquery');
 
     module.exports = {
 
-        replace: true,
-
-        props: ['items', 'items-on-page', 'on-select-page'],
+        props: {
+            'currentPage': {
+                type: Number,
+                default: 1
+            },
+            'items': {
+                type: Number,
+                required: true
+            },
+            'itemsOnPage': {
+                type: Number,
+                required: true
+            },
+            'onSelectPage': {
+                type: Function
+            }
+        },
 
         data: function() {
 
             return {
-                items         : 1,
-                itemsOnPage   : 1,
-                currentPage   : 1,
+                items: 1,
+                itemsOnPage: 1,
                 displayedPages: 3,
-                edges         : 3,
-                lblPrev       : 'uk-icon-angle-double-left',
-                lblNext       : 'uk-icon-angle-double-right'
+                edges: 3,
+                lblPrev: 'uk-icon-angle-double-left',
+                lblNext: 'uk-icon-angle-double-right'
             };
 
         },
@@ -30,42 +51,21 @@
                     ? Math.ceil(this.items / this.itemsOnPage)
                     : 1;
 
+            },
+
+            currentIndex: function() {
+                return this.currentPage - 1;
             }
-
-        },
-
-        created: function() {
-
-            this.$set('currentPage', this.currentPage - 1);
-
-            this.$watch('items', function() {
-
-                // if totalPages changes update currentPage
-                if ((this.currentPage + 1) > this.totalPages){
-
-                    this.$set('currentPage', this.totalPages - 1);
-
-                }
-
-            });
-
-        },
-
-        compiled: function() {
-
-            UI.$('a[href="#"]', this.$el).on('click', function(e) {
-                e.preventDefault();
-            });
 
         },
 
         methods: {
 
-            selectPage: function(index) {
-
-                this.$set('currentPage', index);
-                this.onSelectPage(index);
-
+            selectPage: function(page) {
+                // execute callback
+                if (this.onSelectPage) {
+                    this.onSelectPage(page);
+                }
             },
 
             getInterval: function() {
@@ -73,12 +73,12 @@
                 var pages = this.totalPages, halfDisplayed = this.displayedPages / 2;
 
                 return {
-                    start: Math.ceil(this.currentPage > halfDisplayed
-                        ? Math.max(Math.min(this.currentPage - halfDisplayed, (pages - this.displayedPages)), 0)
+                    start: Math.ceil(this.currentIndex > halfDisplayed
+                        ? Math.max(Math.min(this.currentIndex - halfDisplayed, (pages - this.displayedPages)), 0)
                         : 0),
 
-                    end: Math.ceil(this.currentPage > halfDisplayed
-                        ? Math.min(this.currentPage + halfDisplayed, pages)
+                    end: Math.ceil(this.currentIndex > halfDisplayed
+                        ? Math.min(this.currentIndex + halfDisplayed, pages)
                         : Math.min(this.displayedPages, pages))
 
                 };
@@ -91,7 +91,7 @@
 
                 // Generate Prev link
                 if (this.lblPrev) {
-                    pages.push({index: this.currentPage - 1, icon: this.lblPrev});
+                    pages.push({index: this.currentIndex - 1, icon: this.lblPrev});
                 }
 
                 if (interval.start > 0 && this.edges > 0) {
@@ -132,7 +132,7 @@
 
                 // Generate Next link (unless option is set for at front)
                 if (this.lblNext) {
-                    pages.push({index: this.currentPage + 1, icon: this.lblNext});
+                    pages.push({index: this.currentIndex + 1, icon: this.lblNext});
                 }
 
                 return pages;
@@ -142,19 +142,9 @@
         },
 
         components: {
-
             'page': require('./page.vue')
-
         }
 
     }
 
 </script>
-
-<template>
-
-    <ul class="uk-pagination">
-        <page v-repeat="getPages()" on-select-page="{{ selectPage }}"></page>
-    </ul>
-
-</template>

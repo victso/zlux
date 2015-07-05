@@ -52,6 +52,13 @@
                 currentView: 'resources',
                 fetching: false,
 
+                // pagination
+                itemsPerPage: 2,
+                currentPage:  1,
+                offset: 0,
+                count:  0,
+                total:  0,
+
                 nav: [
                     {title: 'Files', view: 'files'},
                     {title: 'Uploader', view: 'uploader'}
@@ -63,15 +70,11 @@
         computed: {
 
             error: function() {
-
                 return this.errors.length ? this.errors.join('\n') : false;
-
             },
 
             notice: function() {
-
                 return this.notices.length ? this.notices.join('\n') : false;
-
             }
 
         },
@@ -91,23 +94,38 @@
                 this.fetch(this.cleanPath(location));
             },
 
-            fetch: function(location) {
+            fetch: function(location, page) {
                 location = location || this.location;
+                page = page || 1;
 
-                if (this.cache[location]) {
-                    this.$set('location', location);
-                    this.$set('resources', this.cache[location].resources);
+                if (this.cache[location + page]) {
+                    var cached = this.cache[location + page];
+
+                    this.$set('location', cached.location);
+                    this.$set('currentPage', cached.page);
+                    this.$set('resources', cached.resources);
+                    this.$set('count', cached.count);
+                    this.$set('total', cached.total);
                     return;
                 }
 
+                var params = _.extend({
+                    location: location,
+                    limit: this.itemsPerPage,
+                    page: page
+                }, (params || {}));
+
                 this.$set('fetching', true);
 
-                this.$http.get(this.routeMap, {location: location}).done(function(response) {
+                this.$http.get(this.routeMap, params).done(function(response) {
 
                     this.$set('location', response.location);
+                    this.$set('currentPage', response.page);
                     this.$set('resources', response.resources);
+                    this.$set('count', response.count);
+                    this.$set('total', response.total);
 
-                    this.cache[this.location] = response;
+                    this.cache[response.location + this.currentPage] = response;
 
                     // execute callback
                     if (_.isFunction(this.onLoadPage)) {
@@ -127,17 +145,15 @@
 
             cleanPath: function(path) {
                 return path === '/' ? path : path
-                    .replace(/\/\/+/g, '/')    // replace double or more slashes
-                    .replace(/^\/|\/$/g, '');   // remove / from ends
+                    .replace(/\/\/+/g, '/')   // replace double or more slashes
+                    .replace(/^\/|\/$/g, ''); // remove / from ends
             }
 
         },
 
         components: {
-
             resources: require('./components/resources.vue'),
             uploader : require('./components/uploader.vue')
-
         }
 
     };

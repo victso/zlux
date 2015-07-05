@@ -5904,7 +5904,7 @@
   margin: 0;
 }
 .zx .uk-overlay.uk-border-circle {
-  -webkit-mask-image: -webkit-radial-gradient(circle, #ffffff 100%, #000000 100%);
+  -webkit-mask-image: -webkit-radial-gradient(circle, white 100%, black 100%);
 }
 .zx .uk-overlay > :first-child {
   margin-bottom: 0;

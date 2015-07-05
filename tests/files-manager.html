@@ -13,28 +13,31 @@
         <script src="../vendor/uikit/js/uikit.js"></script>
         <script src="../vendor/vue/dist/vue.js"></script>
         <script src="../dist/js/zlux.js"></script>
+        <script src="../dist/js/components/pagination.js"></script>
         <script src="../dist/js/components/files-manager.js"></script>
 
         <script type="text/javascript">
 
-            Vue.config.debug = true
+            Vue.config.debug = true;
 
             var $zlux_config = {
                 'routesMap': {
                     '/files': 'controller=zlux&task=getFilesManagerData'
                 },
                 'debug': true
-            }
+            };
 
             // mock DT request
             $.mockjax(function(settings) {
 
+                var location = settings.data.location === '/' ? '' : '/' + settings.data.location;
+
                 if (settings.url.match(/&controller\=zlux\&task\=getFilesManagerData/)) {
                     return {
-                        proxy: 'data/' + settings.data.path + '/index.json'
-                    }
+                        proxy: 'data/files' + location + '/index.json'
+                    };
                 }
-                return
+                return;
             })
 
             UIkit.ready(function() {
@@ -42,7 +45,7 @@
                 new Vue({
                     el: '[data-zx-files-manager]',
                     ready: function() {
-                        this.$.manager.init()
+                        this.$.manager.fetch();
                     }
                 })
 
@@ -56,7 +59,7 @@
         <div class="uk-container uk-container-center">
 
             <div data-zx-files-manager>
-                <files-manager v-ref="manager" root="files"></files-manager>
+                <files-manager v-ref="manager" route-map="/files"></files-manager>
             </div>
 
         </div>

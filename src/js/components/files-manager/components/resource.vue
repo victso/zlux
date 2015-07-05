@@ -19,7 +19,7 @@
 
     module.exports = {
 
-        props: ['location', 'go-to'],
+        props: ['location', 'goTo'],
 
         data: function() {
 
@@ -44,11 +44,9 @@
         filters: {
 
             title: function(value) {
-
                 return value
-                    .replace(/(\/|\.\w+$)/g, '') // remove extension
-                    .replace(/(-|_)/g, ' ');     // replace dash/underscore
-
+                    .replace(/\/$/g, '')     // remove slash
+                    .replace(/(-|_)/g, ' '); // replace dash/underscore
             },
 
             parseSize: function(size) {

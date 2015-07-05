@@ -357,6 +357,13 @@
 	                currentView: 'resources',
 	                fetching: false,
 
+	                // pagination
+	                itemsPerPage: 2,
+	                currentPage:  1,
+	                offset: 0,
+	                count:  0,
+	                total:  0,
+
 	                nav: [
 	                    {title: 'Files', view: 'files'},
 	                    {title: 'Uploader', view: 'uploader'}
@@ -368,15 +375,11 @@
 	        computed: {
 
 	            error: function() {
-
 	                return this.errors.length ? this.errors.join('\n') : false;
-
 	            },
 
 	            notice: function() {
-
 	                return this.notices.length ? this.notices.join('\n') : false;
-
 	            }
 
 	        },
@@ -396,23 +399,38 @@
 	                this.fetch(this.cleanPath(location));
 	            },
 
-	            fetch: function(location) {
+	            fetch: function(location, page) {
 	                location = location || this.location;
+	                page = page || 1;
 
-	                if (this.cache[location]) {
-	                    this.$set('location', location);
-	                    this.$set('resources', this.cache[location].resources);
+	                if (this.cache[location + page]) {
+	                    var cached = this.cache[location + page];
+
+	                    this.$set('location', cached.location);
+	                    this.$set('currentPage', cached.page);
+	                    this.$set('resources', cached.resources);
+	                    this.$set('count', cached.count);
+	                    this.$set('total', cached.total);
 	                    return;
 	                }
 
+	                var params = _.extend({
+	                    location: location,
+	                    limit: this.itemsPerPage,
+	                    page: page
+	                }, (params || {}));
+
 	                this.$set('fetching', true);
 
-	                this.$http.get(this.routeMap, {location: location}).done(function(response) {
+	                this.$http.get(this.routeMap, params).done(function(response) {
 
 	                    this.$set('location', response.location);
+	                    this.$set('currentPage', response.page);
 	                    this.$set('resources', response.resources);
+	                    this.$set('count', response.count);
+	                    this.$set('total', response.total);
 
-	                    this.cache[this.location] = response;
+	                    this.cache[response.location + this.currentPage] = response;
 
 	                    // execute callback
 	                    if (_.isFunction(this.onLoadPage)) {
@@ -432,17 +450,15 @@
 
 	            cleanPath: function(path) {
 	                return path === '/' ? path : path
-	                    .replace(/\/\/+/g, '/')    // replace double or more slashes
-	                    .replace(/^\/|\/$/g, '');   // remove / from ends
+	                    .replace(/\/\/+/g, '/')   // replace double or more slashes
+	                    .replace(/^\/|\/$/g, ''); // remove / from ends
 	            }
 
 	        },
 
 	        components: {
-
 	            resources: __webpack_require__(25),
 	            uploader : __webpack_require__(35)
-
 	        }
 
 	    };
@@ -473,6 +489,14 @@
 	            resource: __webpack_require__(27),
 	            breadcrumb: __webpack_require__(31)
 
+	        },
+
+	        methods: {
+
+	            changePage: function(page) {
+	                this.fetch(null, page);
+	            }
+
 	        }
 
 	    };
@@ -492,7 +516,7 @@
 
 	    module.exports = {
 
-	        props: ['location', 'go-to'],
+	        props: ['location', 'goTo'],
 
 	        data: function() {
 
@@ -517,11 +541,9 @@
 	        filters: {
 
 	            title: function(value) {
-
 	                return value
-	                    .replace(/(\/|\.\w+$)/g, '') // remove extension
-	                    .replace(/(-|_)/g, ' ');     // replace dash/underscore
-
+	                    .replace(/\/$/g, '')     // remove slash
+	                    .replace(/(-|_)/g, ' '); // replace dash/underscore
 	            },
 
 	            parseSize: function(size) {
@@ -742,7 +764,7 @@
 
 	module.exports = {
 
-	        props: ['location', 'go-to'],
+	        props: ['location', 'goTo'],
 
 	        data: function () {
 
@@ -771,11 +793,19 @@
 
 	                });
 
-	                // set active
 	                this.$set('active', crumbs.pop());
 
 	                return crumbs;
 
+	            }
+
+	        },
+
+	        methods: {
+
+	            select: function(crumb, location) {
+	                crumb.$event.preventDefault();
+	                this.goTo(location);
 	            }
 
 	        }
@@ -786,13 +816,13 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li><a href=\"#\" v-on=\"click: goTo('/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"#\" v-on=\"click: goTo(location)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
+	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li><a href=\"\" v-on=\"click: select(this, '/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
 
 /***/ },
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>";
+	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>\n\n    <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>";
 
 /***/ },
 /* 35 */
