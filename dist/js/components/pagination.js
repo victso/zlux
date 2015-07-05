@@ -71,7 +71,7 @@
 
 /***/ },
 
-/***/ 24:
+/***/ 16:
 /***/ function(module, exports) {
 
 	module.exports = UIkit.$;
@@ -89,7 +89,7 @@
 /***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(24);
+	var $ = __webpack_require__(16);
 
 	    module.exports = {
 

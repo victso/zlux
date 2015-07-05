@@ -1,12 +1,37 @@
+<template>
+
+    <table class="uk-datepicker-table">
+        <thead>
+            <th v-repeat="rows.weekdays">{{ $value }}</th>
+        </thead>
+        <tbody>
+            <tr v-repeat="week: rows.days">
+                <td v-repeat="day: week">
+
+                    <a href="#" v-class="
+                        uk-active: day.selected,
+                        zx-calendar-table-muted: ! day.inmonth,
+                        zx-calendar-inactive: maxDate && day.day > maxDate,
+                        zx-calendar-inactive: minDate && minDate > day.day
+                    ">
+                        {{ day.day.format("D") }}
+                    </a>
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</template>
+
 <script>
 
-    var UI = require('uikit');
+    var $ = require('jquery');
     var moment = require('moment');
 
     module.exports = {
 
         data:  {
-
             currentYear: 2014,
             currentMonth: 11,
 
@@ -28,10 +53,8 @@
 
         ready: function() {
 
-            UI.$('a[href="#"]', this.$el).on('click', function(e) {
-
+            U$('a[href="#"]', this.$el).on('click', function(e) {
                 e.preventDefault();
-
             });
 
         },
@@ -39,15 +62,13 @@
         computed: {
 
             rows: function() {
-
                 return this.getRows(this.currentYear, this.currentMonth);
-
             },
 
             maxDate: function() {
 
                 if (this.options.maxDate !== false) {
-                    
+
                     if (isNaN(this.options.maxDate)) {
 
                         return moment(this.options.maxDate, this.options.format);
@@ -67,21 +88,17 @@
             minDate: function() {
 
                 if (this.options.minDate !== false) {
-                    
+
                     if (isNaN(this.options.minDate)) {
-
                         return moment(this.options.minDate, this.options.format);
-
                     } else {
-
                         return moment().add(this.options.minDate-1, 'days');
-
                     }
 
                 } else {
                     return this.options.minDate;
                 }
-                
+
             }
 
         },
@@ -156,43 +173,3 @@
     };
 
 </script>
-
-<template>
-
-    <table class="uk-datepicker-table">
-
-        <thead>
-    
-            <th v-repeat="rows.weekdays">{{ $value }}</th>
-
-        </thead>
-
-        <tbody>
-
-            <tr v-repeat="week: rows.days">
-
-                <td v-repeat="day: week">
-
-                    <a href="#" v-class="
-
-                        uk-active: day.selected,
-                        zx-calendar-table-muted: ! day.inmonth,
-                        zx-calendar-inactive: maxDate && day.day > maxDate,
-                        zx-calendar-inactive: minDate && minDate > day.day
-
-                    ">
-
-                        {{ day.day.format("D") }}
-
-                    </a>
-
-                </td>
-
-            </tr>
-
-
-        </tbody>
-
-    </table>
-
-</template>

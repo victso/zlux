@@ -18,6 +18,8 @@
 
 		<script type="text/javascript">
 
+			Vue.config.debug = true;
+
 			var $zlux_config = {
 				'routesMap': {
 					'/items': 'controller=zlux&task=getItemsManagerData'
@@ -33,7 +35,18 @@
 					}
 				}
 				return;
-			})
+			});
+
+			UIkit.ready(function() {
+
+                new Vue({
+                    el: '[data-zx-items-manager]',
+                    ready: function() {
+                        this.$.manager.fetch();
+                    }
+                })
+
+            })
 
 		</script>
 
@@ -42,10 +55,8 @@
 
 		<div class="uk-container uk-container-center">
 
-			<div data-zx-items-manager inline-template>
-
-				<items-manager></items-manager>
-
+			<div data-zx-items-manager>
+				<items-manager v-ref="manager"></items-manager>
 			</div>
 
 		</div>

@@ -54,7 +54,7 @@
 	'use strict';
 
 	var UI = __webpack_require__(13);
-	var _ = __webpack_require__(18);
+	var _ = __webpack_require__(19);
 
 	UI.component('zx-items-manager', {
 
@@ -96,20 +96,21 @@
 /* 15 */,
 /* 16 */,
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(19);
+	var lang = __webpack_require__(20);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(20));
+	extend(exports, __webpack_require__(21));
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -203,12 +204,12 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(21);
+	var config = __webpack_require__(22);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -256,7 +257,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -323,7 +324,6 @@
 
 
 /***/ },
-/* 22 */,
 /* 23 */,
 /* 24 */,
 /* 25 */,
@@ -350,13 +350,21 @@
 /* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(18);
+	var _ = __webpack_require__(19);
 
 	    module.exports = {
 
-	        replace: true,
-
-	        props: ['on-select-item', 'on-load-page', 'filters'],
+	        props: {
+	            'onSelectItem': {
+	                type: Function
+	            },
+	            'onLoadPage': {
+	                type: Function
+	            },
+	            'filters': {
+	                type: Object
+	            }
+	        },
 
 	        data: function() {
 
@@ -394,24 +402,18 @@
 	            this.$watch('nav.search', function(value, oldValue) {
 
 	                if (oldValue === '') {
-
 	                    // on first time search reset pagination
-	                    this.$set('currentPage', 0);
-
+	                    this.$set('currentPage', 1);
 	                }
 
 	                this.search();
-
 	            });
-
-	            this.$set('currentPage', this.currentPage - 1);
 
 	        },
 
 	        computed: {
 
 	            order: function() {
-
 	                var order = [this.orderKey];
 
 	                if (this.reversed[this.orderKey]) {
@@ -419,22 +421,19 @@
 	                }
 
 	                return order;
-
 	            },
 
 	            filter: function() {
-
 	                return _.extend({}, this.filters, {
 	                    name: this.nav.search
 	                });
-
 	            }
 
 	        },
 
 	        methods: {
 
-	            fetchData: function(params) {
+	            fetch: function(params) {
 
 	                params = _.extend({
 
@@ -467,10 +466,9 @@
 	                if (key) {
 
 	                    this.reversed[key] = !this.reversed[key];
-	                    this.fetchData();
+	                    this.fetch();
 
 	                }
-
 	            },
 
 	            search: function(e) {
@@ -479,32 +477,31 @@
 	                    e.preventDefault();
 	                }
 
-	                this.fetchData();
+	                this.fetch();
 	                this.searching = false;
-
 	            },
 
 	            clearSearch: function() {
-
 	                this.nav.$set('search', '');
-	                this.fetchData();
+	                this.fetch();
 	                this.searching = false;
-
 	            },
 
 	            changePage: function(index) {
-
 	                this.currentPage = index;
-	                this.fetchData();
+	                this.fetch();
+	            },
 
+	            itemSelected: function(item) {
+	                if (_.isFunction(this.onSelectItem)) {
+	                    this.onSelectItem(item);
+	                }
 	            }
 
 	        },
 
 	        components: {
-
 	            items: __webpack_require__(41)
-
 	        }
 
 	    };
@@ -523,12 +520,8 @@
 	module.exports = {
 
 	        inherit: true,
-	        replace: true,
-
 	        components: {
-
 	            item: __webpack_require__(43)
-
 	        }
 
 	    };
@@ -542,15 +535,19 @@
 
 /***/ },
 /* 44 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var _ = __webpack_require__(18);
+	module.exports = {
 
-	    module.exports = {
-
-	        replace: true,
-
-	        props: ['on-select', 'columns'],
+	        props: {
+	            'onSelect': {
+	                type: Function
+	            },
+	            'columns': {
+	                type: Array,
+	                required: true
+	            }
+	        },
 
 	        data: function() {
 
@@ -559,7 +556,7 @@
 	                name   : '',
 	                type   : '',
 	                access : '',
-	                active : -1,
+	                active : false,
 	                created: '',
 
 	                application: {
@@ -577,9 +574,7 @@
 	        filters: {
 
 	            property: function(key) {
-
 	                return this.$parent.$data[key];
-
 	            }
 
 	        },
@@ -587,11 +582,9 @@
 	        methods: {
 
 	            selectItem: function() {
-
-	                if (_.isFunction(this.onSelect)) {
+	                if (this.onSelect) {
 	                    this.onSelect(this);
 	                }
-
 	            }
 
 	        }
@@ -602,19 +595,19 @@
 /* 45 */
 /***/ function(module, exports) {
 
-	module.exports = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"col: columns\">\n\n            {{ $key | property }}\n\n        </td>\n\n    </tr>";
+	module.exports = "<tr v-on=\"click: selectItem\" v-class=\"uk-active: active\">\n\n        <td v-repeat=\"col: columns\">\n            {{ col.name | property }}\n        </td>\n\n    </tr>";
 
 /***/ },
 /* 46 */
 /***/ function(module, exports) {
 
-	module.exports = "<table class=\"uk-table\">\n\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.name | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\"\n                            v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            <tr>\n        </thead>\n\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" track-by=\"id\" on-select=\"{{ onSelectItem }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n\n    </table>";
+	module.exports = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th v-repeat=\"col: columns\">\n\n                    <span v-class=\"zx-sortable: col.orderKey\" v-on=\"click: sortBy(col.orderKey)\">\n\n                        {{ col.title | capitalize }}\n\n                        <i v-show=\"orderKey == col.orderKey\"\n                            v-class=\"reversed[col.orderKey] ? 'uk-icon-caret-up' : 'uk-icon-caret-down'\">\n                        </i>\n\n                    </span>\n\n                </th>\n            <tr>\n        </thead>\n        <tbody>\n\n            <tr v-component=\"item\" v-repeat=\"items\" on-select=\"{{ itemSelected }}\" columns=\"{{ columns }}\"></tr>\n\n        </tbody>\n    </table>";
 
 /***/ },
 /* 47 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
+	module.exports = "<div class=\"zx-items-manager\">\n\n        <nav class=\"uk-navbar\" v-el=\"nav\">\n\n            <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-1-1\" v-on=\"submit: search\">\n\n                <div class=\"uk-form-icon uk-width-1-1\">\n                    <i v-class=\"nav.search ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                    <input v-model=\"nav.search\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                </div>\n\n            </form>\n\n        </nav>\n\n        <items v-ref=\"items\"></items>\n\n        <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    </div>";
 
 /***/ }
 /******/ ]);

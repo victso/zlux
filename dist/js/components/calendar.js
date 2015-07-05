@@ -108,19 +108,18 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(15)
-	module.exports.template = __webpack_require__(17)
+	module.exports.template = __webpack_require__(18)
 
 /***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var UI = __webpack_require__(13);
-	    var moment = __webpack_require__(16);
+	var $ = __webpack_require__(16);
+	    var moment = __webpack_require__(17);
 
 	    module.exports = {
 
 	        data:  {
-
 	            currentYear: 2014,
 	            currentMonth: 11,
 
@@ -142,10 +141,8 @@
 
 	        ready: function() {
 
-	            UI.$('a[href="#"]', this.$el).on('click', function(e) {
-
+	            U$('a[href="#"]', this.$el).on('click', function(e) {
 	                e.preventDefault();
-
 	            });
 
 	        },
@@ -153,15 +150,13 @@
 	        computed: {
 
 	            rows: function() {
-
 	                return this.getRows(this.currentYear, this.currentMonth);
-
 	            },
 
 	            maxDate: function() {
 
 	                if (this.options.maxDate !== false) {
-	                    
+
 	                    if (isNaN(this.options.maxDate)) {
 
 	                        return moment(this.options.maxDate, this.options.format);
@@ -181,21 +176,17 @@
 	            minDate: function() {
 
 	                if (this.options.minDate !== false) {
-	                    
+
 	                    if (isNaN(this.options.minDate)) {
-
 	                        return moment(this.options.minDate, this.options.format);
-
 	                    } else {
-
 	                        return moment().add(this.options.minDate-1, 'days');
-
 	                    }
 
 	                } else {
 	                    return this.options.minDate;
 	                }
-	                
+
 	            }
 
 	        },
@@ -273,13 +264,19 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = moment;
+	module.exports = UIkit.$;
 
 /***/ },
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<table class=\"uk-datepicker-table\">\n\n        <thead>\n    \n            <th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n\n        </thead>\n\n        <tbody>\n\n            <tr v-repeat=\"week: rows.days\">\n\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate && day.day > maxDate,\n                        zx-calendar-inactive: minDate && minDate > day.day\n\n                    \">\n\n                        {{ day.day.format(\"D\") }}\n\n                    </a>\n\n                </td>\n\n            </tr>\n\n\n        </tbody>\n\n    </table>";
+	module.exports = moment;
+
+/***/ },
+/* 18 */
+/***/ function(module, exports) {
+
+	module.exports = "<table class=\"uk-datepicker-table\">\n        <thead>\n            <th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"week: rows.days\">\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate && day.day > maxDate,\n                        zx-calendar-inactive: minDate && minDate > day.day\n                    \">\n                        {{ day.day.format(\"D\") }}\n                    </a>\n\n                </td>\n            </tr>\n        </tbody>\n    </table>";
 
 /***/ }
 /******/ ]);

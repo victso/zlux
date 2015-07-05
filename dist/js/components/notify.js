@@ -53,10 +53,10 @@
 
 	'use strict';
 
-	var _ = __webpack_require__(18);
+	var _ = __webpack_require__(19);
 	var UI = __webpack_require__(13);
 	var ZX = _.zlux;
-	var $ = __webpack_require__(24);
+	var $ = __webpack_require__(16);
 
 	var notify = function(msg, options){
 	    // display message
@@ -125,22 +125,28 @@
 /***/ },
 /* 14 */,
 /* 15 */,
-/* 16 */,
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = UIkit.$;
+
+/***/ },
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(19);
+	var lang = __webpack_require__(20);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(20));
+	extend(exports, __webpack_require__(21));
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -234,12 +240,12 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(21);
+	var config = __webpack_require__(22);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -287,7 +293,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -352,14 +358,6 @@
 
 	};
 
-
-/***/ },
-/* 22 */,
-/* 23 */,
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = UIkit.$;
 
 /***/ }
 /******/ ]);

@@ -1,12 +1,28 @@
-<script>
+<template>
 
-    var _ = require('../../util');
+    <tr v-on="click: selectItem" v-class="uk-active: active">
+
+        <td v-repeat="col: columns">
+            {{ col.name | property }}
+        </td>
+
+    </tr>
+
+</template>
+
+<script>
 
     module.exports = {
 
-        replace: true,
-
-        props: ['on-select', 'columns'],
+        props: {
+            'onSelect': {
+                type: Function
+            },
+            'columns': {
+                type: Array,
+                required: true
+            }
+        },
 
         data: function() {
 
@@ -15,7 +31,7 @@
                 name   : '',
                 type   : '',
                 access : '',
-                active : -1,
+                active : false,
                 created: '',
 
                 application: {
@@ -33,9 +49,7 @@
         filters: {
 
             property: function(key) {
-
                 return this.$parent.$data[key];
-
             }
 
         },
@@ -43,11 +57,9 @@
         methods: {
 
             selectItem: function() {
-
-                if (_.isFunction(this.onSelect)) {
+                if (this.onSelect) {
                     this.onSelect(this);
                 }
-
             }
 
         }
@@ -55,17 +67,3 @@
     };
 
 </script>
-
-<template>
-
-    <tr v-on="click: selectItem" v-class="uk-active: active">
-
-        <td v-repeat="col: columns">
-
-            {{ $key | property }}
-
-        </td>
-
-    </tr>
-
-</template>

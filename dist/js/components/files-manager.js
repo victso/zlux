@@ -54,7 +54,7 @@
 	'use strict';
 
 	var UI = __webpack_require__(13);
-	var _ = __webpack_require__(18);
+	var _ = __webpack_require__(19);
 
 	UI.component('zx-files-manager', {
 
@@ -66,7 +66,7 @@
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('files-manager', __webpack_require__(22));
+	        Vue.component('files-manager', __webpack_require__(23));
 
 	    }
 
@@ -94,22 +94,28 @@
 /***/ },
 /* 14 */,
 /* 15 */,
-/* 16 */,
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = UIkit.$;
+
+/***/ },
 /* 17 */,
-/* 18 */
+/* 18 */,
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(19);
+	var lang = __webpack_require__(20);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(20));
+	extend(exports, __webpack_require__(21));
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -203,12 +209,12 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(21);
+	var config = __webpack_require__(22);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -256,7 +262,7 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -323,18 +329,18 @@
 
 
 /***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(23)
-	module.exports.template = __webpack_require__(38)
-
-/***/ },
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(18);
-	    var $ = __webpack_require__(24);
+	module.exports = __webpack_require__(24)
+	module.exports.template = __webpack_require__(38)
+
+/***/ },
+/* 24 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var _ = __webpack_require__(19);
+	    var $ = __webpack_require__(16);
 
 	    module.exports = {
 
@@ -506,12 +512,6 @@
 	        }
 
 	    };
-
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
-
-	module.exports = UIkit.$;
 
 /***/ },
 /* 25 */
