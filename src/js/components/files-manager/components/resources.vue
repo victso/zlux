@@ -2,13 +2,13 @@
 
     <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
 
-    <a href="#" v-on="click: reload">Reload</a>
+    <a href="#" v-on="click: reload">{{'Reload' | trans}}</a>
 
     <table class="uk-table">
         <thead>
             <tr>
-                <th>File</th>
-                <th>Size</th>
+                <th>{{'Name' | trans}}</th>
+                <th>{{'Size' | trans}}</th>
             </tr>
         </thead>
         <tbody>
