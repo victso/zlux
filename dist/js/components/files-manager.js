@@ -356,6 +356,7 @@
 	                resources: [],
 	                currentView: 'resources',
 	                fetching: false,
+	                filter: '',
 
 	                // pagination
 	                itemsPerPage: 2,
@@ -369,6 +370,21 @@
 	                    {title: 'Uploader', view: 'uploader'}
 	                ]
 	            };
+
+	        },
+
+	        created: function() {
+
+	            this.$watch('filter', function(value, oldValue) {
+
+	                if (oldValue === '') {
+	                    // on first time search reset pagination
+	                    this.$set('currentPage', 1);
+	                }
+
+	                this.cache = {};
+	                this.search();
+	            });
 
 	        },
 
@@ -395,8 +411,35 @@
 	                this.currentView = view;
 	            },
 
+	            changePage: function(page) {
+	                this.fetch(null, page);
+	            },
+
 	            goTo: function(location) {
 	                this.fetch(this.cleanPath(location));
+	            },
+
+	            reload: function(e) {
+	                e.preventDefault();
+	                this.cache = {};
+	                this.fetch(this.location, this.currentPage);
+	            },
+
+	            search: function(e) {
+
+	                if (e) {
+	                    e.preventDefault();
+	                }
+
+	                this.fetch();
+	                // this.searching = false;
+
+	            },
+
+	            clearSearch: function() {
+	                this.$set('filter', '');
+	                this.fetch();
+	                // this.searching = false;
 	            },
 
 	            fetch: function(location, page) {
@@ -417,7 +460,8 @@
 	                var params = _.extend({
 	                    location: location,
 	                    limit: this.itemsPerPage,
-	                    page: page
+	                    page: page,
+	                    filter: this.filter
 	                }, (params || {}));
 
 	                this.$set('fetching', true);
@@ -488,14 +532,6 @@
 
 	            resource: __webpack_require__(27),
 	            breadcrumb: __webpack_require__(31)
-
-	        },
-
-	        methods: {
-
-	            changePage: function(page) {
-	                this.fetch(null, page);
-	            }
 
 	        }
 
@@ -787,13 +823,20 @@
 	                    }
 
 	                    crumbs.push({
-	                        'name': crumb,
-	                        'location': location += '/' + crumb
+	                        name: crumb,
+	                        location: location += '/' + crumb
 	                    });
 
 	                });
 
 	                this.$set('active', crumbs.pop());
+
+	                if (crumbs.length > 1) {
+	                    crumbs.splice(0, crumbs.length - 1, {
+	                        name: '...',
+	                        location: null
+	                    });
+	                }
 
 	                return crumbs;
 
@@ -816,13 +859,13 @@
 /* 33 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li><a href=\"\" v-on=\"click: select(this, '/')\">{{ 'root' | trans }}</a></li>\n        <li v-repeat=\"crumbs\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
+	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li>\n            <a href=\"\" v-if=\"active\" v-on=\"click: select(this, '/')\">{{ 'root' | trans }}</a>\n            <template v-if=\"!active\">{{ 'root' | trans }}</template>\n        </li>\n\n        <template v-repeat=\"crumbs\">\n        <li v-if=\"location\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"!location\"><span>{{ name }}</span></li>\n        </template>\n\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
 
 /***/ },
 /* 34 */
 /***/ function(module, exports) {
 
-	module.exports = "<breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n    <table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>File</th>\n                <th>Size</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>\n\n    <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>";
+	module.exports = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>{{ 'Name' | trans }}</th>\n                <th>{{ 'Size' | trans }}</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>\n\n    <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    <div v-if=\"location !== '/'\" class=\"uk-text-center\">\n        <breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n    </div>";
 
 /***/ },
 /* 35 */
@@ -849,7 +892,7 @@
 /* 38 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice\">\n            <nav class=\"uk-navbar\">\n                <ul class=\"uk-navbar-nav\">\n\n                    <li class=\"uk-parent uk-active\" v-repeat=\"item: nav\">\n                        <a href=\"#\" v-on=\"click: changeView(item.view)\"> {{ item.title }}</a>\n                    </li>\n\n                </ul>\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">Retry</a></div>\n        </div>\n\n    </div>";
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice\">\n\n            <nav class=\"uk-navbar\" v-el=\"nav\">\n\n                <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-8-10\" v-on=\"submit: search\">\n\n                    <div class=\"uk-form-icon uk-width-1-1\">\n                        <i v-class=\"filter ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                        <input v-model=\"filter\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                    </div>\n\n                </form>\n\n                <div class=\"uk-navbar-content uk-navbar-flip\">\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Reload' | trans }}\">\n                        <i class=\"uk-icon-refresh uk-icon-hover\"></i>\n                    </a>\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Upload' | trans }}\">\n                        <i class=\"uk-icon-cloud-upload uk-icon-hover\"></i>\n                    </a>\n                </div>\n\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">{{ 'Retry' | trans }}</a></div>\n        </div>\n\n    </div>";
 
 /***/ }
 /******/ ]);

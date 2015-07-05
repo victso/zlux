@@ -170,7 +170,6 @@
 
 	                var pages = [], totalPages = this.totalPages, interval = this.getInterval(), i;
 
-	                // Generate Prev link
 	                if (this.lblPrev) {
 	                    pages.push({index: this.currentIndex - 1, icon: this.lblPrev});
 	                }
@@ -211,7 +210,6 @@
 
 	                }
 
-	                // Generate Next link (unless option is set for at front)
 	                if (this.lblNext) {
 	                    pages.push({index: this.currentIndex + 1, icon: this.lblNext});
 	                }

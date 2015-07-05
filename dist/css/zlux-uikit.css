@@ -9094,6 +9094,17 @@ a.uk-datepicker-table-muted {
   cursor: pointer;
 }
 /* ========================================================================
+   Component: Nav
+ ========================================================================== */
+.zx-files-manager nav form .uk-form-blank {
+  border-style: none !important;
+  box-shadow: none !important;
+}
+.zx-files-manager nav form .uk-icon-times {
+  pointer-events: inherit !important;
+  cursor: pointer;
+}
+/* ========================================================================
    Component: Animation
  ========================================================================== */
 [class*='zx-animate-'] {
