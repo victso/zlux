@@ -90,8 +90,17 @@
                 this.currentView = view;
             },
 
+            changePage: function(page) {
+                this.fetch(null, page);
+            },
+
             goTo: function(location) {
                 this.fetch(this.cleanPath(location));
+            },
+
+            reload: function() {
+                this.cache = {};
+                this.fetch(this.location, this.currentPage);
             },
 
             fetch: function(location, page) {

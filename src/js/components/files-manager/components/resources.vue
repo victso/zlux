@@ -2,6 +2,8 @@
 
     <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
 
+    <a href="#" v-on="click: reload">Reload</a>
+
     <table class="uk-table">
         <thead>
             <tr>
@@ -28,14 +30,6 @@
 
             resource: require('./resource.vue'),
             breadcrumb: require('./breadcrumb.vue')
-
-        },
-
-        methods: {
-
-            changePage: function(page) {
-                this.fetch(null, page);
-            }
 
         }
 
