@@ -1,14 +1,10 @@
 <template>
 
-    <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
-
-    <a href="#" v-on="click: reload">{{'Reload' | trans}}</a>
-
     <table class="uk-table">
         <thead>
             <tr>
-                <th>{{'Name' | trans}}</th>
-                <th>{{'Size' | trans}}</th>
+                <th>{{ 'Name' | trans }}</th>
+                <th>{{ 'Size' | trans }}</th>
             </tr>
         </thead>
         <tbody>
@@ -17,6 +13,10 @@
     </table>
 
     <pagination v-if="total > itemsPerPage" items="{{ total }}" current-page="{{@ currentPage }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></pagination>
+
+    <div v-if="location !== '/'" class="uk-text-center">
+        <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
+    </div>
 
 </template>
 

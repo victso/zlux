@@ -6,21 +6,34 @@
         </div>
 
         <template v-if="!notice">
-            <nav class="uk-navbar">
-                <ul class="uk-navbar-nav">
 
-                    <li class="uk-parent uk-active" v-repeat="item: nav">
-                        <a href="#" v-on="click: changeView(item.view)"> {{ item.title }}</a>
-                    </li>
+            <nav class="uk-navbar" v-el="nav">
 
-                </ul>
+                <form class="uk-form uk-margin-remove uk-display-inline-block uk-width-8-10" v-on="submit: search">
+
+                    <div class="uk-form-icon uk-width-1-1">
+                        <i v-class="filter ? 'uk-icon-times' : 'uk-icon-search'" v-on="click: clearSearch"></i>
+                        <input v-model="filter" class="uk-form-blank uk-width-1-1" debounce="500" type="search">
+                    </div>
+
+                </form>
+
+                <div class="uk-navbar-content uk-navbar-flip">
+                    <a href="" v-on="click: reload" title="{{ 'Reload' | trans }}">
+                        <i class="uk-icon-refresh uk-icon-hover"></i>
+                    </a>
+                    <a href="" v-on="click: reload" title="{{ 'Upload' | trans }}">
+                        <i class="uk-icon-cloud-upload uk-icon-hover"></i>
+                    </a>
+                </div>
+
             </nav>
 
             <component is="{{ currentView }}"></component>
         </template>
 
         <div v-if="notice" class="uk-text-center">
-            <div v-if="!fetching">{{ notice }} <br ><a href="" v-on="click: retry">Retry</a></div>
+            <div v-if="!fetching">{{ notice }} <br ><a href="" v-on="click: retry">{{ 'Retry' | trans }}</a></div>
         </div>
 
     </div>
@@ -51,6 +64,7 @@
                 resources: [],
                 currentView: 'resources',
                 fetching: false,
+                filter: '',
 
                 // pagination
                 itemsPerPage: 2,
@@ -64,6 +78,21 @@
                     {title: 'Uploader', view: 'uploader'}
                 ]
             };
+
+        },
+
+        created: function() {
+
+            this.$watch('filter', function(value, oldValue) {
+
+                if (oldValue === '') {
+                    // on first time search reset pagination
+                    this.$set('currentPage', 1);
+                }
+
+                this.cache = {};
+                this.search();
+            });
 
         },
 
@@ -98,9 +127,27 @@
                 this.fetch(this.cleanPath(location));
             },
 
-            reload: function() {
+            reload: function(e) {
+                e.preventDefault();
                 this.cache = {};
                 this.fetch(this.location, this.currentPage);
+            },
+
+            search: function(e) {
+
+                if (e) {
+                    e.preventDefault();
+                }
+
+                this.fetch();
+                // this.searching = false;
+
+            },
+
+            clearSearch: function() {
+                this.$set('filter', '');
+                this.fetch();
+                // this.searching = false;
             },
 
             fetch: function(location, page) {
@@ -121,7 +168,8 @@
                 var params = _.extend({
                     location: location,
                     limit: this.itemsPerPage,
-                    page: page
+                    page: page,
+                    filter: this.filter
                 }, (params || {}));
 
                 this.$set('fetching', true);
