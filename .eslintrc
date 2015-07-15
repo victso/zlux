@@ -20,6 +20,6 @@
     },
 
     "plugins": [
-        "vue"
+        "html"
     ]
 }

@@ -4,13 +4,12 @@ module.exports = [{
     },
     output: {
         filename     : './[name].js',
-        library      : 'zlux',
-        libraryTarget: 'umd'
+        library      : 'zlux'
     },
     externals: {
-        'jquery': 'jQuery',
-        'vue'   : 'Vue',
-        'uikit' : 'UIkit'
+        'uikit' : 'UIkit',
+        'jquery': 'UIkit.$',
+        'vue'   : 'Vue'
     },
     module: {
         loaders: [{

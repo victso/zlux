@@ -9,8 +9,8 @@ if (!UI) {
 var $ = UI.$;
 
 var ZX = {
-    version: '2.0.3',
-    config : require('./config')
+    version: '2.1.0',
+    config: require('./config')
 };
 
 UI.ready(function() {
