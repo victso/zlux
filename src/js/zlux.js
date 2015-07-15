@@ -21,7 +21,7 @@ UI.ready(function() {
     });
 
     // extend config
-    ZX.config = extend(ZX.config, window.$zlux_config);
+    ZX.config = extend(ZX.config, window.$zlux.config);
 
 });
 

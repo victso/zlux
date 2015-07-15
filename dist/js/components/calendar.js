@@ -1,6 +1,6 @@
 /**
  * @package     zlux
- * @version     2.0.3
+ * @version     2.1.0
  * @author      ZOOlanders - http://zoolanders.com
  * @license     GNU General Public License v2 or later
  */
@@ -108,14 +108,13 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = __webpack_require__(15)
-	module.exports.template = __webpack_require__(18)
+	module.exports.template = __webpack_require__(17)
 
 /***/ },
 /* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(16);
-	    var moment = __webpack_require__(17);
+	var moment = __webpack_require__(16);
 
 	    module.exports = {
 
@@ -264,16 +263,10 @@
 /* 16 */
 /***/ function(module, exports) {
 
-	module.exports = UIkit.$;
-
-/***/ },
-/* 17 */
-/***/ function(module, exports) {
-
 	module.exports = moment;
 
 /***/ },
-/* 18 */
+/* 17 */
 /***/ function(module, exports) {
 
 	module.exports = "<table class=\"uk-datepicker-table\">\n        <thead>\n            <th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"week: rows.days\">\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate && day.day > maxDate,\n                        zx-calendar-inactive: minDate && minDate > day.day\n                    \">\n                        {{ day.day.format(\"D\") }}\n                    </a>\n\n                </td>\n            </tr>\n        </tbody>\n    </table>";

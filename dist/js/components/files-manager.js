@@ -1,6 +1,6 @@
 /**
  * @package     zlux
- * @version     2.0.3
+ * @version     2.1.0
  * @author      ZOOlanders - http://zoolanders.com
  * @license     GNU General Public License v2 or later
  */
@@ -54,7 +54,7 @@
 	'use strict';
 
 	var UI = __webpack_require__(13);
-	var _ = __webpack_require__(19);
+	var _ = __webpack_require__(18);
 
 	UI.component('zx-files-manager', {
 
@@ -66,7 +66,7 @@
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('files-manager', __webpack_require__(23));
+	        Vue.component('files-manager', __webpack_require__(22));
 
 	    }
 
@@ -94,28 +94,22 @@
 /***/ },
 /* 14 */,
 /* 15 */,
-/* 16 */
-/***/ function(module, exports) {
-
-	module.exports = UIkit.$;
-
-/***/ },
+/* 16 */,
 /* 17 */,
-/* 18 */,
-/* 19 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(20);
+	var lang = __webpack_require__(19);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(21));
+	extend(exports, __webpack_require__(20));
 
 
 /***/ },
-/* 20 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -209,12 +203,12 @@
 
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(22);
+	var config = __webpack_require__(21);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -262,7 +256,7 @@
 
 
 /***/ },
-/* 22 */
+/* 21 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -329,18 +323,17 @@
 
 
 /***/ },
+/* 22 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(23)
+	module.exports.template = __webpack_require__(37)
+
+/***/ },
 /* 23 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(24)
-	module.exports.template = __webpack_require__(38)
-
-/***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var _ = __webpack_require__(19);
-	    var $ = __webpack_require__(16);
+	var _ = __webpack_require__(18);
 
 	    module.exports = {
 
@@ -507,21 +500,21 @@
 	        },
 
 	        components: {
-	            resources: __webpack_require__(25),
-	            uploader : __webpack_require__(35)
+	            resources: __webpack_require__(24),
+	            uploader : __webpack_require__(34)
 	        }
 
 	    };
 
 /***/ },
-/* 25 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(26)
-	module.exports.template = __webpack_require__(34)
+	module.exports = __webpack_require__(25)
+	module.exports.template = __webpack_require__(33)
 
 /***/ },
-/* 26 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
@@ -530,25 +523,25 @@
 
 	        components: {
 
-	            resource: __webpack_require__(27),
-	            breadcrumb: __webpack_require__(31)
+	            resource: __webpack_require__(26),
+	            breadcrumb: __webpack_require__(30)
 
 	        }
 
 	    };
 
 /***/ },
+/* 26 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(27)
+	module.exports.template = __webpack_require__(29)
+
+/***/ },
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(28)
-	module.exports.template = __webpack_require__(30)
-
-/***/ },
-/* 28 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var helper = __webpack_require__(29);
+	var helper = __webpack_require__(28);
 
 	    module.exports = {
 
@@ -606,7 +599,7 @@
 	    }
 
 /***/ },
-/* 29 */
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -782,20 +775,20 @@
 
 
 /***/ },
-/* 30 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = "<tr>\n\n        <td>\n            <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: goToFolder\">{{ basename | title }}</a>\n            <template v-if=\"type == 'file'\">{{ basename | title }}</template>\n        </td>\n\n        <td>{{ size | parseSize }}</td>\n\n    </tr>";
 
 /***/ },
-/* 31 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(32)
-	module.exports.template = __webpack_require__(33)
+	module.exports = __webpack_require__(31)
+	module.exports.template = __webpack_require__(32)
 
 /***/ },
-/* 32 */
+/* 31 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -856,26 +849,26 @@
 	    };
 
 /***/ },
-/* 33 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li>\n            <a href=\"\" v-if=\"active\" v-on=\"click: select(this, '/')\">{{ 'root' | trans }}</a>\n            <template v-if=\"!active\">{{ 'root' | trans }}</template>\n        </li>\n\n        <template v-repeat=\"crumbs\">\n        <li v-if=\"location\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"!location\"><span>{{ name }}</span></li>\n        </template>\n\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
 
 /***/ },
-/* 34 */
+/* 33 */
 /***/ function(module, exports) {
 
 	module.exports = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>{{ 'Name' | trans }}</th>\n                <th>{{ 'Size' | trans }}</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>\n\n    <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    <div v-if=\"location !== '/'\" class=\"uk-text-center\">\n        <breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n    </div>";
 
 /***/ },
-/* 35 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(36)
-	module.exports.template = __webpack_require__(37)
+	module.exports = __webpack_require__(35)
+	module.exports.template = __webpack_require__(36)
 
 /***/ },
-/* 36 */
+/* 35 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -883,13 +876,13 @@
 	    };
 
 /***/ },
-/* 37 */
+/* 36 */
 /***/ function(module, exports) {
 
 	module.exports = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
 
 /***/ },
-/* 38 */
+/* 37 */
 /***/ function(module, exports) {
 
 	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice\">\n\n            <nav class=\"uk-navbar\" v-el=\"nav\">\n\n                <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-8-10\" v-on=\"submit: search\">\n\n                    <div class=\"uk-form-icon uk-width-1-1\">\n                        <i v-class=\"filter ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                        <input v-model=\"filter\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                    </div>\n\n                </form>\n\n                <div class=\"uk-navbar-content uk-navbar-flip\">\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Reload' | trans }}\">\n                        <i class=\"uk-icon-refresh uk-icon-hover\"></i>\n                    </a>\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Upload' | trans }}\">\n                        <i class=\"uk-icon-cloud-upload uk-icon-hover\"></i>\n                    </a>\n                </div>\n\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">{{ 'Retry' | trans }}</a></div>\n        </div>\n\n    </div>";

@@ -1,21 +1,12 @@
 /**
  * @package     zlux
- * @version     2.0.3
+ * @version     2.1.0
  * @author      ZOOlanders - http://zoolanders.com
  * @license     GNU General Public License v2 or later
  */
 
-(function webpackUniversalModuleDefinition(root, factory) {
-	if(typeof exports === 'object' && typeof module === 'object')
-		module.exports = factory(require("UIkit"));
-	else if(typeof define === 'function' && define.amd)
-		define(["UIkit"], factory);
-	else if(typeof exports === 'object')
-		exports["zlux"] = factory(require("UIkit"));
-	else
-		root["zlux"] = factory(root["UIkit"]);
-})(this, function(__WEBPACK_EXTERNAL_MODULE_6__) {
-return /******/ (function(modules) { // webpackBootstrap
+var zlux =
+/******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
 
@@ -74,8 +65,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var $ = UI.$;
 
 	var ZX = {
-	    version: '2.0.3',
-	    config : __webpack_require__(5)
+	    version: '2.1.0',
+	    config: __webpack_require__(5)
 	};
 
 	UI.ready(function() {
@@ -86,7 +77,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    });
 
 	    // extend config
-	    ZX.config = extend(ZX.config, window.$zlux_config);
+	    ZX.config = extend(ZX.config, window.$zlux.config);
 
 	});
 
@@ -96,9 +87,9 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	ZX.http = __webpack_require__(9)(ZX);
 
-	__webpack_require__(10)(ZX);
 	__webpack_require__(11)(ZX);
-	__webpack_require__(12);
+	__webpack_require__(12)(ZX);
+	__webpack_require__(13);
 
 	UI.$.fn.zx = ZX.fn;
 
@@ -409,7 +400,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 6 */
 /***/ function(module, exports) {
 
-	module.exports = __WEBPACK_EXTERNAL_MODULE_6__;
+	module.exports = UIkit;
 
 /***/ },
 /* 7 */
@@ -715,7 +706,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	module.exports = function () {
 
 	    var _ = __webpack_require__(2);
-	    var UI = __webpack_require__(6);
+	    var $ = __webpack_require__(10);
 	    var config = __webpack_require__(5);
 
 	    /**
@@ -725,10 +716,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     *
 	     * @return {Promise}
 	     */
-
 	    function Http(url, settings) {
 
-	        var self = this, deferred = UI.$.Deferred(), response = {success: true, errors: [], notices: []};
+	        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []};
 
 	        settings = settings || {};
 
@@ -739,40 +729,33 @@ return /******/ (function(modules) { // webpackBootstrap
 	            url = config.routesMap[url];
 	        }
 
-	        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
+	        settings = _.extend(true, {url: [config.route, url].join('&p=')}, Http.settings, settings);
 
-	        // var request  = queue ? this.queue(queue, settings) : UI.$.ajax(settings)
+	        // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 
-	        UI.$.ajax(settings)
+	        $.ajax(settings)
 
 	        .done(function(data, status, jqxhr) {
-
 	            if (settings.dataType === 'json') {
 	                parseReq(_.extend(response, data), status, jqxhr);
 	            }
-
 	        })
 
 	        .fail(function(jqxhr, status, error) {
-
 	            parseReq(response, status, jqxhr);
 	            _.log(error);
 	            _.log(response.errors);
-
 	        })
 
 	        .always(function() {
-
 	            if (response.success) {
 	                deferred.resolveWith(self, [response]);
 	            } else {
 	                deferred.rejectWith(self, [response]);
 	            }
-
 	        });
 
 	        return deferred.promise();
-
 	    }
 
 	    function parseReq(response, status, jqxhr) {
@@ -798,22 +781,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 
 	            response.success = false;
-
 	        }
 
 	        if (status === 'parsererror') {
-
 	            response.errors.push('Response format error: JSON parse error');
 	            response.success = false;
-
 	        }
 
 	        // status state check
 	        if (response.success === undefined) {
-
 	            response.errors.push('Response format error: status not specified');
 	            response.success = false;
-
 	        }
 
 	    }
@@ -827,9 +805,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    ['get', 'put', 'post', 'delete'].forEach(function (method) {
 
 	        Http[method] = function (url, data, settings) {
-
 	            return this(url, _.extend({type: method, data: data}, settings));
-
 	        };
 
 	    });
@@ -853,7 +829,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //         if(notify.group) ZX.notify.closeAll(notify.group);
 
 	    //         // display message
-	    //         if(response.message) ZX.notify(response.message, UI.$.extend(true, {
+	    //         if(response.message) ZX.notify(response.message, $.extend(true, {
 	    //             status: 'success'
 	    //         }, notify));
 
@@ -863,8 +839,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //         if(notify.group) ZX.notify.closeAll(notify.group);
 
 	    //         // display errors
-	    //         if(response.errors && response.errors.length) UI.$.each(response.errors, function(){
-	    //             ZX.notify(this, UI.$.extend(true, {
+	    //         if(response.errors && response.errors.length) $.each(response.errors, function(){
+	    //             ZX.notify(this, $.extend(true, {
 	    //                 status: 'danger'
 	    //             }, notify));
 	    //         });
@@ -872,8 +848,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //     }).always(function(response){
 
 	    //         // display notices
-	    //         if(response.notices && response.notices.length) UI.$.each(response.notices, function(){
-	    //             ZX.notify(this, UI.$.extend(true, {
+	    //         if(response.notices && response.notices.length) $.each(response.notices, function(){
+	    //             ZX.notify(this, $.extend(true, {
 	    //                 status: 'warning'
 	    //             }, notify));
 	    //         });
@@ -886,15 +862,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // // https://github.com/Foliotek/ajaxq
 	    // var queues = {}
 
-	    // // Register an UI.$.ajaxq function, which follows the UI.$.ajax interface, but allows a queue name which will force only one request per queue to fire.
+	    // // Register an $.ajaxq function, which follows the $.ajax interface, but allows a queue name which will force only one request per queue to fire.
 	    // exports.queue = function(qname, opts) {
 
 	    //     if (typeof opts === "undefined") {
 	    //         throw ("AjaxQ: queue name is not provided");
 	    //     }
 
-	    //     // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of UI.$.ajax
-	    //     var deferred = UI.$.Deferred(),
+	    //     // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of $.ajax
+	    //     var deferred = $.Deferred(),
 	    //         promise = deferred.promise();
 
 	    //     promise.success = promise.done;
@@ -902,11 +878,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    //     promise.complete = promise.always;
 
 	    //     // Create a deep copy of the arguments, and enqueue this request.
-	    //     var clonedOptions = UI.$.extend(true, {}, opts);
+	    //     var clonedOptions = $.extend(true, {}, opts);
 	    //     enqueue(function() {
 
 	    //         // Send off the ajax request now that the item has been removed from the queue
-	    //         var jqXHR = UI.$.ajax.apply(window, [clonedOptions]).always(dequeue);
+	    //         var jqXHR = $.ajax.apply(window, [clonedOptions]).always(dequeue);
 
 	    //         // Notify the returned deferred object with the correct context when the jqXHR is done or fails
 	    //         // Note that 'always' will automatically be fired once one of these are called: http://api.jquery.com/category/deferred-object/.
@@ -949,18 +925,18 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // }
 
-	    // // Register a UI.$.postq and UI.$.getq method to provide shortcuts for UI.$.get and UI.$.post
-	    // // Copied from jQuery source to make sure the functions share the same defaults as UI.$.get and UI.$.post.
-	    // UI.$.each( [ "getq", "postq" ], function( i, method ) {
-	    //     UI.$[ method ] = function( qname, url, data, callback, type ) {
+	    // // Register a $.postq and $.getq method to provide shortcuts for $.get and $.post
+	    // // Copied from jQuery source to make sure the functions share the same defaults as $.get and $.post.
+	    // $.each( [ "getq", "postq" ], function( i, method ) {
+	    //     $[ method ] = function( qname, url, data, callback, type ) {
 
-	    //         if ( UI.$.isFunction( data ) ) {
+	    //         if ( $.isFunction( data ) ) {
 	    //             type = type || callback;
 	    //             callback = data;
 	    //             data = undefined;
 	    //         }
 
-	    //         return UI.$zlux.http.queue(qname, {
+	    //         return $zlux.http.queue(qname, {
 	    //             type: method === "postq" ? "post" : "get",
 	    //             url: url,
 	    //             data: data,
@@ -1002,12 +978,17 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // }
 
 	    return Http;
-
 	};
 
 
 /***/ },
 /* 10 */
+/***/ function(module, exports) {
+
+	module.exports = UIkit.$;
+
+/***/ },
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1063,7 +1044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1138,7 +1119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	}
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1174,6 +1155,4 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }
-/******/ ])
-});
-;
+/******/ ]);

@@ -1,7 +1,7 @@
 module.exports = function () {
 
     var _ = require('../util');
-    var UI = require('uikit');
+    var $ = require('jquery');
     var config = require('../config');
 
     /**
@@ -11,10 +11,9 @@ module.exports = function () {
      *
      * @return {Promise}
      */
-
     function Http(url, settings) {
 
-        var self = this, deferred = UI.$.Deferred(), response = {success: true, errors: [], notices: []};
+        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []};
 
         settings = settings || {};
 
@@ -25,40 +24,33 @@ module.exports = function () {
             url = config.routesMap[url];
         }
 
-        settings = _.extend(true, {url: [config.route, url].join('&')}, Http.settings, settings);
+        settings = _.extend(true, {url: [config.route, url].join('&p=')}, Http.settings, settings);
 
-        // var request  = queue ? this.queue(queue, settings) : UI.$.ajax(settings)
+        // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 
-        UI.$.ajax(settings)
+        $.ajax(settings)
 
         .done(function(data, status, jqxhr) {
-
             if (settings.dataType === 'json') {
                 parseReq(_.extend(response, data), status, jqxhr);
             }
-
         })
 
         .fail(function(jqxhr, status, error) {
-
             parseReq(response, status, jqxhr);
             _.log(error);
             _.log(response.errors);
-
         })
 
         .always(function() {
-
             if (response.success) {
                 deferred.resolveWith(self, [response]);
             } else {
                 deferred.rejectWith(self, [response]);
             }
-
         });
 
         return deferred.promise();
-
     }
 
     function parseReq(response, status, jqxhr) {
@@ -84,22 +76,17 @@ module.exports = function () {
             }
 
             response.success = false;
-
         }
 
         if (status === 'parsererror') {
-
             response.errors.push('Response format error: JSON parse error');
             response.success = false;
-
         }
 
         // status state check
         if (response.success === undefined) {
-
             response.errors.push('Response format error: status not specified');
             response.success = false;
-
         }
 
     }
@@ -113,9 +100,7 @@ module.exports = function () {
     ['get', 'put', 'post', 'delete'].forEach(function (method) {
 
         Http[method] = function (url, data, settings) {
-
             return this(url, _.extend({type: method, data: data}, settings));
-
         };
 
     });
@@ -139,7 +124,7 @@ module.exports = function () {
     //         if(notify.group) ZX.notify.closeAll(notify.group);
 
     //         // display message
-    //         if(response.message) ZX.notify(response.message, UI.$.extend(true, {
+    //         if(response.message) ZX.notify(response.message, $.extend(true, {
     //             status: 'success'
     //         }, notify));
 
@@ -149,8 +134,8 @@ module.exports = function () {
     //         if(notify.group) ZX.notify.closeAll(notify.group);
 
     //         // display errors
-    //         if(response.errors && response.errors.length) UI.$.each(response.errors, function(){
-    //             ZX.notify(this, UI.$.extend(true, {
+    //         if(response.errors && response.errors.length) $.each(response.errors, function(){
+    //             ZX.notify(this, $.extend(true, {
     //                 status: 'danger'
     //             }, notify));
     //         });
@@ -158,8 +143,8 @@ module.exports = function () {
     //     }).always(function(response){
 
     //         // display notices
-    //         if(response.notices && response.notices.length) UI.$.each(response.notices, function(){
-    //             ZX.notify(this, UI.$.extend(true, {
+    //         if(response.notices && response.notices.length) $.each(response.notices, function(){
+    //             ZX.notify(this, $.extend(true, {
     //                 status: 'warning'
     //             }, notify));
     //         });
@@ -172,15 +157,15 @@ module.exports = function () {
     // // https://github.com/Foliotek/ajaxq
     // var queues = {}
 
-    // // Register an UI.$.ajaxq function, which follows the UI.$.ajax interface, but allows a queue name which will force only one request per queue to fire.
+    // // Register an $.ajaxq function, which follows the $.ajax interface, but allows a queue name which will force only one request per queue to fire.
     // exports.queue = function(qname, opts) {
 
     //     if (typeof opts === "undefined") {
     //         throw ("AjaxQ: queue name is not provided");
     //     }
 
-    //     // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of UI.$.ajax
-    //     var deferred = UI.$.Deferred(),
+    //     // Will return a Deferred promise object extended with success/error/callback, so that this function matches the interface of $.ajax
+    //     var deferred = $.Deferred(),
     //         promise = deferred.promise();
 
     //     promise.success = promise.done;
@@ -188,11 +173,11 @@ module.exports = function () {
     //     promise.complete = promise.always;
 
     //     // Create a deep copy of the arguments, and enqueue this request.
-    //     var clonedOptions = UI.$.extend(true, {}, opts);
+    //     var clonedOptions = $.extend(true, {}, opts);
     //     enqueue(function() {
 
     //         // Send off the ajax request now that the item has been removed from the queue
-    //         var jqXHR = UI.$.ajax.apply(window, [clonedOptions]).always(dequeue);
+    //         var jqXHR = $.ajax.apply(window, [clonedOptions]).always(dequeue);
 
     //         // Notify the returned deferred object with the correct context when the jqXHR is done or fails
     //         // Note that 'always' will automatically be fired once one of these are called: http://api.jquery.com/category/deferred-object/.
@@ -235,18 +220,18 @@ module.exports = function () {
 
     // }
 
-    // // Register a UI.$.postq and UI.$.getq method to provide shortcuts for UI.$.get and UI.$.post
-    // // Copied from jQuery source to make sure the functions share the same defaults as UI.$.get and UI.$.post.
-    // UI.$.each( [ "getq", "postq" ], function( i, method ) {
-    //     UI.$[ method ] = function( qname, url, data, callback, type ) {
+    // // Register a $.postq and $.getq method to provide shortcuts for $.get and $.post
+    // // Copied from jQuery source to make sure the functions share the same defaults as $.get and $.post.
+    // $.each( [ "getq", "postq" ], function( i, method ) {
+    //     $[ method ] = function( qname, url, data, callback, type ) {
 
-    //         if ( UI.$.isFunction( data ) ) {
+    //         if ( $.isFunction( data ) ) {
     //             type = type || callback;
     //             callback = data;
     //             data = undefined;
     //         }
 
-    //         return UI.$zlux.http.queue(qname, {
+    //         return $zlux.http.queue(qname, {
     //             type: method === "postq" ? "post" : "get",
     //             url: url,
     //             data: data,
@@ -288,5 +273,4 @@ module.exports = function () {
     // }
 
     return Http;
-
 };

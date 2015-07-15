@@ -42,7 +42,6 @@
 <script>
 
     var _ = require('../../util');
-    var $ = require('jquery');
 
     module.exports = {
 

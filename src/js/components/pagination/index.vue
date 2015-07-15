@@ -8,8 +8,6 @@
 
 <script>
 
-    var $ = require('jquery');
-
     module.exports = {
 
         props: {

@@ -1,6 +1,6 @@
 /**
  * @package     zlux
- * @version     2.0.3
+ * @version     2.1.0
  * @author      ZOOlanders - http://zoolanders.com
  * @license     GNU General Public License v2 or later
  */
@@ -71,13 +71,6 @@
 
 /***/ },
 
-/***/ 16:
-/***/ function(module, exports) {
-
-	module.exports = UIkit.$;
-
-/***/ },
-
 /***/ 48:
 /***/ function(module, exports, __webpack_require__) {
 
@@ -89,9 +82,7 @@
 /***/ 49:
 /***/ function(module, exports, __webpack_require__) {
 
-	var $ = __webpack_require__(16);
-
-	    module.exports = {
+	module.exports = {
 
 	        props: {
 	            'currentPage': {
