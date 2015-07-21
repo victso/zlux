@@ -3,8 +3,7 @@ module.exports = [{
         './dist/js/zlux': './src/js/zlux'
     },
     output: {
-        filename     : './[name].js',
-        library      : 'zlux'
+        filename     : './[name].js'
     },
     externals: {
         'uikit' : 'UIkit',
@@ -36,7 +35,7 @@ module.exports = [{
         'uikit' : 'UIkit',
         'jquery': 'UIkit.$',
         'vue'   : 'Vue',
-        'zlux'  : 'zlux',
+        'zlux'  : 'Zlux',
         'moment': 'moment'
     },
     module: {

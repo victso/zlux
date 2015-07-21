@@ -5,7 +5,6 @@
  * @license     GNU General Public License v2 or later
  */
 
-var zlux =
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93,7 +92,7 @@ var zlux =
 
 	UI.$.fn.zx = ZX.fn;
 
-	window.zlux = UI.$zlux = _.zlux = ZX;
+	window.Zlux = UI.$zlux = _.zlux = ZX;
 
 
 /***/ },

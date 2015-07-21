@@ -37,4 +37,4 @@ require('./core/vue');
 
 UI.$.fn.zx = ZX.fn;
 
-window.zlux = UI.$zlux = _.zlux = ZX;
+window.Zlux = UI.$zlux = _.zlux = ZX;
