@@ -725,10 +725,12 @@
 	        // delete settings.queue
 
 	        if (config.routesMap[url]) {
-	            url = config.routesMap[url];
+	            url = config.route + '&' + config.routesMap[url];
+	        } else {
+	            url = config.route + '&p=' + url;
 	        }
 
-	        settings = _.extend(true, {url: [config.route, url].join('&p=')}, Http.settings, settings);
+	        settings = _.extend(true, {url: url}, Http.settings, settings);
 
 	        // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 
