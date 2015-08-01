@@ -16,14 +16,14 @@
     "*.md"
   ],
   "homepage": "https://github.com/yyx990803/vue",
-  "version": "0.12.7",
-  "_release": "0.12.7",
+  "version": "0.12.9",
+  "_release": "0.12.9",
   "_resolution": {
     "type": "version",
-    "tag": "0.12.7",
-    "commit": "69edc1ae02b230dbda22eeae53a4899fc06dff40"
+    "tag": "0.12.9",
+    "commit": "aca258e57602ff3466b9d3513c5bb7bf8fb08479"
   },
   "_source": "git://github.com/yyx990803/vue.git",
-  "_target": "= 0.12.7",
+  "_target": "= 0.12.9",
   "_originalSource": "vue"
 }
