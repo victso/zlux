@@ -18,6 +18,13 @@ exports.basename = function(path, suffix) {
     return b;
 };
 
+// cleans the provided path
+exports.cleanPath = function(path) {
+    return path === '/' ? path : path
+        .replace(/\/\/+/g, '/')   // replace double or more slashes
+        .replace(/^\/|\/$/g, ''); // remove / from ends
+}
+
 // parses the specified size string into a byte value
 exports.parseSize = function(size){
 

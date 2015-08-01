@@ -6,7 +6,7 @@
     "resources": [{
         "basename": "subfolder/"
     }, {
-        "basename": "consectetur.png",
+        "basename": "consectetur and some larger name.png",
         "content_type": "image/jpeg",
         "resolution": "350x71px",
         "size": 1330

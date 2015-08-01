@@ -1,9 +1,9 @@
 <template>
 
-    <ul class="uk-breadcrumb">
+    <ul class="uk-breadcrumb uk-margin">
         <li>
-            <a href="" v-if="active" v-on="click: select(this, '/')">{{ 'root' | trans }}</a>
-            <template v-if="!active">{{ 'root' | trans }}</template>
+            <a href="" v-if="active" v-on="click: select(this, '/')">{{ 'home' | trans }}</a>
+            <span v-if="!active">{{ 'home' | trans }}</span>
         </li>
 
         <template v-repeat="crumbs">

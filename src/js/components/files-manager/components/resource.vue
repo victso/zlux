@@ -1,15 +1,21 @@
 <template>
 
-    <tr>
-
-        <td>
-            <a v-if="type == 'folder'" href="#" v-on="click: goToFolder">{{ basename | title }}</a>
-            <template v-if="type == 'file'">{{ basename | title }}</template>
-        </td>
-
-        <td>{{ size | parseSize }}</td>
-
-    </tr>
+    <li class="zx-files-manager-resource">
+        <div v-on="click: selectItem" class="uk-panel uk-panel-box uk-panel-space uk-text-center" v-class="uk-active: selected">
+            <span class="uk-panel-title">
+                <i class="uk-icon-large uk-icon-justify" v-class="
+                    uk-icon-folder-o: isFolder,
+                    uk-icon-file-image-o: isImage,
+                    uk-icon-file-o: isFile && !isImage
+                "></i>
+            </span>
+            <div class="uk-text-break uk-margin-top">
+                <i class="uk-icon-{{ selected ? 'check-square-o' : 'square-o' }} uk-icon-justify"></i>
+                <a v-if="type == 'folder'" href="#" v-on="click: goTo">{{ basename | title || '..' }}</a>
+                <template v-if="type == 'file'">{{ basename | title || '..' }}</template>
+            </div>
+        </div>
+    </li>
 
 </template>
 
@@ -19,17 +25,12 @@
 
     module.exports = {
 
-        props: ['location', 'goTo'],
-
-        data: function() {
-
-            return {
+        data: {
                 basename: '',
                 content_type: '',
-                ext:  '',
-                name: '',
-                size: ''
-            }
+                size: '',
+                selected: false
+
 
         },
 
@@ -37,6 +38,22 @@
 
             type: function() {
                 return this.basename.match(/\/$/) ? 'folder' : 'file';
+            },
+
+            isFolder: function () {
+                return this.type === 'folder';
+            },
+
+            isFile: function () {
+                return !this.isFolder;
+            },
+
+            isImage: function () {
+                return this.isFile && this.content_type.match('image');
+            },
+
+            path: function () {
+                return helper.cleanPath(this.$parent.location + '/' + this.basename);
             }
 
         },
@@ -63,9 +80,13 @@
 
         methods: {
 
-            goToFolder: function(e) {
+            selectItem: function () {
+                this.$set('selected', !this.selected);
+            },
+
+            goTo: function(e) {
                 e.preventDefault();
-                this.goTo(this.location + '/' + this.basename);
+                this.$parent.goTo(this.path);
             }
 
         }

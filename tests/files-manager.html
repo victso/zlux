@@ -10,8 +10,8 @@
 
         <script src="../vendor/jquery/dist/jquery.min.js"></script>
         <script src="../vendor/jquery-mockjax/dist/jquery.mockjax.min.js"></script>
-        <script src="../vendor/uikit/js/uikit.js"></script>
-        <script src="../vendor/vue/dist/vue.js"></script>
+        <script src="../vendor/uikit/js/uikit.min.js"></script>
+        <script src="../vendor/vue/dist/vue.min.js"></script>
         <script src="../dist/js/zlux.js"></script>
         <script src="../dist/js/components/pagination.js"></script>
         <script src="../dist/js/components/files-manager.js"></script>
@@ -20,11 +20,14 @@
 
             Vue.config.debug = true;
 
-            var $zlux_config = {
-                'routesMap': {
-                    '/files': 'controller=zlux&task=getFilesManagerData'
-                },
-                'debug': true
+            var $zlux = {
+                config: {
+                    'routesMap': {
+                        'zlux/fetchResources': 'controller=zlux&task=getFilesManagerData',
+                        'zlux/deleteResources': 'controller=zlux&task=deleteResources'
+                    },
+                    'debug': true
+                }
             };
 
             // mock DT request
@@ -37,6 +40,15 @@
                         proxy: 'data/files' + location + '/index.json'
                     };
                 }
+
+                if (settings.url.match(/&controller\=zlux\&task\=deleteResources/)) {
+                    return {
+                        responseText: {
+                            success: true
+                        }
+                    };
+                }
+
                 return;
             })
 
@@ -44,7 +56,7 @@
 
                 new Vue({
                     el: '[data-zx-files-manager]',
-                    ready: function() {
+                    compiled: function() {
                         this.$.manager.fetch();
                     }
                 })
@@ -59,7 +71,7 @@
         <div class="uk-container uk-container-center">
 
             <div data-zx-files-manager>
-                <files-manager v-ref="manager" route-map="/files"></files-manager>
+                <files-manager v-ref="manager"></files-manager>
             </div>
 
         </div>
