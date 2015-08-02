@@ -9104,6 +9104,10 @@ a.uk-datepicker-table-muted {
   pointer-events: inherit !important;
   cursor: pointer;
 }
+.zx-files-manager-resource .uk-icon-check-square-o,
+.zx-files-manager-resource .uk-icon-square-o {
+  cursor: pointer;
+}
 /* ========================================================================
    Component: Animation
  ========================================================================== */

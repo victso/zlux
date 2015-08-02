@@ -53,8 +53,8 @@
 
 	'use strict';
 
-	var Vue = __webpack_require__(12);
-	var UI = __webpack_require__(13);
+	var Vue = __webpack_require__(10);
+	var UI = __webpack_require__(11);
 
 	UI.component('zx-calendar', {
 
@@ -67,7 +67,7 @@
 
 	                if (!this.__vue__) {
 
-	                    new Vue(__webpack_require__(14)).$mount(this);
+	                    new Vue(__webpack_require__(12)).$mount(this);
 
 	                }
 
@@ -90,31 +90,29 @@
 /* 7 */,
 /* 8 */,
 /* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */
+/* 10 */
 /***/ function(module, exports) {
 
 	module.exports = Vue;
 
 /***/ },
-/* 13 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
-/* 14 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(15)
-	module.exports.template = __webpack_require__(17)
+	module.exports = __webpack_require__(13)
+	module.exports.template = __webpack_require__(15)
 
 /***/ },
-/* 15 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var moment = __webpack_require__(16);
+	var moment = __webpack_require__(14);
 
 	    module.exports = {
 
@@ -260,13 +258,13 @@
 	    };
 
 /***/ },
-/* 16 */
+/* 14 */
 /***/ function(module, exports) {
 
 	module.exports = moment;
 
 /***/ },
-/* 17 */
+/* 15 */
 /***/ function(module, exports) {
 
 	module.exports = "<table class=\"uk-datepicker-table\">\n        <thead>\n            <th v-repeat=\"rows.weekdays\">{{ $value }}</th>\n        </thead>\n        <tbody>\n            <tr v-repeat=\"week: rows.days\">\n                <td v-repeat=\"day: week\">\n\n                    <a href=\"#\" v-class=\"\n                        uk-active: day.selected,\n                        zx-calendar-table-muted: ! day.inmonth,\n                        zx-calendar-inactive: maxDate && day.day > maxDate,\n                        zx-calendar-inactive: minDate && minDate > day.day\n                    \">\n                        {{ day.day.format(\"D\") }}\n                    </a>\n\n                </td>\n            </tr>\n        </tbody>\n    </table>";

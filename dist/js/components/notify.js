@@ -47,17 +47,16 @@
 /******/ 	return __webpack_require__(0);
 /******/ })
 /************************************************************************/
-/******/ ({
-
-/***/ 0:
+/******/ ([
+/* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(18);
-	var UI = __webpack_require__(13);
+	var _ = __webpack_require__(16);
+	var UI = __webpack_require__(11);
 	var ZX = _.zlux;
-	var $ = __webpack_require__(47);
+	var $ = __webpack_require__(23);
 
 	var notify = function(msg, options){
 	    // display message
@@ -106,29 +105,40 @@
 
 
 /***/ },
-
-/***/ 13:
+/* 1 */,
+/* 2 */,
+/* 3 */,
+/* 4 */,
+/* 5 */,
+/* 6 */,
+/* 7 */,
+/* 8 */,
+/* 9 */,
+/* 10 */,
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
-
-/***/ 18:
+/* 12 */,
+/* 13 */,
+/* 14 */,
+/* 15 */,
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(19);
+	var lang = __webpack_require__(17);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(20));
+	extend(exports, __webpack_require__(18));
 
 
 /***/ },
-
-/***/ 19:
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -222,13 +232,12 @@
 
 
 /***/ },
-
-/***/ 20:
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(21);
+	var config = __webpack_require__(19);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -276,8 +285,7 @@
 
 
 /***/ },
-
-/***/ 21:
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -344,12 +352,13 @@
 
 
 /***/ },
-
-/***/ 47:
+/* 20 */,
+/* 21 */,
+/* 22 */,
+/* 23 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit.$;
 
 /***/ }
-
-/******/ });
+/******/ ]);

@@ -715,20 +715,27 @@
 	     *
 	     * @return {Promise}
 	     */
-	    function Http(url, settings) {
+	    function Http(route, settings) {
 
-	        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []};
+	        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []}, url = config.route;
 
 	        settings = settings || {};
 
 	        // queue = settings.queue ? settings.queue : null,
 	        // delete settings.queue
 
-	        if (config.routesMap[url]) {
-	            url = config.route + '&' + config.routesMap[url];
-	        } else {
-	            url = config.route + '&p=' + url;
+	        // split route prefix [0] and method [1], eg: filesManager/fetchResources
+	        var route = route.split('/');
+
+	        // check if prefix has been mapped
+	        if (config.routesMap[route[0]]) {
+	            url += '&' + config.routesMap[route[0]]
 	        }
+
+	        // append method
+	        url += '&method=' + route[1];
+
+	        console.log(url);
 
 	        settings = _.extend(true, {url: url}, Http.settings, settings);
 

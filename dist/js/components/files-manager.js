@@ -53,8 +53,8 @@
 
 	'use strict';
 
-	var UI = __webpack_require__(13);
-	var _ = __webpack_require__(18);
+	var UI = __webpack_require__(11);
+	var _ = __webpack_require__(16);
 
 	UI.component('zx-files-manager', {
 
@@ -66,7 +66,7 @@
 	        }
 
 	        // save component for programatic usage
-	        Vue.component('files-manager', __webpack_require__(22));
+	        Vue.component('files-manager', __webpack_require__(20));
 
 	    }
 
@@ -84,32 +84,30 @@
 /* 8 */,
 /* 9 */,
 /* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/* 11 */
 /***/ function(module, exports) {
 
 	module.exports = UIkit;
 
 /***/ },
+/* 12 */,
+/* 13 */,
 /* 14 */,
 /* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var lang = __webpack_require__(19);
+	var lang = __webpack_require__(17);
 	var extend = lang.extend;
 
 	extend(exports, lang);
-	extend(exports, __webpack_require__(20));
+	extend(exports, __webpack_require__(18));
 
 
 /***/ },
-/* 19 */
+/* 17 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -203,12 +201,12 @@
 
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(21);
+	var config = __webpack_require__(19);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -256,7 +254,7 @@
 
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -323,17 +321,20 @@
 
 
 /***/ },
-/* 22 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(23)
-	module.exports.template = __webpack_require__(37)
+	module.exports = __webpack_require__(21)
+	module.exports.template = __webpack_require__(30)
 
 /***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var _ = __webpack_require__(18);
+	var _ = __webpack_require__(16);
+	    var $ = __webpack_require__(23);
+	    var UI = __webpack_require__(11);
+	    var helper = __webpack_require__(22);
 
 	    module.exports = {
 
@@ -341,7 +342,7 @@
 	            'routeMap': {
 	                type: String,
 	                required: true,
-	                default: ''
+	                default: 'filesManager'
 	            }
 	        },
 
@@ -353,21 +354,15 @@
 	                errors: [],
 	                notices: [],
 	                resources: [],
-	                currentView: 'resources',
 	                fetching: false,
 	                filter: '',
 
 	                // pagination
-	                itemsPerPage: 2,
+	                itemsPerPage: 10,
 	                currentPage:  1,
 	                offset: 0,
 	                count:  0,
-	                total:  0,
-
-	                nav: [
-	                    {title: 'Files', view: 'files'},
-	                    {title: 'Uploader', view: 'uploader'}
-	                ]
+	                total:  0
 	            };
 
 	        },
@@ -385,6 +380,29 @@
 	                this.search();
 	            });
 
+	            this.$watch('resources', function(value, oldValue) {
+
+	                // reinit gridMargin
+	                $('[data-uk-grid-margin]', this.$el).each(function() {
+	                    var grid = $(this);
+
+	                    grid.data('gridMargin', null);
+	                    grid.data('stackMargin', null);
+
+	                    UI.gridMargin(grid, UI.Utils.options(grid.attr('data-uk-grid-margin')));
+	                });
+
+	                // reinit gridMatchHeight
+	                $('[data-uk-grid-match]', this.$el).each(function() {
+	                    var grid = $(this);
+
+	                    grid.data('gridMatchHeight', null);
+
+	                    UI.gridMatchHeight(grid, UI.Utils.options(grid.attr('data-uk-grid-match')));
+	                });
+
+	            });
+
 	        },
 
 	        computed: {
@@ -395,6 +413,12 @@
 
 	            notice: function() {
 	                return this.notices.length ? this.notices.join('\n') : false;
+	            },
+
+	            selected: function () {
+	                return this.resources.filter(function (resource) {
+	                    return resource.selected;
+	                });
 	            }
 
 	        },
@@ -415,7 +439,7 @@
 	            },
 
 	            goTo: function(location) {
-	                this.fetch(this.cleanPath(location));
+	                this.fetch(helper.cleanPath(location));
 	            },
 
 	            reload: function(e) {
@@ -439,6 +463,15 @@
 	                this.$set('filter', '');
 	                this.fetch();
 	                // this.searching = false;
+	            },
+
+	            deleteResources: function (resources) {
+
+	                this.$http.get(this.routeMap + '/deleteResources', {resources: this.selected}).done(function(response) {
+
+	                    console.log('yeah');
+	                });
+
 	            },
 
 	            fetch: function(location, page) {
@@ -465,7 +498,7 @@
 
 	                this.$set('fetching', true);
 
-	                this.$http.get(this.routeMap, params).done(function(response) {
+	                this.$http.get(this.routeMap + '/fetchResources', params).done(function(response) {
 
 	                    this.$set('location', response.location);
 	                    this.$set('currentPage', response.page);
@@ -489,117 +522,19 @@
 	                    this.$set('fetching', false);
 	                });
 
-	            },
-
-	            cleanPath: function(path) {
-	                return path === '/' ? path : path
-	                    .replace(/\/\/+/g, '/')   // replace double or more slashes
-	                    .replace(/^\/|\/$/g, ''); // remove / from ends
 	            }
 
 	        },
 
 	        components: {
-	            resources: __webpack_require__(24),
-	            uploader : __webpack_require__(34)
+	            resource: __webpack_require__(24),
+	            breadcrumb: __webpack_require__(27)
 	        }
 
 	    };
 
 /***/ },
-/* 24 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(25)
-	module.exports.template = __webpack_require__(33)
-
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = {
-
-	        inherit: true,
-
-	        components: {
-
-	            resource: __webpack_require__(26),
-	            breadcrumb: __webpack_require__(30)
-
-	        }
-
-	    };
-
-/***/ },
-/* 26 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(27)
-	module.exports.template = __webpack_require__(29)
-
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var helper = __webpack_require__(28);
-
-	    module.exports = {
-
-	        props: ['location', 'goTo'],
-
-	        data: function() {
-
-	            return {
-	                basename: '',
-	                content_type: '',
-	                ext:  '',
-	                name: '',
-	                size: ''
-	            }
-
-	        },
-
-	        computed: {
-
-	            type: function() {
-	                return this.basename.match(/\/$/) ? 'folder' : 'file';
-	            }
-
-	        },
-
-	        filters: {
-
-	            title: function(value) {
-	                return value
-	                    .replace(/\/$/g, '')     // remove slash
-	                    .replace(/(-|_)/g, ' '); // replace dash/underscore
-	            },
-
-	            parseSize: function(size) {
-
-	                if ( ! size) {
-	                    return size;
-	                }
-
-	                return helper.filesize( helper.parseSize(size) );
-
-	            }
-
-	        },
-
-	        methods: {
-
-	            goToFolder: function(e) {
-	                e.preventDefault();
-	                this.goTo(this.location + '/' + this.basename);
-	            }
-
-	        }
-
-	    }
-
-/***/ },
-/* 28 */
+/* 22 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -623,6 +558,13 @@
 
 	    return b;
 	};
+
+	// cleans the provided path
+	exports.cleanPath = function(path) {
+	    return path === '/' ? path : path
+	        .replace(/\/\/+/g, '/')   // replace double or more slashes
+	        .replace(/^\/|\/$/g, ''); // remove / from ends
+	}
 
 	// parses the specified size string into a byte value
 	exports.parseSize = function(size){
@@ -775,20 +717,109 @@
 
 
 /***/ },
-/* 29 */
+/* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<tr>\n\n        <td>\n            <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: goToFolder\">{{ basename | title }}</a>\n            <template v-if=\"type == 'file'\">{{ basename | title }}</template>\n        </td>\n\n        <td>{{ size | parseSize }}</td>\n\n    </tr>";
+	module.exports = UIkit.$;
 
 /***/ },
-/* 30 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(31)
-	module.exports.template = __webpack_require__(32)
+	module.exports = __webpack_require__(25)
+	module.exports.template = __webpack_require__(26)
 
 /***/ },
-/* 31 */
+/* 25 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var helper = __webpack_require__(22);
+
+	    module.exports = {
+
+	        data: {
+	                basename: '',
+	                content_type: '',
+	                size: '',
+	                selected: false
+
+
+	        },
+
+	        computed: {
+
+	            type: function() {
+	                return this.basename.match(/\/$/) ? 'folder' : 'file';
+	            },
+
+	            isFolder: function () {
+	                return this.type === 'folder';
+	            },
+
+	            isFile: function () {
+	                return !this.isFolder;
+	            },
+
+	            isImage: function () {
+	                return this.isFile && this.content_type.match('image');
+	            },
+
+	            path: function () {
+	                return helper.cleanPath(this.$parent.location + '/' + this.basename);
+	            }
+
+	        },
+
+	        filters: {
+
+	            title: function(value) {
+	                return value
+	                    .replace(/\/$/g, '')     // remove slash
+	                    .replace(/(-|_)/g, ' '); // replace dash/underscore
+	            },
+
+	            parseSize: function(size) {
+
+	                if ( ! size) {
+	                    return size;
+	                }
+
+	                return helper.filesize( helper.parseSize(size) );
+
+	            }
+
+	        },
+
+	        methods: {
+
+	            selectItem: function () {
+	                this.$set('selected', !this.selected);
+	            },
+
+	            goTo: function(e) {
+	                e.preventDefault();
+	                this.$parent.goTo(this.path);
+	            }
+
+	        }
+
+	    }
+
+/***/ },
+/* 26 */
+/***/ function(module, exports) {
+
+	module.exports = "<li class=\"zx-files-manager-resource\">\n        <div v-on=\"click: selectItem\" class=\"uk-panel uk-panel-box uk-panel-space uk-text-center\" v-class=\"uk-active: selected\">\n            <span class=\"uk-panel-title\">\n                <i class=\"uk-icon-large uk-icon-justify\" v-class=\"\n                    uk-icon-folder-o: isFolder,\n                    uk-icon-file-image-o: isImage,\n                    uk-icon-file-o: isFile && !isImage\n                \"></i>\n            </span>\n            <div class=\"uk-text-break uk-margin-top\">\n                <i class=\"uk-icon-{{ selected ? 'check-square-o' : 'square-o' }} uk-icon-justify\"></i>\n                <a v-if=\"type == 'folder'\" href=\"#\" v-on=\"click: goTo\">{{ basename | title || '..' }}</a>\n                <template v-if=\"type == 'file'\">{{ basename | title || '..' }}</template>\n            </div>\n        </div>\n    </li>";
+
+/***/ },
+/* 27 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = __webpack_require__(28)
+	module.exports.template = __webpack_require__(29)
+
+/***/ },
+/* 28 */
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -849,43 +880,16 @@
 	    };
 
 /***/ },
-/* 32 */
+/* 29 */
 /***/ function(module, exports) {
 
-	module.exports = "<ul class=\"uk-breadcrumb\">\n        <li>\n            <a href=\"\" v-if=\"active\" v-on=\"click: select(this, '/')\">{{ 'root' | trans }}</a>\n            <template v-if=\"!active\">{{ 'root' | trans }}</template>\n        </li>\n\n        <template v-repeat=\"crumbs\">\n        <li v-if=\"location\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"!location\"><span>{{ name }}</span></li>\n        </template>\n\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
+	module.exports = "<ul class=\"uk-breadcrumb uk-margin\">\n        <li>\n            <a href=\"\" v-if=\"active\" v-on=\"click: select(this, '/')\">{{ 'home' | trans }}</a>\n            <span v-if=\"!active\">{{ 'home' | trans }}</span>\n        </li>\n\n        <template v-repeat=\"crumbs\">\n        <li v-if=\"location\"><a href=\"\" v-on=\"click: select(this, location)\">{{ name }}</a></li>\n        <li v-if=\"!location\"><span>{{ name }}</span></li>\n        </template>\n\n        <li v-if=\"active\" class=\"uk-active\"><span>{{ active.name }}</span></li>\n    </ul>";
 
 /***/ },
-/* 33 */
+/* 30 */
 /***/ function(module, exports) {
 
-	module.exports = "<table class=\"uk-table\">\n        <thead>\n            <tr>\n                <th>{{ 'Name' | trans }}</th>\n                <th>{{ 'Size' | trans }}</th>\n            </tr>\n        </thead>\n        <tbody>\n            <tr v-component=\"resource\" v-repeat=\"resources\" location=\"{{ location }}\" go-to=\"{{ goTo }}\"></tr>\n        </tbody>\n    </table>\n\n    <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n    <div v-if=\"location !== '/'\" class=\"uk-text-center\">\n        <breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n    </div>";
-
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = __webpack_require__(35)
-	module.exports.template = __webpack_require__(36)
-
-/***/ },
-/* 35 */
-/***/ function(module, exports) {
-
-	module.exports = {
-
-	    };
-
-/***/ },
-/* 36 */
-/***/ function(module, exports) {
-
-	module.exports = "this is the uploader\n    <div class=\"uk-placeholder-large\">...</div>";
-
-/***/ },
-/* 37 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice\">\n\n            <nav class=\"uk-navbar\" v-el=\"nav\">\n\n                <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-8-10\" v-on=\"submit: search\">\n\n                    <div class=\"uk-form-icon uk-width-1-1\">\n                        <i v-class=\"filter ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                        <input v-model=\"filter\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                    </div>\n\n                </form>\n\n                <div class=\"uk-navbar-content uk-navbar-flip\">\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Reload' | trans }}\">\n                        <i class=\"uk-icon-refresh uk-icon-hover\"></i>\n                    </a>\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Upload' | trans }}\">\n                        <i class=\"uk-icon-cloud-upload uk-icon-hover\"></i>\n                    </a>\n                </div>\n\n            </nav>\n\n            <component is=\"{{ currentView }}\"></component>\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">{{ 'Retry' | trans }}</a></div>\n        </div>\n\n    </div>";
+	module.exports = "<div class=\"zx-files-manager\">\n\n        <div v-if=\"fetching && !resources.length\" class=\"uk-text-center\">\n            <i class=\"uk-icon-spinner uk-icon-spin uk-icon-small\"></i>\n        </div>\n\n        <template v-if=\"!notice && !error\">\n\n            <!-- main nav -->\n            <nav class=\"uk-navbar\" v-el=\"nav\">\n\n                <form class=\"uk-form uk-margin-remove uk-display-inline-block uk-width-8-10\" v-on=\"submit: search\">\n\n                    <div class=\"uk-form-icon uk-width-1-1\">\n                        <i v-class=\"filter ? 'uk-icon-times' : 'uk-icon-search'\" v-on=\"click: clearSearch\"></i>\n                        <input v-model=\"filter\" class=\"uk-form-blank uk-width-1-1\" debounce=\"500\" type=\"search\">\n                    </div>\n\n                </form>\n\n                <div class=\"uk-navbar-content uk-navbar-flip\">\n                    <a href=\"\" v-on=\"click: reload\" title=\"{{ 'Reload' | trans }}\">\n                        <i class=\"uk-icon-refresh uk-icon-hover\"></i>\n                    </a>\n                </div>\n\n            </nav>\n\n            <!-- buttons -->\n            <div class=\"uk-margin\">\n                <span class=\"uk-button uk-button-small uk-button-primary uk-form-file\">{{ 'Upload' | trans }}<input type=\"file\"></span>\n                <button type=\"button\" v-on=\"click: addFolder\" class=\"uk-button uk-button-small\">{{ 'Add Folder' | trans }}</button>\n                <button v-if=\"selected.length\" type=\"button\" v-on=\"click: deleteResources\" class=\"uk-button uk-button-small uk-button-danger\">{{ 'Delete' | trans }}</button>\n            </div>\n\n            <!-- breadcrumb -->\n            <breadcrumb location=\"{{ location }}\" go-to=\"{{ goTo }}\"></breadcrumb>\n\n            <!-- resources -->\n            <div class=\"uk-overflow-container\">\n                <ul class=\"uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-xlarge-1-4\" data-uk-grid-margin data-uk-grid-match=\"{target:'.uk-panel'}\">\n                    <component is=\"resource\" v-repeat=\"resources\"></component>\n                </ul>\n            </div>\n\n            <!-- drop files -->\n            <div class=\"uk-placeholder uk-text-center uk-margin-bottom-remove\">\n                <i class=\"uk-icon-cloud-upload\"></i> {{ 'Drop files here' | trans }}\n            </div>\n\n            <div class=\"uk-progress uk-hidden\">\n                <div class=\"uk-progress-bar\" style=\"width: 0%;\"></div>\n            </div>\n\n            <!-- pagination -->\n            <pagination v-if=\"total > itemsPerPage\" items=\"{{ total }}\" current-page=\"{{@ currentPage }}\" items-on-page=\"{{ itemsPerPage }}\" on-select-page=\"{{ changePage }}\"></pagination>\n\n        </template>\n\n        <div v-if=\"notice\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ notice }} <br ><a href=\"\" v-on=\"click: retry\">{{ 'Retry' | trans }}</a></div>\n        </div>\n\n        <div v-if=\"error\" class=\"uk-text-center\">\n            <div v-if=\"!fetching\">{{ error }} <br ><a href=\"\" v-on=\"click: retry\">{{ 'Retry' | trans }}</a></div>\n        </div>\n\n    </div>";
 
 /***/ }
 /******/ ]);
