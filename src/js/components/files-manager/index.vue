@@ -37,7 +37,7 @@
 
         <!-- resources -->
         <div class="uk-overflow-container">
-            <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
+            <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
                 <component is="resource" v-repeat="resources"></component>
             </ul>
         </div>
@@ -93,6 +93,20 @@
 
         },
 
+        computed: {
+
+            notice: function() {
+                return this.notices.length ? this.notices.join('\n') : false;
+            },
+
+            selected: function () {
+                return this.resources.filter(function (resource) {
+                    return resource.selected;
+                });
+            }
+
+        },
+
         created: function() {
 
             this.$watch('filter', function(value, oldValue) {
@@ -131,25 +145,7 @@
 
         },
 
-        computed: {
-
-            notice: function() {
-                return this.notices.length ? this.notices.join('\n') : false;
-            },
-
-            selected: function () {
-                return this.resources.filter(function (resource) {
-                    return resource.selected;
-                });
-            }
-
-        },
-
         methods: {
-
-            changeView: function(view) {
-                this.currentView = view;
-            },
 
             changePage: function(page) {
                 this.fetch(null, page);
@@ -161,22 +157,28 @@
 
             reload: function(e) {
                 if (e) e.preventDefault();
-
                 this.cache = {};
                 this.fetch(this.location, this.currentPage);
             },
 
             search: function(e) {
                 if (e) e.preventDefault();
-
                 this.fetch();
-                // this.searching = false;
             },
 
             clearSearch: function() {
                 this.$set('filter', '');
                 this.fetch();
-                // this.searching = false;
+            },
+
+            setPageData: function(data) {
+                this.$set('location', data.location);
+                this.$set('currentPage', data.page);
+                this.$set('resources', data.resources);
+                this.$set('count', data.count);
+                this.$set('total', data.total);
+
+                this.cache[data.location + data.page] = data;
             },
 
             deleteSelected: function() {
@@ -187,12 +189,10 @@
 
                 this.$http.get(this.routeMap + '/deleteResources', {resources: resources}).done(function(response) {
 
-                    this.reload()
+                    this.reload();
 
                 }).always(function(response) {
-
-                    this.riseWarnings(response.errors, response.notices);
-
+                    this.riseWarnings(response);
                 });
 
             },
@@ -202,14 +202,7 @@
                 page = page || 1;
 
                 if (this.cache[location + page]) {
-                    var cached = this.cache[location + page];
-
-                    this.$set('location', cached.location);
-                    this.$set('currentPage', cached.page);
-                    this.$set('resources', cached.resources);
-                    this.$set('count', cached.count);
-                    this.$set('total', cached.total);
-                    return;
+                    return this.setPageData(this.cache[location + page])
                 }
 
                 var params = _.merge({
@@ -223,37 +216,28 @@
 
                 this.$http.get(this.routeMap + '/fetchResources', params).done(function(response) {
 
-                    this.$set('location', response.location);
-                    this.$set('currentPage', response.page);
-                    this.$set('resources', response.resources);
-                    this.$set('count', response.count);
-                    this.$set('total', response.total);
-
-                    this.cache[response.location + this.currentPage] = response;
+                    this.setPageData(response);
 
                     // execute callback
                     if (_.isFunction(this.onLoadPage)) {
                         this.onLoadPage();
                     }
 
-                }).fail(function(response) {
-
-                    this.riseWarnings(response.errors, response.notices);
-
-                }).always(function() {
+                }).always(function(response) {
+                    this.riseWarnings(response);
                     this.$set('fetching', false);
                 });
 
             },
 
-            riseWarnings: function (errors, notices) {
+            riseWarnings: function (response) {
 
-                if (errors.length) {
-                    UI.notify(errors.join('\n'), {pos: 'top-right', status: 'danger'});
+                if (response.errors.length) {
+                    UI.notify(response.errors.join('\n'), {pos: 'top-right', status: 'danger'});
                 }
 
-                if (notices.length) {
-                    UI.notify(notices.join('\n'), {pos: 'top-right', status: 'warning'});
+                if (response.notices.length) {
+                    UI.notify(response.notices.join('\n'), {pos: 'top-right', status: 'warning'});
                 }
 
             }
