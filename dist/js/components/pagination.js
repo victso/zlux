@@ -58,7 +58,7 @@
 
 	    install: function (Vue) {
 
-	        Vue.component('pagination', __webpack_require__(40));
+	        Vue.component('pagination', __webpack_require__(108));
 
 	    }
 
@@ -71,15 +71,15 @@
 
 /***/ },
 
-/***/ 40:
+/***/ 108:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(41)
-	module.exports.template = __webpack_require__(45)
+	module.exports = __webpack_require__(109)
+	module.exports.template = __webpack_require__(113)
 
 /***/ },
 
-/***/ 41:
+/***/ 109:
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
@@ -212,22 +212,22 @@
 	        },
 
 	        components: {
-	            'page': __webpack_require__(42)
+	            'page': __webpack_require__(110)
 	        }
 
 	    }
 
 /***/ },
 
-/***/ 42:
+/***/ 110:
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(43)
-	module.exports.template = __webpack_require__(44)
+	module.exports = __webpack_require__(111)
+	module.exports.template = __webpack_require__(112)
 
 /***/ },
 
-/***/ 43:
+/***/ 111:
 /***/ function(module, exports) {
 
 	module.exports = {
@@ -281,14 +281,14 @@
 
 /***/ },
 
-/***/ 44:
+/***/ 112:
 /***/ function(module, exports) {
 
 	module.exports = "<li v-class=\"uk-active: isCurrent\">\n\n        <span v-if=\"isCurrent || index === null\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </span>\n\n        <a href=\"#\" v-if=\"!isCurrent && index !== null\" v-on=\"click: select\">\n            <i v-if=\"icon\" v-class=\"icon\"></i>{{ content }}\n        </a>\n\n    </li>";
 
 /***/ },
 
-/***/ 45:
+/***/ 113:
 /***/ function(module, exports) {
 
 	module.exports = "<ul class=\"uk-pagination\">\n        <page v-repeat=\"getPages()\"></page>\n    </ul>";
