@@ -1,3 +1,4 @@
+var _ = require('../../util');
 
 // http://phpjs.org/functions/basename
 exports.basename = function(path, suffix) {
@@ -11,7 +12,7 @@ exports.basename = function(path, suffix) {
 
     b = b.replace(/^.*[\/\\]/g, '');
 
-    if (typeof suffix === 'string' && b.substr(b.length - suffix.length) === suffix) {
+    if (_.isString(suffix) && b.substr(b.length - suffix.length) === suffix) {
         b = b.substr(0, b.length - suffix.length);
     }
 
@@ -28,7 +29,7 @@ exports.cleanPath = function(path) {
 // parses the specified size string into a byte value
 exports.parseSize = function(size){
 
-    if (typeof (size) !== 'string' || size === '') {
+    if (!_.isString(size) || _.isEmpty(size)) {
         return size;
     }
 

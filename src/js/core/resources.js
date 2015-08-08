@@ -1,3 +1,5 @@
+var _ = require('../util');
+
 module.urls = {
     ajax: '',
     root: '',
@@ -10,7 +12,7 @@ module.urls = {
  * @param Object urls List of urls in JSON format
  */
 module.push = function (urls) {
-    UI.$.extend(ZX.url.urls, urls);
+    _.merge(ZX.url.urls, urls);
 }
 
 /**

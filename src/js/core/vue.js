@@ -8,7 +8,7 @@ var vueZlux = {
         Object.defineProperty(Vue.prototype, '$http', {
 
             get: function () {
-                return _.extend(http.bind(this), http);
+                return _.merge(http.bind(this), http);
             }
 
         });

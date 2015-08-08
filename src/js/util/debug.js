@@ -1,4 +1,5 @@
 var config = require('../config');
+var _ = require('./lang');
 
 /**
  * Enable debug utilities. The enableDebug() function and
@@ -10,7 +11,7 @@ var config = require('../config');
 
 function enableDebug () {
 
-    var hasConsole = typeof console !== 'undefined';
+    var hasConsole = !_.isUndefined(console);
 
     /**
      * Log a message.

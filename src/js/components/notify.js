@@ -15,7 +15,7 @@ var notify = function(msg, options){
 
 confirm = function(msg, options){
 
-    options = $.extend(options, {
+    options = _.merge(options, {
         timeout: false // confirmation must wait user interaction
     });
 

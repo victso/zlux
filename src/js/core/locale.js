@@ -10,7 +10,7 @@ exports.lang = {
      */
 
     push: function (strings) {
-        UI.$.extend(this.strings, strings);
+        _.merge(this.strings, strings);
     },
 
     /**
@@ -36,7 +36,7 @@ exports.lang = {
 
         return str.replace(/%[a-z]/g, function () {
             var value = args.shift();
-            return _.typeOf(value) !== 'undefined' ? value : '';
+            return !_.isUndefined(value) ? value : '';
         });
     }
 

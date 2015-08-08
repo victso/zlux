@@ -1,5 +1,7 @@
-var lang = require('./lang');
-var extend = lang.extend;
+var object = require('./object');
+var assign = object.assign;
 
-extend(exports, lang);
-extend(exports, require('./debug'));
+assign(exports, object);
+assign(exports, require('./debug'));
+assign(exports, require('./lang'));
+assign(exports, require('./collection'));

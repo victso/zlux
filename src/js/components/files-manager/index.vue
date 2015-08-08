@@ -212,7 +212,7 @@
                     return;
                 }
 
-                var params = _.extend({
+                var params = _.merge({
                     location: location,
                     limit: this.itemsPerPage,
                     page: page,

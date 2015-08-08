@@ -1,6 +1,6 @@
 var UI = require('uikit');
 var _ = require('./util');
-var extend = _.extend;
+var assign = _.assign;
 
 if (!UI) {
     throw new Error('UIkit library is missing');
@@ -21,13 +21,13 @@ UI.ready(function() {
     });
 
     // extend config
-    ZX.config = extend(ZX.config, window.$zlux.config);
+    _.merge(ZX.config, window.$zlux.config);
 
 });
 
-extend(ZX, require('./core/extensions'));
-extend(ZX, require('./core/locale'));
-extend(ZX, require('./core/modal'));
+assign(ZX, require('./core/extensions'));
+assign(ZX, require('./core/locale'));
+assign(ZX, require('./core/modal'));
 
 ZX.http = require('./core/http')(ZX);
 

@@ -31,9 +31,7 @@ module.exports = function () {
         // append method
         url += '&method=' + route[1];
 
-        console.log(url);
-
-        settings = _.extend(true, {url: url}, Http.settings, settings);
+        settings = _.merge({url: url}, Http.settings, settings);
 
         // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 
@@ -41,7 +39,7 @@ module.exports = function () {
 
         .done(function(data, status, jqxhr) {
             if (settings.dataType === 'json') {
-                parseReq(_.extend(response, data), status, jqxhr);
+                parseReq(_.merge(response, data), status, jqxhr);
             }
         })
 
@@ -109,7 +107,7 @@ module.exports = function () {
     ['get', 'put', 'post', 'delete'].forEach(function (method) {
 
         Http[method] = function (url, data, settings) {
-            return this(url, _.extend({type: method, data: data}, settings));
+            return this(url, _.merge({type: method, data: data}, settings));
         };
 
     });

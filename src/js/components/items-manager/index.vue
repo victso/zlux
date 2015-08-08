@@ -99,7 +99,7 @@
             },
 
             filter: function() {
-                return _.extend({}, this.filters, {
+                return _.merge({}, this.filters, {
                     name: this.nav.search
                 });
             }
@@ -110,13 +110,11 @@
 
             fetch: function(params) {
 
-                params = _.extend({
-
+                params = _.merge({
                     offset: this.currentPage * this.itemsPerPage,
                     limit : this.itemsPerPage,
                     order : this.order,
                     filter: this.filter
-
                 }, (params || {}));
 
                 this.$http.get('/items', params).done(function(response) {
