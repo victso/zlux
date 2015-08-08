@@ -25,12 +25,16 @@
 
     module.exports = {
 
-        data: {
+        name: 'resource',
+
+        data: function() {
+
+            return {
                 basename: '',
                 content_type: '',
                 size: '',
                 selected: false
-
+            };
 
         },
 

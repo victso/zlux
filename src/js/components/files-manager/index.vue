@@ -5,66 +5,54 @@
             <i class="uk-icon-spinner uk-icon-spin uk-icon-small"></i>
         </div>
 
-        <template v-if="!notice && !error">
+        <!-- main nav -->
+        <nav class="uk-navbar" v-el="nav">
 
-            <!-- main nav -->
-            <nav class="uk-navbar" v-el="nav">
+            <form class="uk-form uk-margin-remove uk-display-inline-block uk-width-8-10" v-on="submit: search">
 
-                <form class="uk-form uk-margin-remove uk-display-inline-block uk-width-8-10" v-on="submit: search">
-
-                    <div class="uk-form-icon uk-width-1-1">
-                        <i v-class="filter ? 'uk-icon-times' : 'uk-icon-search'" v-on="click: clearSearch"></i>
-                        <input v-model="filter" class="uk-form-blank uk-width-1-1" debounce="500" type="search">
-                    </div>
-
-                </form>
-
-                <div class="uk-navbar-content uk-navbar-flip">
-                    <a href="" v-on="click: reload" title="{{ 'Reload' | trans }}">
-                        <i class="uk-icon-refresh uk-icon-hover"></i>
-                    </a>
+                <div class="uk-form-icon uk-width-1-1">
+                    <i v-class="filter ? 'uk-icon-times' : 'uk-icon-search'" v-on="click: clearSearch"></i>
+                    <input v-model="filter" class="uk-form-blank uk-width-1-1" debounce="500" type="search">
                 </div>
 
-            </nav>
+            </form>
 
-            <!-- buttons -->
-            <div class="uk-margin">
-                <span class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}<input type="file"></span>
-                <button type="button" v-on="click: addFolder" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
-                <button v-if="selected.length" type="button" v-on="click: deleteResources" class="uk-button uk-button-small uk-button-danger">{{ 'Delete' | trans }}</button>
+            <div class="uk-navbar-content uk-navbar-flip">
+                <a href="" v-on="click: reload" title="{{ 'Reload' | trans }}">
+                    <i class="uk-icon-refresh uk-icon-hover"></i>
+                </a>
             </div>
 
-            <!-- breadcrumb -->
-            <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
+        </nav>
 
-            <!-- resources -->
-            <div class="uk-overflow-container">
-                <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
-                    <component is="resource" v-repeat="resources"></component>
-                </ul>
-            </div>
-
-            <!-- drop files -->
-            <div class="uk-placeholder uk-text-center uk-margin-bottom-remove">
-                <i class="uk-icon-cloud-upload"></i> {{ 'Drop files here' | trans }}
-            </div>
-
-            <div class="uk-progress uk-hidden">
-                <div class="uk-progress-bar" style="width: 0%;"></div>
-            </div>
-
-            <!-- pagination -->
-            <pagination v-if="total > itemsPerPage" items="{{ total }}" current-page="{{@ currentPage }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></pagination>
-
-        </template>
-
-        <div v-if="notice" class="uk-text-center">
-            <div v-if="!fetching">{{ notice }} <br ><a href="" v-on="click: retry">{{ 'Retry' | trans }}</a></div>
+        <!-- buttons -->
+        <div class="uk-margin">
+            <span class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}<input type="file"></span>
+            <button type="button" v-on="click: addFolder" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
+            <button v-if="selected.length" type="button" v-on="click: deleteSelected" class="uk-button uk-button-small uk-button-danger">{{ 'Delete' | trans }}</button>
         </div>
 
-        <div v-if="error" class="uk-text-center">
-            <div v-if="!fetching">{{ error }} <br ><a href="" v-on="click: retry">{{ 'Retry' | trans }}</a></div>
+        <!-- breadcrumb -->
+        <breadcrumb location="{{ location }}" go-to="{{ goTo }}"></breadcrumb>
+
+        <!-- resources -->
+        <div class="uk-overflow-container">
+            <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
+                <component is="resource" v-repeat="resources"></component>
+            </ul>
         </div>
+
+        <!-- drop files -->
+        <div class="uk-placeholder uk-text-center uk-margin-bottom-remove">
+            <i class="uk-icon-cloud-upload"></i> {{ 'Drop files here' | trans }}
+        </div>
+
+        <div class="uk-progress uk-hidden">
+            <div class="uk-progress-bar" style="width: 0%;"></div>
+        </div>
+
+        <!-- pagination -->
+        <pagination v-if="total > itemsPerPage" items="{{ total }}" current-page="{{@ currentPage }}" items-on-page="{{ itemsPerPage }}" on-select-page="{{ changePage }}"></pagination>
 
     </div>
 </template>
@@ -91,8 +79,6 @@
             return {
                 location: '/',
                 cache: {},
-                errors: [],
-                notices: [],
                 resources: [],
                 fetching: false,
                 filter: '',
@@ -147,10 +133,6 @@
 
         computed: {
 
-            error: function() {
-                return this.errors.length ? this.errors.join('\n') : false;
-            },
-
             notice: function() {
                 return this.notices.length ? this.notices.join('\n') : false;
             },
@@ -165,11 +147,6 @@
 
         methods: {
 
-            retry: function(e) {
-                e.preventDefault();
-                this.fetch();
-            },
-
             changeView: function(view) {
                 this.currentView = view;
             },
@@ -183,20 +160,17 @@
             },
 
             reload: function(e) {
-                e.preventDefault();
+                if (e) e.preventDefault();
+
                 this.cache = {};
                 this.fetch(this.location, this.currentPage);
             },
 
             search: function(e) {
-
-                if (e) {
-                    e.preventDefault();
-                }
+                if (e) e.preventDefault();
 
                 this.fetch();
                 // this.searching = false;
-
             },
 
             clearSearch: function() {
@@ -205,11 +179,20 @@
                 // this.searching = false;
             },
 
-            deleteResources: function (resources) {
+            deleteSelected: function() {
 
-                this.$http.get(this.routeMap + '/deleteResources', {resources: this.selected}).done(function(response) {
+                var resources = this.selected.map(function(resource) {
+                    return helper.cleanPath(this.location + '/' + resource.basename);
+                }, this);
 
-                    console.log('yeah');
+                this.$http.get(this.routeMap + '/deleteResources', {resources: resources}).done(function(response) {
+
+                    this.reload()
+
+                }).always(function(response) {
+
+                    this.riseWarnings(response.errors, response.notices);
+
                 });
 
             },
@@ -255,12 +238,23 @@
 
                 }).fail(function(response) {
 
-                    this.$set('notices', response.notices);
-                    this.$set('errors', response.errors);
+                    this.riseWarnings(response.errors, response.notices);
 
                 }).always(function() {
                     this.$set('fetching', false);
                 });
+
+            },
+
+            riseWarnings: function (errors, notices) {
+
+                if (errors.length) {
+                    UI.notify(errors.join('\n'), {pos: 'top-right', status: 'danger'});
+                }
+
+                if (notices.length) {
+                    UI.notify(notices.join('\n'), {pos: 'top-right', status: 'warning'});
+                }
 
             }
 
