@@ -8,7 +8,7 @@
         <!-- main nav -->
         <nav class="uk-navbar" v-el="nav">
 
-            <form class="uk-form uk-margin-remove uk-display-inline-block uk-width-8-10" v-on="submit: search">
+            <form class="uk-form uk-margin-remove uk-display-inline-block uk-width-1-1" v-on="submit: search">
 
                 <div class="uk-form-icon uk-width-1-1">
                     <i v-class="filter ? 'uk-icon-times' : 'uk-icon-search'" v-on="click: clearSearch"></i>
@@ -17,18 +17,13 @@
 
             </form>
 
-            <div class="uk-navbar-content uk-navbar-flip">
-                <a href="" v-on="click: reload" title="{{ 'Reload' | trans }}">
-                    <i class="uk-icon-refresh uk-icon-hover"></i>
-                </a>
-            </div>
-
         </nav>
 
         <!-- buttons -->
         <div class="uk-margin">
             <span class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}<input type="file"></span>
             <button type="button" v-on="click: createDir" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
+            <button type="button" v-on="click: reload" class="uk-button uk-button-small">{{ 'Reload' | trans }}</button>
             <button v-if="selected.length" type="button" v-on="click: deleteSelected" class="uk-button uk-button-small uk-button-danger">{{ 'Delete' | trans }}</button>
         </div>
 
