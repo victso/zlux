@@ -28,7 +28,7 @@
         <!-- buttons -->
         <div class="uk-margin">
             <span class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}<input type="file"></span>
-            <button type="button" v-on="click: addFolder" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
+            <button type="button" v-on="click: createDir" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
             <button v-if="selected.length" type="button" v-on="click: deleteSelected" class="uk-button uk-button-small uk-button-danger">{{ 'Delete' | trans }}</button>
         </div>
 
@@ -179,6 +179,20 @@
                 this.$set('total', data.total);
 
                 this.cache[data.location + data.page] = data;
+            },
+
+            createDir: function() {
+
+                var path = helper.cleanPath(this.location + '/' + prompt());
+
+                this.$http.get(this.routeMap + '/createDir', {path: path}).done(function(response) {
+
+                    this.reload();
+
+                }).always(function(response) {
+                    this.riseWarnings(response);
+                });
+
             },
 
             deleteSelected: function() {
