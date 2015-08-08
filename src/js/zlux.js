@@ -27,12 +27,7 @@ UI.ready(function() {
 
 assign(ZX, require('./core/extensions'));
 assign(ZX, require('./core/locale'));
-assign(ZX, require('./core/modal'));
-
 ZX.http = require('./core/http')(ZX);
-
-require('./core/animate')(ZX);
-require('./core/spin')(ZX);
 require('./core/vue');
 
 UI.$.fn.zx = ZX.fn;
