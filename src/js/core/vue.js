@@ -1,4 +1,4 @@
-var _  = require('../util');
+var _ = require('../util');
 var http = require('./http')();
 
 var vueZlux = {

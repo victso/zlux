@@ -3,6 +3,11 @@
 /vendor/jquery*/*
 /vendor/moment/*
 
+/vendor/plupload/examples
+/vendor/plupload/js/**/*
+/vendor/plupload/readme.md
+!/vendor/plupload/js/plupload.full.min.js
+
 /vendor/vue/build
 /vendor/vue/perf
 /vendor/vue/src

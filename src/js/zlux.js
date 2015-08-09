@@ -1,23 +1,28 @@
 var UI = require('uikit');
+var $ = require('jquery');
 var _ = require('./util');
-var assign = _.assign;
 
 if (!UI) {
     throw new Error('UIkit library is missing');
 }
 
-var $ = UI.$;
-
 var ZX = {
     version: '2.1.0',
-    config: require('./config')
+    config: require('./config'),
+    util: require('./util'),
+    http: require('./core/http')(ZX)
 };
+
+_.assign(ZX, require('./core/extensions'));
+_.assign(ZX, require('./core/locale'));
+
+require('./core/vue');
 
 UI.ready(function() {
 
     // style workaround, wrapp dragging elements with zx class
     $('body').on('start.uk.nestable, start.uk.sortable', function() {
-        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />');
+        $('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />');
     });
 
     // extend config
@@ -25,11 +30,5 @@ UI.ready(function() {
 
 });
 
-assign(ZX, require('./core/extensions'));
-assign(ZX, require('./core/locale'));
-ZX.http = require('./core/http')(ZX);
-require('./core/vue');
-
-UI.$.fn.zx = ZX.fn;
-
+$.fn.zx = ZX.fn;
 window.Zlux = UI.$zlux = _.zlux = ZX;

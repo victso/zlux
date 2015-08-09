@@ -2,7 +2,6 @@ module.exports = function () {
 
     var _ = require('../util');
     var $ = require('jquery');
-    var config = require('../config');
 
     /**
      * Http request as jQuery ajax wrapper
@@ -13,25 +12,14 @@ module.exports = function () {
      */
     function Http(route, settings) {
 
-        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []}, url = config.route;
+        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []};
 
         settings = settings || {};
 
         // queue = settings.queue ? settings.queue : null,
         // delete settings.queue
 
-        // split route prefix [0] and method [1], eg: filesManager/fetchResources
-        var route = route.split('/');
-
-        // check if prefix has been mapped
-        if (config.routesMap[route[0]]) {
-            url += '&' + config.routesMap[route[0]]
-        }
-
-        // append method
-        url += '&method=' + route[1];
-
-        settings = _.merge({url: url}, Http.settings, settings);
+        settings = _.merge({url: _.helper.getFulllRoute(route)}, Http.settings, settings);
 
         // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 

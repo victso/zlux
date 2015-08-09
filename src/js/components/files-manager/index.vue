@@ -21,9 +21,10 @@
 
         <!-- buttons -->
         <div class="uk-margin">
-            <span class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}<input type="file"></span>
+            <button v-el="browse" type="button" class="uk-button uk-button-small uk-button-primary uk-form-file">{{ 'Upload' | trans }}</button>
             <button type="button" v-on="click: createDir" class="uk-button uk-button-small">{{ 'Add Folder' | trans }}</button>
             <button type="button" v-on="click: reload" class="uk-button uk-button-small">{{ 'Reload' | trans }}</button>
+            <button v-if="selected.length" type="button" v-on="click: renameResource" class="uk-button uk-button-small" v-attr="disabled: selected.length > 1">{{ 'Rename' | trans }}</button>
             <button v-if="selected.length" type="button" v-on="click: deleteSelected" class="uk-button uk-button-small uk-button-danger">{{ 'Delete' | trans }}</button>
         </div>
 
@@ -32,18 +33,18 @@
 
         <!-- resources -->
         <div class="uk-overflow-container">
-            <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
+            <ul class="uk-grid uk-grid-width-small-1-2 uk-grid-width-medium-1-3 uk-grid-width-xlarge-1-4" data-uk-grid-margin data-uk-grid-match="{target:'.uk-panel'}">
                 <component is="resource" v-repeat="resources"></component>
             </ul>
         </div>
 
         <!-- drop files -->
-        <div class="uk-placeholder uk-text-center uk-margin-bottom-remove">
-            <i class="uk-icon-cloud-upload"></i> {{ 'Drop files here' | trans }}
+        <div v-if="uploadProgress" class="uk-progress">
+            <div class="uk-progress-bar" v-style="width: uploadProgress + '%'"></div>
         </div>
 
-        <div class="uk-progress uk-hidden">
-            <div class="uk-progress-bar" style="width: 0%;"></div>
+        <div v-el="dropzone" class="uk-placeholder uk-text-center uk-margin-bottom-remove">
+            <i class="uk-icon-cloud-upload uk-icon-medium uk-text-muted uk-margin-small-right"></i> {{ 'Drop files here' | trans }}
         </div>
 
         <!-- pagination -->
@@ -54,29 +55,39 @@
 
 <script>
 
-    var _ = require('../../util');
     var $ = require('jquery');
     var UI = require('uikit');
+    var ZX = require('zlux');
+    var _ = ZX.util;
     var helper = require('./helper.js');
 
     module.exports = {
 
         props: {
-            'routeMap': {
+            routeMap: {
                 type: String,
                 required: true,
                 default: 'filesManager'
+            },
+            extensions: {
+                type: String,
+                default: ''
+            },
+            maxFileSize: {
+                type: String
             }
         },
 
         data: function() {
-
             return {
                 location: '/',
                 cache: {},
                 resources: [],
                 fetching: false,
                 filter: '',
+
+                // upload
+                uploadProgress: 0,
 
                 // pagination
                 itemsPerPage: 10,
@@ -85,7 +96,6 @@
                 count:  0,
                 total:  0
             };
-
         },
 
         computed: {
@@ -140,6 +150,10 @@
 
         },
 
+        ready: function () {
+            this.initPlupload();
+        },
+
         methods: {
 
             changePage: function(page) {
@@ -177,10 +191,29 @@
             },
 
             createDir: function() {
+                var name = prompt('Choose name'),
+                    path = helper.cleanPath(this.location + '/' + name);
 
-                var path = helper.cleanPath(this.location + '/' + prompt());
+                if (!name) return;
 
                 this.$http.get(this.routeMap + '/createDir', {path: path}).done(function(response) {
+
+                    this.reload();
+
+                }).always(function(response) {
+                    this.riseWarnings(response);
+                });
+
+            },
+
+            renameResource: function() {
+                var resource = this.selected[0],
+                    rpath = helper.cleanPath(this.location + '/' + resource.basename),
+                    name = prompt('Choose new name for ' + resource.basename);
+
+                if (!name) return;
+
+                this.$http.get(this.routeMap + '/renameResource', {resource: rpath, new_name: name}).done(function(response) {
 
                     this.reload();
 
@@ -249,8 +282,45 @@
                     UI.notify(response.notices.join('\n'), {pos: 'top-right', status: 'warning'});
                 }
 
-            }
+            },
 
+            initPlupload: function () {
+                var vm = this;
+
+                var uploader = new plupload.Uploader({
+                    runtimes: 'html5',
+                    browse_button: this.$$.browse,
+                    drop_element: this.$$.dropzone,
+                    max_file_size: this.maxFileSize,
+                    url: _.helper.getFulllRoute(this.routeMap + '/upload'),
+                    headers: {
+                        'X-XSRF-TOKEN': ZX.config.csrf
+                    },
+                    filters: [
+                        {title: 'Files', extensions: this.extensions}
+                    ],
+                    init: {
+                        FileUploaded: function(up, file, response) {
+                            vm.$set('uploadProgress', 0);
+                            vm.riseWarnings(JSON.parse(response.response));
+                        },
+                        FilesAdded: function(up, files) {
+                            up.start();
+                        },
+                        UploadProgress: function(up, file) {
+                            vm.uploadProgress = isNaN(file.percent) ? 0 : file.percent;
+                        },
+                        UploadComplete: function(up, file) {
+                            vm.reload();
+                        },
+                        BeforeUpload: function(up, file) {
+                            up.settings.url += '&location=' + vm.location;
+                        }
+                    }
+                });
+
+                uploader.init();
+            }
         },
 
         components: {

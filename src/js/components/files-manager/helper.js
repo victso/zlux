@@ -1,4 +1,4 @@
-var _ = require('../../util');
+var _ = require('zlux').util;
 
 // http://phpjs.org/functions/basename
 exports.basename = function(path, suffix) {

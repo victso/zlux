@@ -1,6 +1,6 @@
 <template>
 
-    <li class="zx-files-manager-resource">
+    <li class="zx-files-manager-resource" draggable="true">
         <div v-on="click: selectItem" class="uk-panel uk-panel-box uk-panel-space uk-text-center" v-class="uk-active: selected">
             <span class="uk-panel-title">
                 <i class="uk-icon-large uk-icon-justify" v-class="

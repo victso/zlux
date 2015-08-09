@@ -1,5 +1,5 @@
 var UI = require('uikit');
-var _ = require('../../util');
+var _ = require('zlux').util;
 
 UI.component('zx-files-manager', {
 

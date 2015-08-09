@@ -25,7 +25,7 @@
 
 <script>
 
-    var _ = require('../../util');
+    var _ = require('zlux').util;
 
     module.exports = {
 
