@@ -53,26 +53,31 @@
 
 	'use strict';
 
-	var UI = __webpack_require__(74);
-	var _ = __webpack_require__(2);
-	var assign = _.assign;
+	var UI = __webpack_require__(1);
+	var $ = __webpack_require__(2);
+	var _ = __webpack_require__(3);
 
 	if (!UI) {
 	    throw new Error('UIkit library is missing');
 	}
 
-	var $ = UI.$;
-
 	var ZX = {
 	    version: '2.1.0',
-	    config: __webpack_require__(41)
+	    config: __webpack_require__(42),
+	    util: __webpack_require__(3),
+	    http: __webpack_require__(76)(ZX)
 	};
+
+	_.assign(ZX, __webpack_require__(77));
+	_.assign(ZX, __webpack_require__(78));
+
+	__webpack_require__(79);
 
 	UI.ready(function() {
 
 	    // style workaround, wrapp dragging elements with zx class
 	    $('body').on('start.uk.nestable, start.uk.sortable', function() {
-	        UI.$('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />');
+	        $('.uk-nestable-list-dragged, .uk-sortable-dragged').wrap('<div class="zx" />');
 	    });
 
 	    // extend config
@@ -80,108 +85,21 @@
 
 	});
 
-	assign(ZX, __webpack_require__(75));
-	assign(ZX, __webpack_require__(76));
-	assign(ZX, __webpack_require__(1));
-
-	ZX.http = __webpack_require__(77)(ZX);
-
-	__webpack_require__(79)(ZX);
-	__webpack_require__(80)(ZX);
-	__webpack_require__(81);
-
-	UI.$.fn.zx = ZX.fn;
-
+	$.fn.zx = ZX.fn;
 	window.Zlux = UI.$zlux = _.zlux = ZX;
 
 
 /***/ },
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	var _ = __webpack_require__(2);
-	var UI = __webpack_require__(74);
-	var ZX = _.zlux;
-
-	exports.modal = {
-
-	    dialog: function(content, options){
-
-	        var modal = UI.$.UIkit.modal.dialog(content, options);
-
-	        // extend modal with
-	        UI.$.extend(modal, {
-
-	            // update content
-	            content: function(html) {
-	                var container = this.dialog;
-
-	                if(!html) {
-	                    return container.html();
-	                }
-
-	                container.html(html);
-
-	                return this;
-	            }
-	        });
-
-	        // add zlux class for the holding content styling
-	        modal.element.addClass('zx');
-
-	        return modal;
-	    },
-
-	    alert: function(content, options){
-
-	        var modal = UI.$.UIkit.modal.dialog(([
-	            '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
-	            '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary uk-modal-close">' + ZX.lang.get('Ok') + '</button></div>'
-	        ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options));
-
-	        modal.show();
-
-	        return modal;
-	    },
-
-	    confirm: function(content, onconfirm, options){
-
-	        onconfirm = UI.$.isFunction(onconfirm) ? onconfirm : function(){};
-
-	        var modal = UI.$.UIkit.modal.dialog(([
-	           '<div class="uk-margin uk-modal-content">' + String(content) + '</div>',
-	           '<div class="uk-modal-buttons"><button class="uk-button uk-button-small uk-button-primary js-modal-confirm">' + ZX.lang.get('Ok') + '</button> <button class="uk-button uk-button-small uk-modal-close">' + ZX.lang.get('Cancel') + '</button></div>'
-	       ]).join(''), UI.$.extend({bgclose: false, keyboard: false}, options));
-
-	        modal.element.find('.js-modal-confirm').on('click', function(){
-	           onconfirm();
-	           modal.hide();
-	        });
-
-	        modal.show();
-
-	        return modal;
-	    }
-
-	};
-
+	module.exports = UIkit;
 
 /***/ },
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	'use strict';
-
-	var object = __webpack_require__(3);
-	var assign = object.assign;
-
-	assign(exports, object);
-	assign(exports, __webpack_require__(40));
-	assign(exports, __webpack_require__(42));
-	assign(exports, __webpack_require__(46));
-
+	module.exports = UIkit.$;
 
 /***/ },
 /* 3 */
@@ -189,10 +107,14 @@
 
 	'use strict';
 
-	module.exports = {
-	    assign: __webpack_require__(4),
-	    merge: __webpack_require__(28)
-	}
+	var object = __webpack_require__(4);
+	var assign = object.assign;
+
+	assign(exports, object);
+	assign(exports, __webpack_require__(41));
+	assign(exports, __webpack_require__(43));
+	assign(exports, __webpack_require__(47));
+	assign(exports, __webpack_require__(75));
 
 
 /***/ },
@@ -201,9 +123,21 @@
 
 	'use strict';
 
-	var assignWith = __webpack_require__(5),
-	    baseAssign = __webpack_require__(21),
-	    createAssigner = __webpack_require__(23);
+	module.exports = {
+	    assign: __webpack_require__(5),
+	    merge: __webpack_require__(29)
+	}
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var assignWith = __webpack_require__(6),
+	    baseAssign = __webpack_require__(22),
+	    createAssigner = __webpack_require__(24);
 
 	/**
 	 * Assigns own enumerable properties of source object(s) to the destination
@@ -247,12 +181,12 @@
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var keys = __webpack_require__(6);
+	var keys = __webpack_require__(7);
 
 	/**
 	 * A specialized version of `_.assign` for customizing assigned values without
@@ -287,15 +221,15 @@
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getNative = __webpack_require__(7),
-	    isArrayLike = __webpack_require__(12),
-	    isObject = __webpack_require__(10),
-	    shimKeys = __webpack_require__(16);
+	var getNative = __webpack_require__(8),
+	    isArrayLike = __webpack_require__(13),
+	    isObject = __webpack_require__(11),
+	    shimKeys = __webpack_require__(17);
 
 	/* Native method references for those with the same name as other `lodash` methods. */
 	var nativeKeys = getNative(Object, 'keys');
@@ -340,12 +274,12 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isNative = __webpack_require__(8);
+	var isNative = __webpack_require__(9);
 
 	/**
 	 * Gets the native function at `key` of `object`.
@@ -364,13 +298,13 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isFunction = __webpack_require__(9),
-	    isObjectLike = __webpack_require__(11);
+	var isFunction = __webpack_require__(10),
+	    isObjectLike = __webpack_require__(12);
 
 	/** Used to detect host constructors (Safari > 5). */
 	var reIsHostCtor = /^\[object .+?Constructor\]$/;
@@ -420,12 +354,12 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isObject = __webpack_require__(10);
+	var isObject = __webpack_require__(11);
 
 	/** `Object#toString` result references. */
 	var funcTag = '[object Function]';
@@ -466,7 +400,7 @@
 
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -502,7 +436,7 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -522,13 +456,13 @@
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getLength = __webpack_require__(13),
-	    isLength = __webpack_require__(15);
+	var getLength = __webpack_require__(14),
+	    isLength = __webpack_require__(16);
 
 	/**
 	 * Checks if `value` is array-like.
@@ -545,12 +479,12 @@
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseProperty = __webpack_require__(14);
+	var baseProperty = __webpack_require__(15);
 
 	/**
 	 * Gets the "length" property value of `object`.
@@ -568,7 +502,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -590,7 +524,7 @@
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -618,16 +552,16 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArguments = __webpack_require__(17),
-	    isArray = __webpack_require__(18),
-	    isIndex = __webpack_require__(19),
-	    isLength = __webpack_require__(15),
-	    keysIn = __webpack_require__(20);
+	var isArguments = __webpack_require__(18),
+	    isArray = __webpack_require__(19),
+	    isIndex = __webpack_require__(20),
+	    isLength = __webpack_require__(16),
+	    keysIn = __webpack_require__(21);
 
 	/** Used for native method references. */
 	var objectProto = Object.prototype;
@@ -667,13 +601,13 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArrayLike = __webpack_require__(12),
-	    isObjectLike = __webpack_require__(11);
+	var isArrayLike = __webpack_require__(13),
+	    isObjectLike = __webpack_require__(12);
 
 	/** Used for native method references. */
 	var objectProto = Object.prototype;
@@ -709,14 +643,14 @@
 
 
 /***/ },
-/* 18 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getNative = __webpack_require__(7),
-	    isLength = __webpack_require__(15),
-	    isObjectLike = __webpack_require__(11);
+	var getNative = __webpack_require__(8),
+	    isLength = __webpack_require__(16),
+	    isObjectLike = __webpack_require__(12);
 
 	/** `Object#toString` result references. */
 	var arrayTag = '[object Array]';
@@ -757,7 +691,7 @@
 
 
 /***/ },
-/* 19 */
+/* 20 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -789,16 +723,16 @@
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArguments = __webpack_require__(17),
-	    isArray = __webpack_require__(18),
-	    isIndex = __webpack_require__(19),
-	    isLength = __webpack_require__(15),
-	    isObject = __webpack_require__(10);
+	var isArguments = __webpack_require__(18),
+	    isArray = __webpack_require__(19),
+	    isIndex = __webpack_require__(20),
+	    isLength = __webpack_require__(16),
+	    isObject = __webpack_require__(11);
 
 	/** Used for native method references. */
 	var objectProto = Object.prototype;
@@ -861,13 +795,13 @@
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseCopy = __webpack_require__(22),
-	    keys = __webpack_require__(6);
+	var baseCopy = __webpack_require__(23),
+	    keys = __webpack_require__(7);
 
 	/**
 	 * The base implementation of `_.assign` without support for argument juggling,
@@ -888,7 +822,7 @@
 
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -919,14 +853,14 @@
 
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var bindCallback = __webpack_require__(24),
-	    isIterateeCall = __webpack_require__(26),
-	    restParam = __webpack_require__(27);
+	var bindCallback = __webpack_require__(25),
+	    isIterateeCall = __webpack_require__(27),
+	    restParam = __webpack_require__(28);
 
 	/**
 	 * Creates a `_.assign`, `_.defaults`, or `_.merge` function.
@@ -968,12 +902,12 @@
 
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var identity = __webpack_require__(25);
+	var identity = __webpack_require__(26);
 
 	/**
 	 * A specialized version of `baseCallback` which only supports `this` binding
@@ -1015,7 +949,7 @@
 
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1043,14 +977,14 @@
 
 
 /***/ },
-/* 26 */
+/* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArrayLike = __webpack_require__(12),
-	    isIndex = __webpack_require__(19),
-	    isObject = __webpack_require__(10);
+	var isArrayLike = __webpack_require__(13),
+	    isIndex = __webpack_require__(20),
+	    isObject = __webpack_require__(11);
 
 	/**
 	 * Checks if the provided arguments are from an iteratee call.
@@ -1079,7 +1013,7 @@
 
 
 /***/ },
-/* 27 */
+/* 28 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1145,13 +1079,13 @@
 
 
 /***/ },
-/* 28 */
+/* 29 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseMerge = __webpack_require__(29),
-	    createAssigner = __webpack_require__(23);
+	var baseMerge = __webpack_require__(30),
+	    createAssigner = __webpack_require__(24);
 
 	/**
 	 * Recursively merges own enumerable properties of the source object(s), that
@@ -1207,19 +1141,19 @@
 
 
 /***/ },
-/* 29 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arrayEach = __webpack_require__(30),
-	    baseMergeDeep = __webpack_require__(31),
-	    isArray = __webpack_require__(18),
-	    isArrayLike = __webpack_require__(12),
-	    isObject = __webpack_require__(10),
-	    isObjectLike = __webpack_require__(11),
-	    isTypedArray = __webpack_require__(38),
-	    keys = __webpack_require__(6);
+	var arrayEach = __webpack_require__(31),
+	    baseMergeDeep = __webpack_require__(32),
+	    isArray = __webpack_require__(19),
+	    isArrayLike = __webpack_require__(13),
+	    isObject = __webpack_require__(11),
+	    isObjectLike = __webpack_require__(12),
+	    isTypedArray = __webpack_require__(39),
+	    keys = __webpack_require__(7);
 
 	/**
 	 * The base implementation of `_.merge` without support for argument juggling,
@@ -1271,7 +1205,7 @@
 
 
 /***/ },
-/* 30 */
+/* 31 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1301,18 +1235,18 @@
 
 
 /***/ },
-/* 31 */
+/* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arrayCopy = __webpack_require__(32),
-	    isArguments = __webpack_require__(17),
-	    isArray = __webpack_require__(18),
-	    isArrayLike = __webpack_require__(12),
-	    isPlainObject = __webpack_require__(33),
-	    isTypedArray = __webpack_require__(38),
-	    toPlainObject = __webpack_require__(39);
+	var arrayCopy = __webpack_require__(33),
+	    isArguments = __webpack_require__(18),
+	    isArray = __webpack_require__(19),
+	    isArrayLike = __webpack_require__(13),
+	    isPlainObject = __webpack_require__(34),
+	    isTypedArray = __webpack_require__(39),
+	    toPlainObject = __webpack_require__(40);
 
 	/**
 	 * A specialized version of `baseMerge` for arrays and objects which performs
@@ -1376,7 +1310,7 @@
 
 
 /***/ },
-/* 32 */
+/* 33 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1404,14 +1338,14 @@
 
 
 /***/ },
-/* 33 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseForIn = __webpack_require__(34),
-	    isArguments = __webpack_require__(17),
-	    isObjectLike = __webpack_require__(11);
+	var baseForIn = __webpack_require__(35),
+	    isArguments = __webpack_require__(18),
+	    isObjectLike = __webpack_require__(12);
 
 	/** `Object#toString` result references. */
 	var objectTag = '[object Object]';
@@ -1483,13 +1417,13 @@
 
 
 /***/ },
-/* 34 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseFor = __webpack_require__(35),
-	    keysIn = __webpack_require__(20);
+	var baseFor = __webpack_require__(36),
+	    keysIn = __webpack_require__(21);
 
 	/**
 	 * The base implementation of `_.forIn` without support for callback
@@ -1508,12 +1442,12 @@
 
 
 /***/ },
-/* 35 */
+/* 36 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var createBaseFor = __webpack_require__(36);
+	var createBaseFor = __webpack_require__(37);
 
 	/**
 	 * The base implementation of `baseForIn` and `baseForOwn` which iterates
@@ -1533,12 +1467,12 @@
 
 
 /***/ },
-/* 36 */
+/* 37 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var toObject = __webpack_require__(37);
+	var toObject = __webpack_require__(38);
 
 	/**
 	 * Creates a base function for `_.forIn` or `_.forInRight`.
@@ -1568,12 +1502,12 @@
 
 
 /***/ },
-/* 37 */
+/* 38 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isObject = __webpack_require__(10);
+	var isObject = __webpack_require__(11);
 
 	/**
 	 * Converts `value` to an object if it's not one.
@@ -1590,13 +1524,13 @@
 
 
 /***/ },
-/* 38 */
+/* 39 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isLength = __webpack_require__(15),
-	    isObjectLike = __webpack_require__(11);
+	var isLength = __webpack_require__(16),
+	    isObjectLike = __webpack_require__(12);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -1672,13 +1606,13 @@
 
 
 /***/ },
-/* 39 */
+/* 40 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseCopy = __webpack_require__(22),
-	    keysIn = __webpack_require__(20);
+	var baseCopy = __webpack_require__(23),
+	    keysIn = __webpack_require__(21);
 
 	/**
 	 * Converts `value` to a plain object flattening inherited enumerable
@@ -1711,13 +1645,13 @@
 
 
 /***/ },
-/* 40 */
+/* 41 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var config = __webpack_require__(41);
-	var _ = __webpack_require__(42);
+	var config = __webpack_require__(42);
+	var _ = __webpack_require__(43);
 
 	/**
 	 * Enable debug utilities. The enableDebug() function and
@@ -1765,7 +1699,7 @@
 
 
 /***/ },
-/* 41 */
+/* 42 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1832,21 +1766,21 @@
 
 
 /***/ },
-/* 42 */
+/* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	module.exports = {
-	    isFunction: __webpack_require__(9),
-	    isUndefined: __webpack_require__(43),
-	    isString: __webpack_require__(44),
-	    isEmpty: __webpack_require__(45)
+	    isFunction: __webpack_require__(10),
+	    isUndefined: __webpack_require__(44),
+	    isString: __webpack_require__(45),
+	    isEmpty: __webpack_require__(46)
 	}
 
 
 /***/ },
-/* 43 */
+/* 44 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -1875,12 +1809,12 @@
 
 
 /***/ },
-/* 44 */
+/* 45 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isObjectLike = __webpack_require__(11);
+	var isObjectLike = __webpack_require__(12);
 
 	/** `Object#toString` result references. */
 	var stringTag = '[object String]';
@@ -1918,18 +1852,18 @@
 
 
 /***/ },
-/* 45 */
+/* 46 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArguments = __webpack_require__(17),
-	    isArray = __webpack_require__(18),
-	    isArrayLike = __webpack_require__(12),
-	    isFunction = __webpack_require__(9),
-	    isObjectLike = __webpack_require__(11),
-	    isString = __webpack_require__(44),
-	    keys = __webpack_require__(6);
+	var isArguments = __webpack_require__(18),
+	    isArray = __webpack_require__(19),
+	    isArrayLike = __webpack_require__(13),
+	    isFunction = __webpack_require__(10),
+	    isObjectLike = __webpack_require__(12),
+	    isString = __webpack_require__(45),
+	    keys = __webpack_require__(7);
 
 	/**
 	 * Checks if `value` is empty. A value is considered empty unless it's an
@@ -1973,26 +1907,26 @@
 
 
 /***/ },
-/* 46 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = {
-	    filter: __webpack_require__(47)
-	}
-
-
-/***/ },
 /* 47 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arrayFilter = __webpack_require__(48),
-	    baseCallback = __webpack_require__(49),
-	    baseFilter = __webpack_require__(70),
-	    isArray = __webpack_require__(18);
+	module.exports = {
+	    filter: __webpack_require__(48)
+	}
+
+
+/***/ },
+/* 48 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var arrayFilter = __webpack_require__(49),
+	    baseCallback = __webpack_require__(50),
+	    baseFilter = __webpack_require__(71),
+	    isArray = __webpack_require__(19);
 
 	/**
 	 * Iterates over elements of `collection`, returning an array of all elements
@@ -2053,7 +1987,7 @@
 
 
 /***/ },
-/* 48 */
+/* 49 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2086,16 +2020,16 @@
 
 
 /***/ },
-/* 49 */
+/* 50 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseMatches = __webpack_require__(50),
-	    baseMatchesProperty = __webpack_require__(61),
-	    bindCallback = __webpack_require__(24),
-	    identity = __webpack_require__(25),
-	    property = __webpack_require__(68);
+	var baseMatches = __webpack_require__(51),
+	    baseMatchesProperty = __webpack_require__(62),
+	    bindCallback = __webpack_require__(25),
+	    identity = __webpack_require__(26),
+	    property = __webpack_require__(69);
 
 	/**
 	 * The base implementation of `_.callback` which supports specifying the
@@ -2129,14 +2063,14 @@
 
 
 /***/ },
-/* 50 */
+/* 51 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsMatch = __webpack_require__(51),
-	    getMatchData = __webpack_require__(58),
-	    toObject = __webpack_require__(37);
+	var baseIsMatch = __webpack_require__(52),
+	    getMatchData = __webpack_require__(59),
+	    toObject = __webpack_require__(38);
 
 	/**
 	 * The base implementation of `_.matches` which does not clone `source`.
@@ -2167,13 +2101,13 @@
 
 
 /***/ },
-/* 51 */
+/* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsEqual = __webpack_require__(52),
-	    toObject = __webpack_require__(37);
+	var baseIsEqual = __webpack_require__(53),
+	    toObject = __webpack_require__(38);
 
 	/**
 	 * The base implementation of `_.isMatch` without support for callback
@@ -2227,14 +2161,14 @@
 
 
 /***/ },
-/* 52 */
+/* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseIsEqualDeep = __webpack_require__(53),
-	    isObject = __webpack_require__(10),
-	    isObjectLike = __webpack_require__(11);
+	var baseIsEqualDeep = __webpack_require__(54),
+	    isObject = __webpack_require__(11),
+	    isObjectLike = __webpack_require__(12);
 
 	/**
 	 * The base implementation of `_.isEqual` without support for `this` binding
@@ -2263,16 +2197,16 @@
 
 
 /***/ },
-/* 53 */
+/* 54 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var equalArrays = __webpack_require__(54),
-	    equalByTag = __webpack_require__(56),
-	    equalObjects = __webpack_require__(57),
-	    isArray = __webpack_require__(18),
-	    isTypedArray = __webpack_require__(38);
+	var equalArrays = __webpack_require__(55),
+	    equalByTag = __webpack_require__(57),
+	    equalObjects = __webpack_require__(58),
+	    isArray = __webpack_require__(19),
+	    isTypedArray = __webpack_require__(39);
 
 	/** `Object#toString` result references. */
 	var argsTag = '[object Arguments]',
@@ -2373,12 +2307,12 @@
 
 
 /***/ },
-/* 54 */
+/* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var arraySome = __webpack_require__(55);
+	var arraySome = __webpack_require__(56);
 
 	/**
 	 * A specialized version of `baseIsEqualDeep` for arrays with support for
@@ -2432,7 +2366,7 @@
 
 
 /***/ },
-/* 55 */
+/* 56 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2463,7 +2397,7 @@
 
 
 /***/ },
-/* 56 */
+/* 57 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2519,12 +2453,12 @@
 
 
 /***/ },
-/* 57 */
+/* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var keys = __webpack_require__(6);
+	var keys = __webpack_require__(7);
 
 	/** Used for native method references. */
 	var objectProto = Object.prototype;
@@ -2594,13 +2528,13 @@
 
 
 /***/ },
-/* 58 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isStrictComparable = __webpack_require__(59),
-	    pairs = __webpack_require__(60);
+	var isStrictComparable = __webpack_require__(60),
+	    pairs = __webpack_require__(61);
 
 	/**
 	 * Gets the propery names, values, and compare flags of `object`.
@@ -2623,12 +2557,12 @@
 
 
 /***/ },
-/* 59 */
+/* 60 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isObject = __webpack_require__(10);
+	var isObject = __webpack_require__(11);
 
 	/**
 	 * Checks if `value` is suitable for strict equality comparisons, i.e. `===`.
@@ -2646,13 +2580,13 @@
 
 
 /***/ },
-/* 60 */
+/* 61 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var keys = __webpack_require__(6),
-	    toObject = __webpack_require__(37);
+	var keys = __webpack_require__(7),
+	    toObject = __webpack_require__(38);
 
 	/**
 	 * Creates a two dimensional array of the key-value pairs for `object`,
@@ -2687,20 +2621,20 @@
 
 
 /***/ },
-/* 61 */
+/* 62 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseGet = __webpack_require__(62),
-	    baseIsEqual = __webpack_require__(52),
-	    baseSlice = __webpack_require__(63),
-	    isArray = __webpack_require__(18),
-	    isKey = __webpack_require__(64),
-	    isStrictComparable = __webpack_require__(59),
-	    last = __webpack_require__(65),
-	    toObject = __webpack_require__(37),
-	    toPath = __webpack_require__(66);
+	var baseGet = __webpack_require__(63),
+	    baseIsEqual = __webpack_require__(53),
+	    baseSlice = __webpack_require__(64),
+	    isArray = __webpack_require__(19),
+	    isKey = __webpack_require__(65),
+	    isStrictComparable = __webpack_require__(60),
+	    last = __webpack_require__(66),
+	    toObject = __webpack_require__(38),
+	    toPath = __webpack_require__(67);
 
 	/**
 	 * The base implementation of `_.matchesProperty` which does not clone `srcValue`.
@@ -2740,12 +2674,12 @@
 
 
 /***/ },
-/* 62 */
+/* 63 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var toObject = __webpack_require__(37);
+	var toObject = __webpack_require__(38);
 
 	/**
 	 * The base implementation of `get` without support for string paths
@@ -2777,7 +2711,7 @@
 
 
 /***/ },
-/* 63 */
+/* 64 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2817,13 +2751,13 @@
 
 
 /***/ },
-/* 64 */
+/* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var isArray = __webpack_require__(18),
-	    toObject = __webpack_require__(37);
+	var isArray = __webpack_require__(19),
+	    toObject = __webpack_require__(38);
 
 	/** Used to match property names within property paths. */
 	var reIsDeepProp = /\.|\[(?:[^[\]]*|(["'])(?:(?!\1)[^\n\\]|\\.)*?\1)\]/,
@@ -2853,7 +2787,7 @@
 
 
 /***/ },
-/* 65 */
+/* 66 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2880,13 +2814,13 @@
 
 
 /***/ },
-/* 66 */
+/* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseToString = __webpack_require__(67),
-	    isArray = __webpack_require__(18);
+	var baseToString = __webpack_require__(68),
+	    isArray = __webpack_require__(19);
 
 	/** Used to match property names within property paths. */
 	var rePropName = /[^.[\]]+|\[(?:(-?\d+(?:\.\d+)?)|(["'])((?:(?!\2)[^\n\\]|\\.)*?)\2)\]/g;
@@ -2916,7 +2850,7 @@
 
 
 /***/ },
-/* 67 */
+/* 68 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -2937,14 +2871,14 @@
 
 
 /***/ },
-/* 68 */
+/* 69 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseProperty = __webpack_require__(14),
-	    basePropertyDeep = __webpack_require__(69),
-	    isKey = __webpack_require__(64);
+	var baseProperty = __webpack_require__(15),
+	    basePropertyDeep = __webpack_require__(70),
+	    isKey = __webpack_require__(65);
 
 	/**
 	 * Creates a function that returns the property value at `path` on a
@@ -2976,13 +2910,13 @@
 
 
 /***/ },
-/* 69 */
+/* 70 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseGet = __webpack_require__(62),
-	    toPath = __webpack_require__(66);
+	var baseGet = __webpack_require__(63),
+	    toPath = __webpack_require__(67);
 
 	/**
 	 * A specialized version of `baseProperty` which supports deep paths.
@@ -3003,12 +2937,12 @@
 
 
 /***/ },
-/* 70 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseEach = __webpack_require__(71);
+	var baseEach = __webpack_require__(72);
 
 	/**
 	 * The base implementation of `_.filter` without support for callback
@@ -3033,13 +2967,13 @@
 
 
 /***/ },
-/* 71 */
+/* 72 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseForOwn = __webpack_require__(72),
-	    createBaseEach = __webpack_require__(73);
+	var baseForOwn = __webpack_require__(73),
+	    createBaseEach = __webpack_require__(74);
 
 	/**
 	 * The base implementation of `_.forEach` without support for callback
@@ -3056,13 +2990,13 @@
 
 
 /***/ },
-/* 72 */
+/* 73 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var baseFor = __webpack_require__(35),
-	    keys = __webpack_require__(6);
+	var baseFor = __webpack_require__(36),
+	    keys = __webpack_require__(7);
 
 	/**
 	 * The base implementation of `_.forOwn` without support for callback
@@ -3081,14 +3015,14 @@
 
 
 /***/ },
-/* 73 */
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var getLength = __webpack_require__(13),
-	    isLength = __webpack_require__(15),
-	    toObject = __webpack_require__(37);
+	var getLength = __webpack_require__(14),
+	    isLength = __webpack_require__(16),
+	    toObject = __webpack_require__(38);
 
 	/**
 	 * Creates a `baseEach` or `baseEachRight` function.
@@ -3120,252 +3054,33 @@
 
 
 /***/ },
-/* 74 */
-/***/ function(module, exports) {
-
-	module.exports = UIkit;
-
-/***/ },
 /* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-	var UI = __webpack_require__(74);
-	var ZX = _.zlux;
+	var _ = __webpack_require__(3);
 
-	exports.extensions = {};
+	exports.helper = {
 
-	/** COMPONENT **/
-	exports.component = function(name, def) {
+	    getFulllRoute: function(_route) {
 
-	    var fn = function(element, options) {
-	        var $this = this;
+	        var route = _.zlux.config.route;
 
-	        this.element = element ? UI.$(element) : null;
-	        this.options = UI.$.extend(true, {}, this.defaults, options);
-	        this.plugins = {};
+	        // split route prefix [0] and method [1], eg: filesManager/fetchResources
+	        var _route = _route.split('/');
 
-	        if (this.element) {
-	            this.element.data(name, this);
+	        // check if prefix has been mapped
+	        if (_.zlux.config.routesMap[_route[0]]) {
+	            route += '&' + _.zlux.config.routesMap[_route[0]]
 	        }
 
-	        this.init();
+	        // append method
+	        route += '&method=' + _route[1];
 
-	        (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
-
-	            if (fn.plugins[plugin].init) {
-	                fn.plugins[plugin].init($this);
-	                $this.plugins[plugin] = true;
-	            }
-
-	        });
-
-	        this.trigger('init', [this]);
-	    };
-
-	    fn.plugins = {};
-	    fn.instances = [];
-
-	    UI.$.extend(true, fn.prototype, {
-
-	        type: 'component',
-
-	        defaults: {plugins: []},
-
-	        boot: function(){},
-	        init: function(){},
-
-	        on: function(){
-	            return UI.$(this.element || this).on.apply(this.element || this, arguments);
-	        },
-
-	        one: function(){
-	            return UI.$(this.element || this).one.apply(this.element || this, arguments);
-	        },
-
-	        off: function(evt){
-	            return UI.$(this.element || this).off(evt);
-	        },
-
-	        trigger: function(evt, params) {
-	            return UI.$(this.element || this).trigger(evt, params);
-	        },
-
-	        find: function(selector) {
-	            return this.element ? this.element.find(selector) : $([]);
-	        },
-
-	        proxy: function(obj, methods) {
-	            var $this = this;
-
-	            methods.split(' ').forEach(function(method) {
-	                if (!$this[method]) $this[method] = function() { return obj[method].apply(obj, arguments); };
-	            });
-	        },
-
-	        mixin: function(obj, methods) {
-	            var $this = this;
-
-	            methods.split(' ').forEach(function(method) {
-	                if (!$this[method]) $this[method] = obj[method].bind($this);
-	            });
-	        }
-
-	    }, def);
-
-	    // save the component
-	    this.extensions[name] = fn;
-
-	    // declare the component init function and save it into ZX root
-	    this[name] = function() {
-
-	        var element, options;
-
-	        if(arguments.length) {
-	            switch(arguments.length) {
-	                case 1:
-
-	                    if (typeof arguments[0] === "string" || arguments[0].nodeType || arguments[0] instanceof jQuery) {
-	                        element = UI.$(arguments[0]);
-	                    } else {
-	                        options = arguments[0];
-	                    }
-
-	                    break;
-	                case 2:
-
-	                    element = UI.$(arguments[0]);
-	                    options = arguments[1];
-	                    break;
-	            }
-	        }
-
-	        if (element && element.data(name)) {
-	            return element.data(name);
-	        }
-
-	        return (new ZX.extensions[name](element, options));
-	    };
-
-	    // Component plugin declaration
-	    this[name].plugin = function(plugin, def) {
-	        ZX.extensions[name].plugins[plugin] = def;
-	    };
-
-	    if (UI.domready) {
-	        UI.component.boot(name);
+	        return route;
 	    }
 
-	    return fn;
-	};
-
-	exports.component.boot = function(name) {
-
-	    if (ZX.extensions[name].prototype && ZX.extensions[name].prototype.boot && !ZX.extensions[name].booted) {
-	        ZX.extensions[name].prototype.boot.apply(ZX, []);
-	        ZX.extensions[name].booted = true;
-	    }
-	}
-
-	exports.component.bootComponents = function() {
-
-	    for (var component in ZX.extensions) {
-	        ZX.component.boot(component);
-	    }
-
-	}
-
-	/** PLUGIN **/
-	exports.plugin = function(name, def) {
-
-	    var fn = function(element, options) {
-	        this.element = element ? UI.$(element) : null;
-	        this.init(options);
-	    };
-
-	    UI.$.extend(true, fn.prototype, {
-
-	        type: 'plugin',
-
-	        init: function(){}
-
-	    }, def);
-
-
-	    // save the plugin
-	    this.extensions[name] = fn;
-
-	    // declare the plugin init function and save it into ZX root
-	    this[name] = function() {
-
-	        var element, options;
-
-	        if(arguments.length) {
-	            switch(arguments.length) {
-	                case 1:
-
-	                    if (typeof arguments[0] === "string" || arguments[0].nodeType || arguments[0] instanceof jQuery) {
-	                        element = UI.$(arguments[0]);
-	                    } else {
-	                        options = arguments[0];
-	                    }
-
-	                    break;
-	                case 2:
-
-	                    element = UI.$(arguments[0]);
-	                    options = arguments[1];
-	                    break;
-	            }
-	        }
-
-	        return (new ZX.extensions[name](element, options));
-	    };
-
-	    return fn;
-	};
-
-
-	/** FN **/
-	exports.fn = function(command, options) {
-
-	    var args = arguments, cmd = command.match(/^([a-z\-]+)(?:\.([a-z]+))?/i), extension = cmd[1], method = cmd[2];
-
-	    if (!ZX[extension]) {
-	        UI.$.error("ZLUX extension [" + extension + "] does not exist.");
-	        return this;
-	    }
-
-	    // component
-	    if(ZX.extensions[extension].prototype.type === 'component') {
-
-	        return this.each(function() {
-	            // the element
-	            var $this = UI.$(this),
-
-	            // get the saved instance
-	            data = $this.data(extension);
-
-	            // if no instance, init it
-	            if (!data) {
-	                $this.data(extension, (data = ZX[extension](this, method ? undefined : options)));
-	                ZX.extensions[extension].instances.push(data);
-	            }
-
-	            // if method provided, execute it
-	            if (method) data[method].apply(data, Array.prototype.slice.call(args, 1));
-	        });
-	    }
-
-	    // plugin
-	    else if(ZX.extensions[extension].prototype.type === 'plugin') {
-
-	        return this.each(function() {
-	            ZX[extension](this, Array.prototype.slice.call(args, 1));
-	        });
-	    }
 	}
 
 
@@ -3375,62 +3090,10 @@
 
 	'use strict';
 
-	var _ = __webpack_require__(2);
-
-	exports.lang = {
-
-	    strings: {},
-
-	    /**
-	     * Push language strings to the list
-	     * @param Object strings Translated string in JSON format.
-	     */
-
-	    push: function (strings) {
-	        _.merge(this.strings, strings);
-	    },
-
-	    /**
-	     * Retrieves the specified language string
-	     * @param String string String to look for.
-	     * @return String Translated string or the input string if it wasn't found.
-	     */
-
-	    get: function (string) {
-	        return this.strings[string] || string;
-	    },
-
-	    /**
-	     * Pseudo sprintf implementation - simple way to replace tokens with specified values.
-	     * @param String str String with tokens
-	     * @return String String with replaced tokens
-	     */
-
-	    sprintf: function (str) {
-	        var args = [].slice.call(arguments, 1);
-
-	        str = this.get(str);
-
-	        return str.replace(/%[a-z]/g, function () {
-	            var value = args.shift();
-	            return !_.isUndefined(value) ? value : '';
-	        });
-	    }
-
-	};
-
-
-/***/ },
-/* 77 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
 	module.exports = function () {
 
-	    var _ = __webpack_require__(2);
-	    var $ = __webpack_require__(78);
-	    var config = __webpack_require__(41);
+	    var _ = __webpack_require__(3);
+	    var $ = __webpack_require__(2);
 
 	    /**
 	     * Http request as jQuery ajax wrapper
@@ -3441,25 +3104,14 @@
 	     */
 	    function Http(route, settings) {
 
-	        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []}, url = config.route;
+	        var self = this, deferred = $.Deferred(), response = {success: true, errors: [], notices: []};
 
 	        settings = settings || {};
 
 	        // queue = settings.queue ? settings.queue : null,
 	        // delete settings.queue
 
-	        // split route prefix [0] and method [1], eg: filesManager/fetchResources
-	        var route = route.split('/');
-
-	        // check if prefix has been mapped
-	        if (config.routesMap[route[0]]) {
-	            url += '&' + config.routesMap[route[0]]
-	        }
-
-	        // append method
-	        url += '&method=' + route[1];
-
-	        settings = _.merge({url: url}, Http.settings, settings);
+	        settings = _.merge({url: _.helper.getFulllRoute(route)}, Http.settings, settings);
 
 	        // var request  = queue ? this.queue(queue, settings) : $.ajax(settings)
 
@@ -3712,10 +3364,299 @@
 
 
 /***/ },
-/* 78 */
-/***/ function(module, exports) {
+/* 77 */
+/***/ function(module, exports, __webpack_require__) {
 
-	module.exports = UIkit.$;
+	'use strict';
+
+	var _ = __webpack_require__(3);
+	var UI = __webpack_require__(1);
+	var ZX = _.zlux;
+
+	exports.extensions = {};
+
+	/** COMPONENT **/
+	exports.component = function(name, def) {
+
+	    var fn = function(element, options) {
+	        var $this = this;
+
+	        this.element = element ? UI.$(element) : null;
+	        this.options = UI.$.extend(true, {}, this.defaults, options);
+	        this.plugins = {};
+
+	        if (this.element) {
+	            this.element.data(name, this);
+	        }
+
+	        this.init();
+
+	        (this.options.plugins.length ? this.options.plugins : Object.keys(fn.plugins)).forEach(function(plugin) {
+
+	            if (fn.plugins[plugin].init) {
+	                fn.plugins[plugin].init($this);
+	                $this.plugins[plugin] = true;
+	            }
+
+	        });
+
+	        this.trigger('init', [this]);
+	    };
+
+	    fn.plugins = {};
+	    fn.instances = [];
+
+	    UI.$.extend(true, fn.prototype, {
+
+	        type: 'component',
+
+	        defaults: {plugins: []},
+
+	        boot: function(){},
+	        init: function(){},
+
+	        on: function(){
+	            return UI.$(this.element || this).on.apply(this.element || this, arguments);
+	        },
+
+	        one: function(){
+	            return UI.$(this.element || this).one.apply(this.element || this, arguments);
+	        },
+
+	        off: function(evt){
+	            return UI.$(this.element || this).off(evt);
+	        },
+
+	        trigger: function(evt, params) {
+	            return UI.$(this.element || this).trigger(evt, params);
+	        },
+
+	        find: function(selector) {
+	            return this.element ? this.element.find(selector) : $([]);
+	        },
+
+	        proxy: function(obj, methods) {
+	            var $this = this;
+
+	            methods.split(' ').forEach(function(method) {
+	                if (!$this[method]) $this[method] = function() { return obj[method].apply(obj, arguments); };
+	            });
+	        },
+
+	        mixin: function(obj, methods) {
+	            var $this = this;
+
+	            methods.split(' ').forEach(function(method) {
+	                if (!$this[method]) $this[method] = obj[method].bind($this);
+	            });
+	        }
+
+	    }, def);
+
+	    // save the component
+	    this.extensions[name] = fn;
+
+	    // declare the component init function and save it into ZX root
+	    this[name] = function() {
+
+	        var element, options;
+
+	        if(arguments.length) {
+	            switch(arguments.length) {
+	                case 1:
+
+	                    if (typeof arguments[0] === "string" || arguments[0].nodeType || arguments[0] instanceof jQuery) {
+	                        element = UI.$(arguments[0]);
+	                    } else {
+	                        options = arguments[0];
+	                    }
+
+	                    break;
+	                case 2:
+
+	                    element = UI.$(arguments[0]);
+	                    options = arguments[1];
+	                    break;
+	            }
+	        }
+
+	        if (element && element.data(name)) {
+	            return element.data(name);
+	        }
+
+	        return (new ZX.extensions[name](element, options));
+	    };
+
+	    // Component plugin declaration
+	    this[name].plugin = function(plugin, def) {
+	        ZX.extensions[name].plugins[plugin] = def;
+	    };
+
+	    if (UI.domready) {
+	        UI.component.boot(name);
+	    }
+
+	    return fn;
+	};
+
+	exports.component.boot = function(name) {
+
+	    if (ZX.extensions[name].prototype && ZX.extensions[name].prototype.boot && !ZX.extensions[name].booted) {
+	        ZX.extensions[name].prototype.boot.apply(ZX, []);
+	        ZX.extensions[name].booted = true;
+	    }
+	}
+
+	exports.component.bootComponents = function() {
+
+	    for (var component in ZX.extensions) {
+	        ZX.component.boot(component);
+	    }
+
+	}
+
+	/** PLUGIN **/
+	exports.plugin = function(name, def) {
+
+	    var fn = function(element, options) {
+	        this.element = element ? UI.$(element) : null;
+	        this.init(options);
+	    };
+
+	    UI.$.extend(true, fn.prototype, {
+
+	        type: 'plugin',
+
+	        init: function(){}
+
+	    }, def);
+
+
+	    // save the plugin
+	    this.extensions[name] = fn;
+
+	    // declare the plugin init function and save it into ZX root
+	    this[name] = function() {
+
+	        var element, options;
+
+	        if(arguments.length) {
+	            switch(arguments.length) {
+	                case 1:
+
+	                    if (typeof arguments[0] === "string" || arguments[0].nodeType || arguments[0] instanceof jQuery) {
+	                        element = UI.$(arguments[0]);
+	                    } else {
+	                        options = arguments[0];
+	                    }
+
+	                    break;
+	                case 2:
+
+	                    element = UI.$(arguments[0]);
+	                    options = arguments[1];
+	                    break;
+	            }
+	        }
+
+	        return (new ZX.extensions[name](element, options));
+	    };
+
+	    return fn;
+	};
+
+
+	/** FN **/
+	exports.fn = function(command, options) {
+
+	    var args = arguments, cmd = command.match(/^([a-z\-]+)(?:\.([a-z]+))?/i), extension = cmd[1], method = cmd[2];
+
+	    if (!ZX[extension]) {
+	        UI.$.error("ZLUX extension [" + extension + "] does not exist.");
+	        return this;
+	    }
+
+	    // component
+	    if(ZX.extensions[extension].prototype.type === 'component') {
+
+	        return this.each(function() {
+	            // the element
+	            var $this = UI.$(this),
+
+	            // get the saved instance
+	            data = $this.data(extension);
+
+	            // if no instance, init it
+	            if (!data) {
+	                $this.data(extension, (data = ZX[extension](this, method ? undefined : options)));
+	                ZX.extensions[extension].instances.push(data);
+	            }
+
+	            // if method provided, execute it
+	            if (method) data[method].apply(data, Array.prototype.slice.call(args, 1));
+	        });
+	    }
+
+	    // plugin
+	    else if(ZX.extensions[extension].prototype.type === 'plugin') {
+
+	        return this.each(function() {
+	            ZX[extension](this, Array.prototype.slice.call(args, 1));
+	        });
+	    }
+	}
+
+
+/***/ },
+/* 78 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _ = __webpack_require__(3);
+
+	exports.lang = {
+
+	    strings: {},
+
+	    /**
+	     * Push language strings to the list
+	     * @param Object strings Translated string in JSON format.
+	     */
+
+	    push: function (strings) {
+	        _.merge(this.strings, strings);
+	    },
+
+	    /**
+	     * Retrieves the specified language string
+	     * @param String string String to look for.
+	     * @return String Translated string or the input string if it wasn't found.
+	     */
+
+	    get: function (string) {
+	        return this.strings[string] || string;
+	    },
+
+	    /**
+	     * Pseudo sprintf implementation - simple way to replace tokens with specified values.
+	     * @param String str String with tokens
+	     * @return String String with replaced tokens
+	     */
+
+	    sprintf: function (str) {
+	        var args = [].slice.call(arguments, 1);
+
+	        str = this.get(str);
+
+	        return str.replace(/%[a-z]/g, function () {
+	            var value = args.shift();
+	            return !_.isUndefined(value) ? value : '';
+	        });
+	    }
+
+	};
+
 
 /***/ },
 /* 79 */
@@ -3723,139 +3664,8 @@
 
 	'use strict';
 
-	var UI = __webpack_require__(74);
-
-	module.exports = function(ZX) {
-
-	    ZX.plugin('animate', {
-
-	        init: function(options) {
-	            var $this = this,
-
-	            // set animation class
-	            animation = 'zx-animate-' + UI.$.trim(options[0]),
-
-	            // set callback
-	            callback = options[1] ? options[1] : null;
-
-	            // animate
-	            $this.animate(animation).done(function(){
-
-	                // execute any callback passing the element as scope
-	                if (callback) {
-	                    callback.apply($this.element);
-	                }
-
-	            });
-	        },
-
-	        animate: function(animation) {
-	            var $this = this;
-
-	            return UI.$.Deferred(function(defer) {
-
-	                // animate the element with CSS3
-	                $this.element.addClass(animation)
-
-	                // when done
-	                .one('webkitAnimationEnd mozAnimationEnd MSAnimationEnd oanimationend animationend', function() {
-
-	                    // remove the class to allow further animation
-	                    $this.element.removeClass(animation);
-	                    defer.resolve();
-
-	                });
-
-	            }).promise();
-	        }
-	    });
-
-	};
-
-
-/***/ },
-/* 80 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var UI = __webpack_require__(74)
-
-	module.exports = function(ZX) {
-
-	    ZX.component('spin', {
-
-	        defaults: {
-	            class: '',
-	            affix:  'append' // append, prepend or replace
-	        },
-
-	        init: function() {
-	            // run default
-	            this.on()
-	        },
-
-	        on: function() {
-	            var $this = this
-
-	            $this.icon_class = false
-
-	            // find and existing icon
-	            $this.icon = $this.element.is('i') ? $this.element : UI.$('i', $this.element).first()
-
-	            // use it if found
-	            if($this.icon.length) {
-	                // save original class
-	                $this.icon_class = $this.icon.attr('class')
-	                // hardcode the width to avoid movement effects
-	                $this.icon.width($this.icon.width())
-	                // set new class
-	                $this.icon.attr('class', 'uk-icon-zx-spinner uk-icon-spin')
-
-	            // else, create one
-	            } else {
-	                $this.icon = UI.$('<i class="uk-icon-zx-spinner uk-icon-spin"></i>')
-
-	                // place the icon
-	                if($this.options.affix == 'replace') {
-	                    $this.element.html($this.icon)
-	                } else {
-	                    $this.element[$this.options.affix]($this.icon)
-	                }
-	            }
-
-	            // add custom class
-	            $this.icon.addClass($this.options['class'])
-	        },
-
-	        off: function() {
-	            var $this = this;
-
-	            // remove the spin classes but not the icon
-	            $this.icon.removeClass('uk-icon-zx-spinner uk-icon-spin')
-
-	            // recover class, if any
-	            if($this.icon_class) $this.icon.attr('class', $this.icon_class)
-
-	            // remove hardcoded width
-	            $this.icon.width('')
-
-	            // remove spin instance from element
-	            $this.element.removeData('spin')
-	        }
-
-	    })
-
-	}
-
-/***/ },
-/* 81 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _  = __webpack_require__(2);
-	var http = __webpack_require__(77)();
+	var _ = __webpack_require__(3);
+	var http = __webpack_require__(76)();
 
 	var vueZlux = {
 
