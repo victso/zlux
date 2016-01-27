@@ -4023,7 +4023,7 @@
 }
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../../uikit/fonts/fontawesome-webfont.woff2") format('woff2'), url("../../uikit/fonts/fontawesome-webfont.woff") format("woff"), url("../../uikit/fonts/fontawesome-webfont.ttf") format("truetype");
+  src: url("../../../uikit/fonts/fontawesome-webfont.woff2") format('woff2'), url("../../../uikit/fonts/fontawesome-webfont.woff") format("woff"), url("../../../uikit/fonts/fontawesome-webfont.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
