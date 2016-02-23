@@ -5,6 +5,26 @@
  * @license     GNU General Public License v2 or later
  */
 
+html.zx {
+  font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+  background: #ffffff;
+  color: #444444;
+}
+html.zx:not(.uk-touch) .uk-nav-offcanvas > li > a:hover,
+html.zx:not(.uk-touch) .uk-nav-offcanvas > li > a:focus {
+  background: #404040;
+  color: #ffffff;
+  outline: none;
+}
+html.zx .uk-nav.uk-nav-offcanvas > li.uk-active > a {
+  background: #1a1a1a;
+  color: #ffffff;
+}
+html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
+  color: #ffffff;
+}
 .zx {
   /* ========================================================================
    Component: Base
@@ -1371,7 +1391,8 @@
  * Items
  */
 }
-.zx html {
+.zx html,
+.zx html.zx {
   /* 1 */
   font: normal 14px / 20px "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* 2 */
@@ -2821,13 +2842,16 @@
 }
 .zx .uk-nav-offcanvas > .uk-open > a,
 .zx html:not(.uk-touch) .uk-nav-offcanvas > li > a:hover,
-.zx html:not(.uk-touch) .uk-nav-offcanvas > li > a:focus {
+.zx html:not(.uk-touch) .uk-nav-offcanvas > li > a:focus,
+.zx html.zx:not(.uk-touch) .uk-nav-offcanvas > li > a:hover,
+.zx html.zx:not(.uk-touch) .uk-nav-offcanvas > li > a:focus {
   background: #404040;
   color: #ffffff;
   /* 2 */
   outline: none;
 }
-.zx html .uk-nav.uk-nav-offcanvas > li.uk-active > a {
+.zx html .uk-nav.uk-nav-offcanvas > li.uk-active > a,
+.zx html.zx .uk-nav.uk-nav-offcanvas > li.uk-active > a {
   background: #1a1a1a;
   color: #ffffff;
 }
@@ -2840,7 +2864,8 @@
 .zx .uk-nav-offcanvas ul a {
   color: #cccccc;
 }
-.zx html:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
+.zx html:not(.uk-touch) .uk-nav-offcanvas ul a:hover,
+.zx html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   color: #ffffff;
 }
 .zx .uk-navbar {

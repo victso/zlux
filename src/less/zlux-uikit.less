@@ -4,13 +4,18 @@
 // LESS related
 @import "uikit/variables.less";
 
-// wrapp with 'zx' to avoid interfiering with other styles
+// Workaround when wrapping html tag
+@import (reference) "../../vendor/uikit/less/core/base.less";
+@import (reference) "../../vendor/uikit/less/core/nav.less";
 
+html.zx:extend(html all) {}
+
+
+// wrapp with 'zx' to avoid interfiering with other styles
 .zx {
 
 // Defaults
-@import "../../vendor/uikit/less/core/base.less";
-
+@import (multiple) "../../vendor/uikit/less/core/base.less";
 @import "uikit/base.less";
 
 // Layout
@@ -27,7 +32,7 @@
 @import "uikit/comment.less";
 
 // Navs
-@import "../../vendor/uikit/less/core/nav.less";
+@import (multiple) "../../vendor/uikit/less/core/nav.less";
 @import "../../vendor/uikit/less/core/navbar.less";
 @import "../../vendor/uikit/less/core/subnav.less";
 @import "../../vendor/uikit/less/core/breadcrumb.less";
