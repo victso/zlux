@@ -47,6 +47,7 @@ gulp.task('dist-copy', ['dist-clean'], function() {
     return merge(
         gulp.src(['src/js/components/**']).pipe(gulp.dest(output+'/js/components')),
         gulp.src(['src/svg/**']).pipe(gulp.dest(output+'/svg')),
+        gulp.src(['src/fonts/**']).pipe(gulp.dest(output+'/fonts')),
         gulp.src(['CHANGELOG.md']).pipe(gulp.dest(output))
     );
 });

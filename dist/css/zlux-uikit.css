@@ -4186,7 +4186,7 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
 }
 @font-face {
   font-family: 'FontAwesome';
-  src: url("../../../uikit/fonts/fontawesome-webfont.woff2") format('woff2'), url("../../../uikit/fonts/fontawesome-webfont.woff") format("woff"), url("../../../uikit/fonts/fontawesome-webfont.ttf") format("truetype");
+  src: url("../fonts/fontawesome-webfont.woff2") format('woff2'), url("../fonts/fontawesome-webfont.woff") format("woff"), url("../fonts/fontawesome-webfont.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
