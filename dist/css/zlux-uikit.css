@@ -30,7 +30,7 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
    Component: Base
  ========================================================================== */
   /*
- * 1. Normalizes default `font-family` and sets `font-size` here to support `rem` units
+ * 1. Normalize default `font-family` and set `font-size` to support `rem` units
  * 2. Prevents iOS text size adjust after orientation change, without disabling user zoom
  * 3. Style
  */
@@ -43,7 +43,7 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
  * Remove the gray background color from active links in IE 10.
  */
   /*
- * Improves readability when focused and also mouse hovered in all browsers.
+ * Improve readability of focused elements when they are also in an active/hover state.
  */
   /*
  * Style
@@ -51,10 +51,10 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   /* Text-level semantics
  ========================================================================== */
   /*
- * Addresses styling not present in Chrome, Safari, Opera and IE 8/9/10.
+ * Address styling not present in IE 8/9/10/11, Safari, and Chrome.
  */
   /*
- * Addresses style set to `bolder` in Firefox
+ * Address style set to `bolder` in Firefox 4+, Safari, and Chrome.
  */
   /*
  * 1. Address odd `em`-unit font size rendering in all browsers.
@@ -79,13 +79,15 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   /*
  * Prevents `sub` and `sup` affecting `line-height` in all browsers.
  */
-  /* Images
+  /* Embedded content
  ========================================================================== */
+  /*
+ * Remove the gap between audio, canvas, iframes, images, videos and the bottom of their containers.
+ */
   /*
  * 1. Responsiveness: Sets a maximum width relative to the parent and auto scales the height
  * 2. Corrects `max-width` behavior if padding and border are used
  * 3. Remove border when inside `a` element in IE 8/9/10.
- * 4. Remove the gap between images and the bottom of their containers
  */
   /*
  * Preserve original image dimensions
@@ -136,17 +138,19 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   /* HTML5 elements
  ========================================================================== */
   /*
- * Corrects `block` display not defined in IE 8/9.
+ * Correct `block` display not defined for any HTML5 element in IE 8/9.
+ * Correct `block` display not defined for `details` or `summary` in IE 10/11 and Firefox.
+ * Correct `block` display not defined for `main` in IE 11.
  */
   /*
- * Addresses inconsistent vertical alignment of `progress` in Chrome, Firefox and Opera.
+ * Normalize vertical alignment of `progress` in Chrome, Firefox, and Opera.
  */
   /*
  * Prevent displaying `audio` without controls in Chrome, Safari and Opera
  */
   /*
- * Address `[hidden]` styling not present in IE 8/9.
- * Hide the `template` element in IE and Safari
+ * Address `[hidden]` styling not present in IE 8/9/10.
+ * Hide the `template` element in IE 8/9/10/11, Safari, and Firefox < 22.
  */
   /* Iframe
  ========================================================================== */
@@ -1476,6 +1480,14 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
 .zx sub {
   bottom: -0.25em;
 }
+.zx audio,
+.zx canvas,
+.zx iframe,
+.zx img,
+.zx svg,
+.zx video {
+  vertical-align: middle;
+}
 .zx img {
   /* 1 */
   max-width: 100%;
@@ -1484,8 +1496,6 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   box-sizing: border-box;
   /* 3 */
   border: 0;
-  /* 4 */
-  vertical-align: middle;
 }
 .zx .uk-img-preserve,
 .zx .uk-img-preserve img {
@@ -1845,7 +1855,13 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
 .zx .uk-grid-width-1-10 > * {
   width: 10%;
 }
+.zx .uk-grid-width-auto > * {
+  width: auto;
+}
 @media (min-width: 480px) {
+  .zx .uk-grid-width-small-1-1 > * {
+    width: 100%;
+  }
   .zx .uk-grid-width-small-1-2 > * {
     width: 50%;
   }
@@ -1866,6 +1882,9 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   }
 }
 @media (min-width: 768px) {
+  .zx .uk-grid-width-medium-1-1 > * {
+    width: 100%;
+  }
   .zx .uk-grid-width-medium-1-2 > * {
     width: 50%;
   }
@@ -1886,6 +1905,9 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   }
 }
 @media (min-width: 960px) {
+  .zx .uk-grid-width-large-1-1 > * {
+    width: 100%;
+  }
   .zx .uk-grid-width-large-1-2 > * {
     width: 50%;
   }
@@ -1906,6 +1928,9 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   }
 }
 @media (min-width: 1220px) {
+  .zx .uk-grid-width-xlarge-1-1 > * {
+    width: 100%;
+  }
   .zx .uk-grid-width-xlarge-1-2 > * {
     width: 50%;
   }
@@ -8193,12 +8218,10 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
 @media (min-width: 768px) {
   .zx .uk-align-medium-left {
     margin-right: 20px;
-    margin-bottom: 20px;
     float: left;
   }
   .zx .uk-align-medium-right {
     margin-left: 20px;
-    margin-bottom: 20px;
     float: right;
   }
 }
@@ -8903,7 +8926,9 @@ html.zx:not(.uk-touch) .uk-nav-offcanvas ul a:hover {
   color: #2d7091 !important;
 }
 @media print {
-  .zx * {
+  .zx *,
+  .zx *:before,
+  .zx *:after {
     background: transparent !important;
     color: black !important;
     box-shadow: none !important;

@@ -170,6 +170,10 @@
             $('.uk-nestable-list-dragged').wrap('<div class="zx" />');
         });
 
+        $('body').on('show.uk.modal', function() {
+            $('.uk-modal').not('.zx .uk-modal').wrap('<div class="zx" />');
+        });
+
         ZX.component.bootComponents();
     });
 

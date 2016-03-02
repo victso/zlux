@@ -1,5 +1,10 @@
 # Changelog
 
+### WIP
+
+  - Updated UIkit to 2.25.0
+  - Fixed UIkit Modal wrapping
+
 ### 2.0.3
 
   - Added Calendar component
