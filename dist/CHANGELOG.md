@@ -1,6 +1,6 @@
 # Changelog
 
-### WIP
+### 2.0.4
 
   - Updated UIkit to 2.25.0
   - Fixed UIkit Modal wrapping
