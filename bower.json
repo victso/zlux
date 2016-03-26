@@ -1,6 +1,6 @@
 {
   "name": "zlux",
-  "version": "2.0.2",
+  "version": "2.0.4",
   "main": "",
   "dependencies": {
     "uikit": ">= 2.25.0",
